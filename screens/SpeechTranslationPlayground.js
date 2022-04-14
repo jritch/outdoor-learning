@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Audio, AudioUtil, MobileModel } from 'react-native-pytorch-core';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useCallback, useState} from 'react';
-import translate from '../components/useSpeechTranslation';
+import translate from '../components/speechTranslation';
 
 export default function SpeechTranslationTest() {
   const [recording, setRecording] = useState(false);
