@@ -1,3 +1,5 @@
+import type { ModelResultMetrics } from 'react-native-pytorch-core';
+
 import * as React from 'react';
 import { Audio, AudioUtil, MobileModel } from 'react-native-pytorch-core';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
@@ -7,7 +9,7 @@ import translate from '../components/speechTranslation';
 export default function SpeechTranslationTest() {
   const [recording, setRecording] = useState(false);
   const [translatedText, setTranslatedText] = useState("");
-  const [metrics, setMetrics] = useState();
+  const [metrics, setMetrics] = useState<ModelResultMetrics | null>();
 
   function startRecording() {
     setRecording(true);
@@ -17,9 +19,13 @@ export default function SpeechTranslationTest() {
   async function stopRecording() {
     const audio = await AudioUtil.stopRecord();
     setRecording(false);
+    // TODO: Implement better null/error handling here
+    if (audio == null) {
+      throw new Error("audio should not be null in stopRecording");
+    }
     const result = await translate(audio);
     setTranslatedText(result.text);
-    setMetrics(result.metrics);
+    setMetrics(result.metrics ?? null);
   }
 
   return (
