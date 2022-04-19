@@ -6,7 +6,7 @@ export default function IntroScreen() {
     <View style={styles.mainContainer}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>
-          Look for plant species and scan to learn about it. Turn on the volume to be guided through audio.
+          Look for a eucalyptus tree and scan to learn about the tree. Turn on the volume to be guided through audio.
         </Text>
       </View>
       <View style={styles.imageSection} />
@@ -43,16 +43,18 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   button: {
-    width: 99,
     height: 40,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
+    marginLeft: 24,
+    marginRight: 24,
   },
   buttonPosition: {
     position: 'absolute',
-    bottom: 108,
+    bottom: 84,
+    width: '100%',
   },
   imageSection: {
     marginTop: 50,
