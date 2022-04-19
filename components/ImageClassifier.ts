@@ -10,8 +10,10 @@ import {
   // Alias for torchvision transforms
   const T = torchvision.transforms;
 
-  // Load the model file and the associated classes returned as inference
+  // The torchscripted model which runs classification on an image
   const MODEL_URL = "https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/classifier.ptl";
+
+  // The possible classes returned by the model
   const IMAGE_CLASSES = [
       "background",
       "eucalyptus tree",
