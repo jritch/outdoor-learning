@@ -1,0 +1,30 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+//   "[flow]": {
+//     "editor.codeActionsOnSave": [
+//       // Run ESLint fixers _before_ prettier to ensure the user doesn't need to do multiple saves
+//       "source.fixAll.eslint",
+//       "source.fixAll.format"
+//     ]
+//     // "editor.defaultFormatter": "nuclide.prettier",
+//     // "editor.detectIndentation": false,
+//     // "editor.formatOnSave": true,
+//     // "editor.insertSpaces": true,
+//     // "editor.tabSize": 2
+//   },
+//   "[javascript]": {
+//     "editor.codeActionsOnSave": [
+//       // Run ESLint fixers _before_ prettier to ensure the user doesn't need to do multiple saves
+//       "source.fixAll.eslint",
+//       "source.fixAll.format"
+//     ]
+//   },
+//   "[sql]": {
+//     "editor.codeActionsOnSave": [
+//       // Run ESLint fixers _before_ prettier to ensure the user doesn't need to do multiple saves
+//       "source.fixAll.eslint",
+//       "source.fixAll.format"
+//     ]
+//   }
+}
