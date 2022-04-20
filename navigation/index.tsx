@@ -74,7 +74,7 @@ function RootNavigator() {
       <Stack.Screen
         name="LessonTabNavigator"
         component={LessonTabNavigator}
-        options={{headerShown: false}}
+        options={{headerShown: true, headerTitle: 'Stanford Nature'}}
       />
       <Stack.Screen
         name="NotFound"
@@ -100,7 +100,7 @@ function LessonTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Learn"
-      screenOptions={{headerTitle: 'Stanford Nature'}}>
+      screenOptions={{headerShown: false}}>
       <BottomTab.Screen
         name="Learn"
         component={LearnScreen}
