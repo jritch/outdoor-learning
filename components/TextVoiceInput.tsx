@@ -32,8 +32,6 @@ export default function TextVoiceInput(props: Props) {
   const recordingPlaceHolderTextColor = "rgba(222, 52, 18, 1);";
   const recordingPlaceHolderText = "Listening...";
   const transcribingPlaceHolderText = "Translating...";
-  const activeMicrophoneImageSource = 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/microphone_active.png';
-  const inactiveMicrophoneImageSource = 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/microphone_inactive.png';
   const recordButtonImageSource = 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/recordButton.png';
 
   const [showRecordingView, setShowRecordingView] = useState<boolean>(false);
