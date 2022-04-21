@@ -22,8 +22,7 @@ export default function ChatBubble(props: Props) {
         padding: 13,
         borderRadius: 20,
         maxWidth: '75%',
-      }}
-    >
+      }}>
       {viewToBeRendered}
       {alignment === 'left' && (
         <>

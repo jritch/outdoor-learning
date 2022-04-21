@@ -47,6 +47,7 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
@@ -100,8 +101,7 @@ function LessonTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Learn"
-      screenOptions={{headerShown: false}}
-    >
+      screenOptions={{headerShown: false}}>
       <BottomTab.Screen
         name="Learn"
         component={LearnScreen}
@@ -115,8 +115,7 @@ function LessonTabNavigator() {
               onPress={() => navigation.navigate('Modal')}
               style={({pressed}) => ({
                 opacity: pressed ? 0.5 : 1,
-              })}
-            >
+              })}>
               <FontAwesome
                 name="info-circle"
                 size={25}
