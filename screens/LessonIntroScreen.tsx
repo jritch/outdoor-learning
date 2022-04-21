@@ -18,7 +18,8 @@ export default function LessonIntroScreen({
       <View style={styles.buttonPosition}>
         <TouchableOpacity
           onPress={() => navigation.navigate('LessonTabNavigator')}
-          style={styles.button}>
+          style={styles.button}
+        >
           <Text style={styles.startButtonText}>{'START'}</Text>
         </TouchableOpacity>
       </View>

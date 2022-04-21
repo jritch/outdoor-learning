@@ -16,7 +16,8 @@ export default function DevIntroScreen({
       <View style={styles.buttonWrapper}>
         <TouchableOpacity
           onPress={() => navigation.navigate('LessonIntroScreen')}
-          style={styles.button}>
+          style={styles.button}
+        >
           <Text style={styles.startButtonText}>{'Start App'}</Text>
         </TouchableOpacity>
       </View>
