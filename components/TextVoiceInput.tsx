@@ -47,6 +47,24 @@ export default function TextVoiceInput(props: Props) {
 
   const onSubmitCallback = props.onSubmit;
 
+  /**
+   * Add this part when the component is used with a screen which uses navigation to
+   * avoid keeping the mic recording audio even if the screen is not in focus.
+   *
+   * const isFocused = useIsFocused();
+   * useEffect(() => {
+   *    return () => {
+   *        AudioUtil.isRecording().then(isRecording => {
+   *            if (isRecording) {
+   *                // Make sure we stop the current recording before we navigate
+   *                console.log('Finishing ongoing recording..');
+   *                AudioUtil.stopRecord();
+   *            }
+   *        });
+   *    };
+   * }, [isFocused]);
+   */
+
   async function stopAudioRecording() {
     const audio = await AudioUtil.stopRecord();
     setIsAudioRecording(false);
