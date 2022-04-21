@@ -1,5 +1,5 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import * as React from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import type {RootStackParamList} from '../types';
 
@@ -16,7 +16,8 @@ export default function DevIntroScreen({
       <View style={styles.buttonWrapper}>
         <TouchableOpacity
           onPress={() => navigation.navigate('LessonIntroScreen')}
-          style={styles.button}>
+          style={styles.button}
+        >
           <Text style={styles.startButtonText}>{'Start App'}</Text>
         </TouchableOpacity>
       </View>
