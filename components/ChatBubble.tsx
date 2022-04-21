@@ -6,7 +6,7 @@ type Props = {
   alignment: string; // position of the small arrow on the chat bubble, 'left' or 'right'
   bubbleColor: string; // the color of the chat bubble
   backgroundColor: string; // the background color of the view on which the bubble is rendered
-  view: View; // the view to be rendered inside the bubble
+  view: any; // the view to be rendered inside the bubble
 };
 
 export default function ChatBubble(props: Props) {
@@ -21,7 +21,7 @@ export default function ChatBubble(props: Props) {
         backgroundColor: bubbleColor,
         padding: 13,
         borderRadius: 20,
-        maxWidth: '50%',
+        maxWidth: '75%',
       }}
     >
       {viewToBeRendered}
