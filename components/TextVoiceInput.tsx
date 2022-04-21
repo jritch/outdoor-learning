@@ -23,7 +23,7 @@ type Props = {
   placeHolderText: string
 };
 
-export default function QuestionAnswer(props: Props) {
+export default function TextVoiceInput(props: Props) {
 
   // Constants
   const defaultTimerText = "00:00:00";
