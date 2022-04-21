@@ -3,14 +3,17 @@ import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
+  TouchableOpacity,
   View,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   TextInput,
   Text,
   Platform,
   Pressable,
 } from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {AudioUtil} from 'react-native-pytorch-core';
 import RecordingMicrophone from './RecordingMicrophone';
 import transcribe from './speechTranslation';
@@ -20,7 +23,8 @@ var stopTimer: boolean = false;
 var timerStartedTimestamp: number = Date.now();
 
 type Props = {
-  placeHolderText: string
+  placeHolderText: string,
+  onSubmit: Function,
 };
 
 export default function TextVoiceInput(props: Props) {
@@ -36,29 +40,13 @@ export default function TextVoiceInput(props: Props) {
 
   const [showRecordingView, setShowRecordingView] = useState<boolean>(false);
   const [isAudioRecording, setIsAudioRecording] = useState<boolean>(false);
-  const [transcribedText, setTranscribedText] = useState("");
   const [textInputValue, setTextInputValue] = useState("");
   const [placeHolderText, setPlaceHolderText] = useState(defaultPlaceHolderText);
   const [placeHolderTextColor, setPlaceHolderTextColor] = useState(defaultPlaceHolderTextColor);
   const [timerText, setTimerText] = useState(defaultTimerText);
 
-  /**
-   * Add this part when the component is used with a screen which uses navigation to
-   * avoid keeping the mic recording audio even if the screen is not in focus.
-   *
-   * const isFocused = useIsFocused();
-   * useEffect(() => {
-   *    return () => {
-   *        AudioUtil.isRecording().then(isRecording => {
-   *            if (isRecording) {
-   *                // Make sure we stop the current recording before we navigate
-   *                console.log('Finishing ongoing recording..');
-   *                AudioUtil.stopRecord();
-   *            }
-   *        });
-   *    };
-   * }, [isFocused]);
-   */
+  const onSubmitCallback = props.onSubmit;
+
   async function stopAudioRecording() {
     const audio = await AudioUtil.stopRecord();
     setIsAudioRecording(false);
@@ -122,6 +110,13 @@ export default function TextVoiceInput(props: Props) {
     );
   }
 
+  function submitInput() {
+    Keyboard.dismiss();
+    if(onSubmitCallback) {
+      onSubmitCallback(textInputValue);
+    }
+  }
+
   return (
       <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.wrapper}>
         <View style={{
@@ -146,13 +141,13 @@ export default function TextVoiceInput(props: Props) {
               minHeight: 45,
             }}
             value={textInputValue}
-            onChangeText={(text: string) => {setTextInputValue(text)}}
+            onChangeText={text => {setTextInputValue(text)}}
             placeholder={placeHolderText}
             placeholderTextColor={placeHolderTextColor}
             multiline={true}
             keyboardType="default"
             blurOnSubmit={true}
-            onSubmitEditing={()=>{Keyboard.dismiss()}}
+            onSubmitEditing={submitInput}
           />
           <View style={{alignItems: 'flex-end'}}>
             <Pressable
