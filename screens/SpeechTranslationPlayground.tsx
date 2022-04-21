@@ -1,14 +1,14 @@
-import type { ModelResultMetrics } from 'react-native-pytorch-core';
+import type {ModelResultMetrics} from 'react-native-pytorch-core';
 
 import * as React from 'react';
-import { Audio, AudioUtil, MobileModel } from 'react-native-pytorch-core';
+import {Audio, AudioUtil, MobileModel} from 'react-native-pytorch-core';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useCallback, useState} from 'react';
 import translate from '../components/speechTranslation';
 
 export default function SpeechTranslationTest() {
   const [recording, setRecording] = useState(false);
-  const [translatedText, setTranslatedText] = useState("");
+  const [translatedText, setTranslatedText] = useState('');
   const [metrics, setMetrics] = useState<ModelResultMetrics | null>();
 
   function startRecording() {
@@ -21,7 +21,7 @@ export default function SpeechTranslationTest() {
     setRecording(false);
     // TODO: Implement better null/error handling here
     if (audio == null) {
-      throw new Error("audio should not be null in stopRecording");
+      throw new Error('audio should not be null in stopRecording');
     }
     const result = await translate(audio);
     setTranslatedText(result.text);
@@ -33,7 +33,9 @@ export default function SpeechTranslationTest() {
       <View style={styles.container}>
         <TouchableOpacity onPress={recording ? stopRecording : startRecording}>
           <View style={styles.button}>
-            <Text style={styles.buttonText}>{recording ? 'Stop Record' : 'Start Record'}</Text>
+            <Text style={styles.buttonText}>
+              {recording ? 'Stop Record' : 'Start Record'}
+            </Text>
           </View>
         </TouchableOpacity>
         <Text style={styles.small}>{'Translated Text: ' + translatedText}</Text>
