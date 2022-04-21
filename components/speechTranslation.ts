@@ -13,5 +13,5 @@ export default async function translate(audio: Audio) {
     translatedText = answer;
     modelRunMetrics = m;
   }
-  return {text: translatedText, metrics: modelRunMetrics};
+  return {text: translatedText.toLowerCase(), metrics: modelRunMetrics};
 }
