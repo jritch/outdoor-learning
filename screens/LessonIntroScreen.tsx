@@ -1,20 +1,22 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {ImageBackground, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export default function LessonIntroScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'LessonIntroScreen'>) {
+  const headingTextContent = "Learn about eucalyptus trees guided by audio.";
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.headingContainer}>
+      <View style={styles.headingSection}>
         <Text style={styles.headingText}>
-          Look for a eucalyptus tree and scan to learn about the tree. Turn on
-          the volume to be guided through audio.
+          {headingTextContent}
         </Text>
       </View>
-      <View style={styles.imageSection} />
+      <View style={styles.imageSection}>
+        <ImageBackground source={{uri: "https://reactjs.org/logo-og.png"}} resizeMode="cover" style={styles.image} />
+      </View>
       <View style={styles.buttonPosition}>
         <TouchableOpacity
           onPress={() => navigation.navigate('LessonTabNavigator')}
@@ -29,20 +31,16 @@ export default function LessonIntroScreen({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: '#000000',
     flex: 1,
-    alignItems: 'center',
-  },
-  headingContainer: {
-    marginLeft: 24,
-    marginRight: 24,
-    marginTop: 22,
-    height: 160,
   },
   headingText: {
-    fontSize: 28,
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#FFFFFF',
+  },
+  headingSection: {
+    marginLeft: 24,
+    marginRight: 24,
   },
   startButtonText: {
     color: '#000000',
@@ -64,10 +62,13 @@ const styles = StyleSheet.create({
     bottom: 84,
     width: '100%',
   },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+  },
   imageSection: {
-    marginTop: 50,
-    width: '100%',
-    height: 256,
     backgroundColor: '#ffffff',
+    marginTop: 15,
+    flex: 1
   },
 });
