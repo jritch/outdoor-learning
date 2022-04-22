@@ -23,26 +23,30 @@ var stopTimer: boolean = false;
 var timerStartedTimestamp: number = Date.now();
 
 type Props = {
-  placeHolderText: string,
-  onSubmit: Function,
+  placeHolderText: string;
+  onSubmit: Function;
 };
 
 export default function TextVoiceInput(props: Props) {
-
   // Constants
-  const defaultTimerText = "00:00:00";
+  const defaultTimerText = '00:00:00';
   const defaultPlaceHolderText = props.placeHolderText;
-  const defaultPlaceHolderTextColor = "rgba(235, 235, 245, 0.6)";
-  const recordingPlaceHolderTextColor = "rgba(222, 52, 18, 1);";
-  const recordingPlaceHolderText = "Listening...";
-  const transcribingPlaceHolderText = "Translating...";
-  const recordButtonImageSource = 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/recordButton.png';
+  const defaultPlaceHolderTextColor = 'rgba(235, 235, 245, 0.6)';
+  const recordingPlaceHolderTextColor = 'rgba(222, 52, 18, 1);';
+  const recordingPlaceHolderText = 'Listening...';
+  const transcribingPlaceHolderText = 'Translating...';
+  const recordButtonImageSource =
+    'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/recordButton.png';
 
   const [showRecordingView, setShowRecordingView] = useState<boolean>(false);
   const [isAudioRecording, setIsAudioRecording] = useState<boolean>(false);
-  const [textInputValue, setTextInputValue] = useState("");
-  const [placeHolderText, setPlaceHolderText] = useState(defaultPlaceHolderText);
-  const [placeHolderTextColor, setPlaceHolderTextColor] = useState(defaultPlaceHolderTextColor);
+  const [textInputValue, setTextInputValue] = useState('');
+  const [placeHolderText, setPlaceHolderText] = useState(
+    defaultPlaceHolderText,
+  );
+  const [placeHolderTextColor, setPlaceHolderTextColor] = useState(
+    defaultPlaceHolderTextColor,
+  );
   const [timerText, setTimerText] = useState(defaultTimerText);
 
   const onSubmitCallback = props.onSubmit;
@@ -85,13 +89,19 @@ export default function TextVoiceInput(props: Props) {
 
   function openAudioRecordingView() {
     stopTimer = false;
-    changePlaceHolderStyle(recordingPlaceHolderText, recordingPlaceHolderTextColor);
+    changePlaceHolderStyle(
+      recordingPlaceHolderText,
+      recordingPlaceHolderTextColor,
+    );
     setShowRecordingView(true);
     timerStartedTimestamp = Date.now();
     startRecordingTimer();
   }
 
-  function changePlaceHolderStyle(placeHolderText: string, placeHolderTextColor: string) {
+  function changePlaceHolderStyle(
+    placeHolderText: string,
+    placeHolderTextColor: string,
+  ) {
     setPlaceHolderText(placeHolderText);
     setPlaceHolderTextColor(placeHolderTextColor);
   }
@@ -99,7 +109,7 @@ export default function TextVoiceInput(props: Props) {
   function closeAudioRecordingView() {
     stopTimer = true;
     setShowRecordingView(false);
-    changePlaceHolderStyle(defaultPlaceHolderText,defaultPlaceHolderTextColor);
+    changePlaceHolderStyle(defaultPlaceHolderText, defaultPlaceHolderTextColor);
   }
 
   function updateTimerText() {
@@ -108,91 +118,103 @@ export default function TextVoiceInput(props: Props) {
     const mins = Math.floor(secs / 60);
     const hrs = Math.floor(mins / 60);
 
-    setTimerText(padZero(hrs) + ":" + padZero(mins % 60) + ":" + padZero(secs % 60));
+    setTimerText(
+      padZero(hrs) + ':' + padZero(mins % 60) + ':' + padZero(secs % 60),
+    );
   }
 
   function padZero(val: number) {
-    return (val % 60) < 10 ? "0"+(val % 60) : (val % 60);
+    return val % 60 < 10 ? '0' + (val % 60) : val % 60;
   }
 
   function startRecordingTimer() {
     setTimeout(
-      function() {
+      function () {
         if (!stopTimer) {
           startRecordingTimer();
         }
         updateTimerText();
-      }
-      .bind(this),
-      1000
+      }.bind(this),
+      1000,
     );
   }
 
   function submitInput() {
     Keyboard.dismiss();
-    if(onSubmitCallback) {
+    if (onSubmitCallback) {
       onSubmitCallback(textInputValue);
     }
   }
 
   return (
-      <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.wrapper}>
-        <View style={{
+    <KeyboardAvoidingView
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      style={styles.wrapper}
+    >
+      <View
+        style={{
           flex: 1,
-          justifyContent: "flex-end",
+          justifyContent: 'flex-end',
           marginLeft: 24,
           marginRight: 24,
           bottom: showRecordingView ? 250 : 60,
-        }}>
-          <TextInput
-            style={{
-              width: '100%',
-              borderRadius: 18,
-              backgroundColor: '#262627',
-              fontSize: 17,
-              paddingLeft: 19,
-              paddingRight: 45,
-              paddingTop: Platform.OS === 'ios' ? 12 : 7,
-              paddingBottom: 10,
-              color: '#EBEBF5',
-              maxHeight: 100,
-              minHeight: 45,
-            }}
-            value={textInputValue}
-            onChangeText={text => {setTextInputValue(text)}}
-            placeholder={placeHolderText}
-            placeholderTextColor={placeHolderTextColor}
-            multiline={true}
-            keyboardType="default"
-            blurOnSubmit={true}
-            onSubmitEditing={submitInput}
-          />
-          <View style={{alignItems: 'flex-end'}}>
-            <Pressable
-              style={{height: 50, width: 40, bottom: 35}}
-              onPress={isAudioRecording ? stopAudioRecording : startAudioRecording}>
-              <View style={{flex: 1}}>
-                <RecordingMicrophone isActive={isAudioRecording} />
-              </View>
-            </Pressable>
-          </View>
+        }}
+      >
+        <TextInput
+          style={{
+            width: '100%',
+            borderRadius: 18,
+            backgroundColor: '#262627',
+            fontSize: 17,
+            paddingLeft: 19,
+            paddingRight: 45,
+            paddingTop: Platform.OS === 'ios' ? 12 : 7,
+            paddingBottom: 10,
+            color: '#EBEBF5',
+            maxHeight: 100,
+            minHeight: 45,
+          }}
+          value={textInputValue}
+          onChangeText={text => {
+            setTextInputValue(text);
+          }}
+          placeholder={placeHolderText}
+          placeholderTextColor={placeHolderTextColor}
+          multiline={true}
+          keyboardType="default"
+          blurOnSubmit={true}
+          onSubmitEditing={submitInput}
+        />
+        <View style={{alignItems: 'flex-end'}}>
+          <Pressable
+            style={{height: 50, width: 40, bottom: 35}}
+            onPress={
+              isAudioRecording ? stopAudioRecording : startAudioRecording
+            }
+          >
+            <View style={{flex: 1}}>
+              <RecordingMicrophone isActive={isAudioRecording} />
+            </View>
+          </Pressable>
+        </View>
       </View>
       <View>
-        {showRecordingView &&
+        {showRecordingView && (
           <View style={styles.recordingView}>
             <Text style={styles.timer}>{timerText}</Text>
-             <Pressable
+            <Pressable
               style={{flex: 1}}
               onPress={() => {
                 stopAudioRecording();
-              }}>
-                <Image
-                  style={styles.recordingImage}
-                  source={{uri: recordButtonImageSource}}
-                />
+              }}
+            >
+              <Image
+                style={styles.recordingImage}
+                source={{uri: recordButtonImageSource}}
+              />
             </Pressable>
           </View>
-        }
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -208,17 +230,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: 280,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   timer: {
     top: 69,
     color: 'rgba(235, 235, 245, 0.6)',
     fontWeight: 'bold',
-    fontSize: 36
+    fontSize: 36,
   },
   recordingImage: {
     top: 90,
     width: 56,
-    height: 56
-  }
+    height: 56,
+  },
 });
