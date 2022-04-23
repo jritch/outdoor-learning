@@ -30,6 +30,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import LessonIntroScreen from '../screens/LessonIntroScreen';
 import LearnScreen from '../screens/LearnScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
+import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScreen';
 
 export default function Navigation({
   colorScheme,
@@ -76,6 +77,10 @@ function RootNavigator() {
         name="LessonTabNavigator"
         component={LessonTabNavigator}
         options={{headerShown: true, headerTitle: 'Stanford Nature'}}
+      />
+      <Stack.Screen
+        name="FindScanEucalyptusTreeScreen"
+        component={FindScanEucalyptusTreeScreen}
       />
       <Stack.Screen
         name="NotFound"
