@@ -20,7 +20,7 @@ export default function Bubble(props: Props) {
 
 const styles = StyleSheet.create({
   bubble: {
-    height: 40,
+    height: 45,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 11,
-    paddingBottom: 11,
+    paddingBottom: 9,
   },
   bubbleText: {
     color: '#ffffff',
