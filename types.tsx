@@ -17,9 +17,10 @@ declare global {
 }
 
 export type RootStackParamList = {
-  DevIntroScreen: undefined;
+  Root: undefined;
   LessonIntroScreen: undefined;
   LessonTabNavigator: NavigatorScreenParams<LessonTabParamList> | undefined;
+  FindScanEucalyptusTreeScreen: undefined;
   Modal: undefined;
   NotFound: undefined;
 };

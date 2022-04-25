@@ -134,6 +134,7 @@ export default function TextVoiceInput(props: Props) {
           startRecordingTimer();
         }
         updateTimerText();
+        // @ts-ignore TODO: revisit need for .bind(this)
       }.bind(this),
       1000,
     );
