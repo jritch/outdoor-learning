@@ -1,21 +1,29 @@
 import * as React from 'react';
-import {ImageBackground, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  ImageBackground,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export default function LessonIntroScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'LessonIntroScreen'>) {
-  const headingTextContent = "Learn about eucalyptus trees guided by audio.";
+  const headingTextContent = 'Learn about eucalyptus trees guided by audio.';
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headingSection}>
-        <Text style={styles.headingText}>
-          {headingTextContent}
-        </Text>
+        <Text style={styles.headingText}>{headingTextContent}</Text>
       </View>
       <View style={styles.imageSection}>
-        <ImageBackground source={{uri: "https://reactjs.org/logo-og.png"}} resizeMode="cover" style={styles.image} />
+        <ImageBackground
+          source={{uri: 'https://reactjs.org/logo-og.png'}}
+          resizeMode="cover"
+          style={styles.image}
+        />
       </View>
       <View style={styles.buttonPosition}>
         <TouchableOpacity
@@ -64,11 +72,11 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   imageSection: {
     backgroundColor: '#ffffff',
     marginTop: 15,
-    flex: 1
+    flex: 1,
   },
 });

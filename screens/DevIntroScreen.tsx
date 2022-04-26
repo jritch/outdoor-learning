@@ -5,7 +5,7 @@ import type {RootStackParamList} from '../types';
 
 export default function DevIntroScreen({
   navigation,
-}: NativeStackScreenProps<RootStackParamList, 'DevIntroScreen'>) {
+}: NativeStackScreenProps<RootStackParamList, 'Root'>) {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headingContainer}>

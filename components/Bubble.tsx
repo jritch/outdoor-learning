@@ -10,13 +10,10 @@ export default function Bubble(props: Props) {
 
   return (
     <View style={styles.bubble}>
-      <Text style={styles.bubbleText}>
-        {textToBeRendered}
-      </Text>
+      <Text style={styles.bubbleText}>{textToBeRendered}</Text>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   bubble: {

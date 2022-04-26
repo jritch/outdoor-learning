@@ -27,7 +27,10 @@ checkForPytorchCoreLib();
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
+  // NOTE: We're hardcoding the dark theme here but in the future
+  // we could support a light mode
+  // const colorScheme = useColorScheme();
+  const colorScheme = 'dark';
 
   if (!isLoadingComplete) {
     return null;

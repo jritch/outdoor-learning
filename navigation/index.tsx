@@ -26,7 +26,6 @@ import {
   LessonTabParamList,
   RootTabScreenProps,
 } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
 import LessonIntroScreen from '../screens/LessonIntroScreen';
 import LearnScreen from '../screens/LearnScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
@@ -38,7 +37,9 @@ export default function Navigation({
   colorScheme: ColorSchemeName;
 }) {
   return (
-    <NavigationContainer linking={LinkingConfiguration} theme={DarkTheme}>
+    <NavigationContainer
+      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+    >
       <RootNavigator />
     </NavigationContainer>
   );
@@ -56,7 +57,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="DevIntroScreen"
+        name="Root"
         component={DevIntroScreen}
         options={{
           headerShown: true,
@@ -98,7 +99,7 @@ function RootNavigator() {
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const BottomTab = createBottomTabNavigator<LessonTabParamList>();
 
 function LessonTabNavigator() {
   const colorScheme = useColorScheme();
