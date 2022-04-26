@@ -1,6 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Image, ImageBackground, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import {useState} from 'react';
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
 
 export default function SampleEucalyptusTreesScreen() {
   return (
@@ -12,15 +19,27 @@ export default function SampleEucalyptusTreesScreen() {
           </Text>
         </View>
         <View style={styles.imageSection}>
-          <ImageBackground imageStyle={{ borderRadius: 20}} source={{uri: "https://reactjs.org/logo-og.png"}} resizeMode="cover" style={styles.image} />
+          <ImageBackground
+            imageStyle={{borderRadius: 20}}
+            source={{uri: 'https://reactjs.org/logo-og.png'}}
+            resizeMode="cover"
+            style={styles.image}
+          />
         </View>
         <View style={styles.textSection}>
           <Text style={styles.textSection}>
-            You might also notice that eucalyptus has a distinctive bark pattern. See if you can use the bark and the leaves to identify eucalyptus.
+            You might also notice that eucalyptus has a distinctive bark
+            pattern. See if you can use the bark and the leaves to identify
+            eucalyptus.
           </Text>
         </View>
         <View style={styles.imageSection}>
-          <ImageBackground imageStyle={{ borderRadius: 20}} source={{uri: "https://reactjs.org/logo-og.png"}} resizeMode="cover" style={styles.image} />
+          <ImageBackground
+            imageStyle={{borderRadius: 20}}
+            source={{uri: 'https://reactjs.org/logo-og.png'}}
+            resizeMode="cover"
+            style={styles.image}
+          />
         </View>
       </View>
     </View>
@@ -29,7 +48,7 @@ export default function SampleEucalyptusTreesScreen() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#121212'
+    backgroundColor: '#121212',
   },
   mainContainer: {
     marginLeft: 24,
@@ -37,16 +56,16 @@ const styles = StyleSheet.create({
   },
   textSection: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     marginTop: 20,
   },
   image: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   imageSection: {
     width: '100%',
     height: 250,
     marginTop: 16,
-  }
+  },
 });

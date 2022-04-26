@@ -99,11 +99,11 @@ export default function TextVoiceInput(props: Props) {
   }
 
   function changePlaceHolderStyle(
-    placeHolderText: string,
-    placeHolderTextColor: string,
+    changedPlaceHolderText: string,
+    changedPlaceHolderTextColor: string,
   ) {
-    setPlaceHolderText(placeHolderText);
-    setPlaceHolderTextColor(placeHolderTextColor);
+    setPlaceHolderText(changedPlaceHolderText);
+    setPlaceHolderTextColor(changedPlaceHolderTextColor);
   }
 
   function closeAudioRecordingView() {
@@ -128,16 +128,13 @@ export default function TextVoiceInput(props: Props) {
   }
 
   function startRecordingTimer() {
-    setTimeout(
-      function () {
-        if (!stopTimer) {
-          startRecordingTimer();
-        }
-        updateTimerText();
-        // @ts-ignore TODO: revisit need for .bind(this)
-      }.bind(this),
-      1000,
-    );
+    setTimeout(function () {
+      if (!stopTimer) {
+        startRecordingTimer();
+      }
+      updateTimerText();
+      // @ts-ignore TODO: revisit need for .bind(this)
+    }, 1000);
   }
 
   function submitInput() {
