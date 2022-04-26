@@ -14,7 +14,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "tsc": "tsc",
+    "tsc": "tsc --noEmit",
     "prettier": "prettier --write .",
     "prettier-check": "prettier --check .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
