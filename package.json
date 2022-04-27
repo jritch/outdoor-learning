@@ -40,7 +40,7 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "@react-native-async-storage/async-storage": "~1.15.0",
-    "react-native-pytorch-core": "^0.0.0-04262022-1207-f4308c17e",
+    "react-native-pytorch-core": "0.0.0-04262022-1207-f4308c17e",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-web": "0.17.1"
