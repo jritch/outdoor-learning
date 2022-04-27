@@ -17,12 +17,15 @@ export type Lesson = {
 
 export type Messages = Array<string>;
 
+// Under the hood react native uses numbers to refer to static assets that are required
+type ImageReference = number;
+
 export interface GenericElement {
   __type: string;
 }
 
 export interface GenericElementWithImages extends GenericElement {
-  imageFilenames: Array<string> | null;
+  imageFilenames: Array<ImageReference> | null;
 }
 
 /**
@@ -31,7 +34,7 @@ export interface GenericElementWithImages extends GenericElement {
 export interface TitleElement extends GenericElement {
   __type: 'TitleElement';
   title: string;
-  imageFilename: string;
+  imageFilename: ImageReference;
 }
 
 /**
@@ -39,7 +42,7 @@ export interface TitleElement extends GenericElement {
  */
 export interface InstructionalElement extends GenericElement {
   __type: 'InstructionalElement';
-  instructions: Array<{message: string; imageFilename: string}>;
+  instructions: Array<{message: string; imageFilename: ImageReference}>;
 }
 
 /**

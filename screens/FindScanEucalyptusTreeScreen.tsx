@@ -13,8 +13,12 @@ import classifyImage from '../components/ImageClassifier';
 import Bubble from '../components/Bubble';
 
 import SampleEucalyptusTreesScreen from './SampleEucalyptusTreesScreen';
+import {RootStackParamList} from '../types';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export default function FindScanEucalyptusTreeScreen() {
+export default function FindScanEucalyptusTreeScreen({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList, 'FindScanEucalyptusTreeScreen'>) {
   const findTreeText =
     'Go find and scan a eucalyptus tree to start the lesson.';
   const viewTreeText = 'View eucalyptus tree photos';
@@ -115,6 +119,25 @@ export default function FindScanEucalyptusTreeScreen() {
             </Text>
           </View>
         )}
+      </View>
+
+      <View style={styles.messageHolder}>
+        <Text style={{color: 'white', fontSize: 16}}>{incorrectTreeText}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('LessonContentScreen');
+          }}
+        >
+          <Text
+            style={{
+              color: 'background: rgba(70, 140, 247, 1)',
+              fontSize: 16,
+              marginTop: 24,
+            }}
+          >
+            {'[DEV] Skip to next screen'}
+          </Text>
+        </TouchableOpacity>
       </View>
       {showSampleImageScreen && <SampleEucalyptusTreesScreen />}
       {showSampleImageScreen && (

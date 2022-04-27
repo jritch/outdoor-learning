@@ -27,6 +27,7 @@ import {
   RootTabScreenProps,
 } from '../types';
 import LessonIntroScreen from '../screens/LessonIntroScreen';
+import LessonContentScreen from '../screens/LessonContentScreen';
 import LearnScreen from '../screens/LearnScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
 import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScreen';
@@ -82,6 +83,15 @@ function RootNavigator() {
       <Stack.Screen
         name="FindScanEucalyptusTreeScreen"
         component={FindScanEucalyptusTreeScreen}
+      />
+      <Stack.Screen
+        name="LessonContentScreen"
+        component={LessonContentScreen}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+          title: 'Stanford Nature',
+        }}
       />
       <Stack.Screen
         name="NotFound"
