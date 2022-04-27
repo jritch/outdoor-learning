@@ -38,3 +38,10 @@ export type RootTabScreenProps<Screen extends keyof LessonTabParamList> =
     BottomTabScreenProps<LessonTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
+
+export type JournalEntry = {
+  timestamp: number,
+  images: Array<string>,
+  audios: Array<string>,
+  texts: Array<string>,
+};
