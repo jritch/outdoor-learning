@@ -25,5 +25,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 2,
     '@typescript-eslint/no-unused-vars': 1,
+    'no-console': 1,
   },
 };

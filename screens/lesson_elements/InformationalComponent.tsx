@@ -24,21 +24,15 @@ type Props = {
 
 export default function InformationalComponent({
   navigation,
-  route,
   elementProps,
   elementId,
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
-  const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-  console.log('Element props:', elementProps);
-  const {__type, imageFilenames, messages} = elementProps;
-  console.log('Type:', __type);
-  console.log('Messages:', messages);
+  const {imageFilenames, messages} = elementProps;
 
   const imageSource = imageFilenames?.[0];
-  console.log('Image source:', imageSource != null);
 
   return (
     <View style={styles.mainContainer}>
@@ -146,9 +140,9 @@ const styles = StyleSheet.create({
   },
   lessonNumber: {
     textAlign: 'center',
-    // TODO: Work with james to get the correct sizing here
     fontSize: 11,
     fontWeight: '500',
+    // TODO: is this font natively supported on both platforms?
     fontFamily: 'SF Pro Text',
     color: 'white',
   },
