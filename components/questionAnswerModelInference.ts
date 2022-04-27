@@ -19,7 +19,7 @@ export default async function findAnswer(textString: string, question: string) {
     .toGenericDict()
     .start_logits.toTensor()
     .argmax()
-    .item(); // TODO: change to argmax().item() later.
+    .item();
   const endId = output.toGenericDict().end_logits.toTensor().argmax().item();
   const res = tokenizer.decode(arr.slice(startId, endId + 1));
   return {text: res};
