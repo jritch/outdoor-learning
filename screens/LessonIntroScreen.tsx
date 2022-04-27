@@ -20,7 +20,7 @@ export default function LessonIntroScreen({
       </View>
       <View style={styles.imageSection}>
         <ImageBackground
-          source={{uri: 'https://reactjs.org/logo-og.png'}}
+          source={require('../assets/images/GettyImages-a0052-000570.jpeg')}
           resizeMode="cover"
           style={styles.image}
         />
