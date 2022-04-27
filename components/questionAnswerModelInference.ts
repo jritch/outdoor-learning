@@ -15,8 +15,12 @@ export default async function findAnswer(textString: string, question: string) {
   const modelPath = await MobileModel.download(model); // TODO: Revisit this, cache the model download.
   const nlpModel = await torch.jit._loadForMobile(modelPath);
   const output = await nlpModel.forward(t);
-  const startId = output.toGenericDict().start_logits.toTensor().argmax(); // TODO: change to argmax().item() later.
-  const endId = output.toGenericDict().end_logits.toTensor().argmax();
+  const startId = output
+    .toGenericDict()
+    .start_logits.toTensor()
+    .argmax()
+    .item(); // TODO: change to argmax().item() later.
+  const endId = output.toGenericDict().end_logits.toTensor().argmax().item();
   const res = tokenizer.decode(arr.slice(startId, endId + 1));
   return {text: res};
 }

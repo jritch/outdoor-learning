@@ -70,7 +70,7 @@ export default async function classifyImage(image: Image) {
   const resultTensor = result.toTensor();
 
   // 8. Get the index of the value with the highest probability
-  const maxIdx = resultTensor.argmax();
+  const maxIdx = resultTensor.argmax().item();
 
   // 9. Resolve the most likely class label and return it
   return IMAGE_CLASSES[maxIdx];
