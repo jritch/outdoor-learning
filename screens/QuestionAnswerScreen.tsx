@@ -65,6 +65,7 @@ export default function QuestionAnswerScreen() {
       <TextVoiceInput
         placeHolderText="Ask a question"
         onSubmit={(text: string) => submitQuestion(text)}
+        isSaveEnabled={true}
       />
     </View>
   );

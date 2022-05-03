@@ -13,7 +13,8 @@ export default function LessonIntroScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'LessonIntroScreen'>) {
   const headingTextContent = 'What makes eucalyptus trees so controversial?';
-  const textContent = "Depending on who you ask, eucalyptus trees in the Bay Area are either a fire-prone blight on the landscape or an essential piece of California’s natural heritage. Let’s find out! It will take approximately 10 mins to complete the lesson. Turn up the volume to listen to the narration through audio.";
+  const textContent =
+    'Depending on who you ask, eucalyptus trees in the Bay Area are either a fire-prone blight on the landscape or an essential piece of California’s natural heritage. Let’s find out! It will take approximately 10 mins to complete the lesson. Turn up the volume to listen to the narration through audio.';
 
   return (
     <View style={styles.mainContainer}>

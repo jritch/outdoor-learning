@@ -2,23 +2,27 @@ import {JournalEntry} from '../types';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const APP_WIDE_JOURNAL_KEY = "outdoor_app_journal";
+const APP_WIDE_JOURNAL_KEY = 'outdoor_app_journal';
 
 type StorageResponse = {
-  success: boolean,
-  errorMessage: string | null,
-}
+  success: boolean;
+  errorMessage: string | null;
+};
 
 class JournalUtil {
-
   /**
    * Add an annotation to a lesson and save it for reference.
    */
-  static async saveAnnotation(annotation: JournalEntry): Promise<StorageResponse> {
+  static async saveAnnotation(
+    annotation: JournalEntry,
+  ): Promise<StorageResponse> {
     const currentTimestampString = annotation.timestamp.toString();
     const savedAnnotationKeys = await JournalUtil.getList(APP_WIDE_JOURNAL_KEY);
     if (savedAnnotationKeys == null) {
-      return {success: false, errorMessage: "Could not retrieve the annotations list for the app."};
+      return {
+        success: false,
+        errorMessage: 'Could not retrieve the annotations list for the app.',
+      };
     }
     savedAnnotationKeys.push(currentTimestampString); // This ensures keys to be sorted in ascending order
 
@@ -26,14 +30,20 @@ class JournalUtil {
     try {
       await JournalUtil.saveRecord(currentTimestampString, annotation);
     } catch (e) {
-      return {success: false, errorMessage: 'Error encountered while updating annotations list.'};
+      return {
+        success: false,
+        errorMessage: 'Error encountered while updating annotations list.',
+      };
     }
 
     // Add this annotation to the global list of annotations.
     try {
       await JournalUtil.saveRecord(APP_WIDE_JOURNAL_KEY, savedAnnotationKeys);
     } catch (e) {
-      return {success: false, errorMessage: 'Error encountered while updating annotations list.'};
+      return {
+        success: false,
+        errorMessage: 'Error encountered while updating annotations list.',
+      };
     }
 
     return {success: true, errorMessage: null};
@@ -50,16 +60,21 @@ class JournalUtil {
     const entries = await AsyncStorage.multiGet(allAnnotations);
     const result = [];
     for (let entry of entries) {
-      const stringifiedValue = entry[1] ? entry[1] : "{}"; // To avoid crashes in client calls
+      const stringifiedValue = entry[1] ? entry[1] : '{}'; // To avoid crashes in client calls
       const objectValue = JSON.parse(stringifiedValue);
-      result.push({timestamp: objectValue['timestamp'], images: objectValue['images'], audios: objectValue['audios'], texts: objectValue['texts']});
+      result.push({
+        timestamp: objectValue.timestamp,
+        images: objectValue.images,
+        audios: objectValue.audios,
+        texts: objectValue.texts,
+      });
     }
     return result;
   }
 
   static async saveRecord(key: string, value: any): Promise<void> {
     const stringifiedValue = JSON.stringify(value);
-    await AsyncStorage.setItem(key, stringifiedValue)
+    await AsyncStorage.setItem(key, stringifiedValue);
   }
 
   /**
@@ -69,7 +84,7 @@ class JournalUtil {
     try {
       const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue != null ? JSON.parse(jsonValue) : [];
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
@@ -90,9 +105,9 @@ class JournalUtil {
         // Remove the individual annotation record associated with the key.
         await AsyncStorage.removeItem(key);
       } else {
-        console.log("Error!");
+        console.log('Error!');
       }
-    } catch(e) {
+    } catch (e) {
       // remove error
     }
   }
@@ -105,7 +120,10 @@ class JournalUtil {
         await JournalUtil.saveRecord(APP_WIDE_JOURNAL_KEY, modifiedAnnotations);
         return {success: true, errorMessage: null};
       } catch (e) {
-        return {success: false, errorMessage: 'Error encountered while updating annotations list.'};
+        return {
+          success: false,
+          errorMessage: 'Error encountered while updating annotations list.',
+        };
       }
     }
     return {success: false, errorMessage: 'No annotations exist in the app.'};

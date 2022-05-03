@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { ImageBackground, Platform, View, StyleSheet, Text } from 'react-native';
+import {useState} from 'react';
+import {ImageBackground, Platform, View, StyleSheet, Text} from 'react-native';
 import PlayAudioButton from '../components/PlayAudioButton';
 
 import {JournalEntry} from '../types';
 
 type Props = {
   entry: JournalEntry;
-}
+};
 
 /**
  * Currently, assumes only a single entry for images, audios and texts.
@@ -16,7 +16,10 @@ export default function JournalRecordScreen(props: Props) {
   const dateText = calculateDateText(props.entry.timestamp);
   const timeText = calculateTimeText(props.entry.timestamp);
   const notesText = props.entry.texts[0];
-  const imageSource = Platform.OS == 'ios' ? props.entry.images[0] : 'file://' + props.entry.images[0]; // android expects the 'file://' for local file paths.
+  const imageSource =
+    Platform.OS == 'ios'
+      ? props.entry.images[0]
+      : 'file://' + props.entry.images[0]; // android expects the 'file://' for local file paths.
   const audioSource = props.entry.audios[0];
 
   function calculateDateText(timestamp: number) {
@@ -27,7 +30,9 @@ export default function JournalRecordScreen(props: Props) {
     return '1:32 PM'; // TODO: Write a function to parse the time string from timestamp
   }
 
-  const handleError = (e: any) => {console.log(e.nativeEvent.error)}
+  const handleError = (e: any) => {
+    console.log(e.nativeEvent.error);
+  };
 
   return (
     <View style={styles.container}>
@@ -57,15 +62,15 @@ export default function JournalRecordScreen(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#121212'
+    backgroundColor: '#121212',
   },
   timestampText: {
     color: 'white',
-    fontSize: 13
+    fontSize: 13,
   },
   notesText: {
     color: 'white',
-    fontSize: 16
+    fontSize: 16,
   },
   image: {
     flex: 1,

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { ImageBackground, Pressable, View, StyleSheet, Text} from 'react-native';
+import {ImageBackground, Pressable, View, StyleSheet, Text} from 'react-native';
 
 type Props = {
-  thumbnailImage: string,
-  timestamp: number,
-  onClick: Function,
-}
+  thumbnailImage: string;
+  timestamp: number;
+  onClick: Function;
+};
 
 export default function JournalCard(props: Props) {
   const dateString = calculateDateString(props.timestamp);
@@ -52,12 +52,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 13
+    fontSize: 13,
   },
   textView: {
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   imageSection: {
     height: 155,

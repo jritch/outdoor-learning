@@ -23,6 +23,8 @@ export type RootStackParamList = {
   LessonContentScreen: {elementId: number} | undefined;
   LessonTabNavigator: NavigatorScreenParams<LessonTabParamList> | undefined;
   FindScanEucalyptusTreeScreen: undefined;
+  TipsToFindEucalyptusTreesScreen: undefined;
+  Playground: undefined;
   Modal: undefined;
   NotFound: undefined;
 };
@@ -42,8 +44,8 @@ export type RootTabScreenProps<Screen extends keyof LessonTabParamList> =
   >;
 
 export type JournalEntry = {
-  timestamp: number,
-  images: Array<string>,
-  audios: Array<string>,
-  texts: Array<string>,
+  timestamp: number;
+  images: Array<string>;
+  audios: Array<string>;
+  texts: Array<string>;
 };

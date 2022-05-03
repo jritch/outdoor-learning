@@ -25,8 +25,8 @@ var timerStartedTimestamp: number = Date.now();
 
 type Props = {
   placeHolderText: string; // Text input place holder text
-  onSubmit: Function;      // Callback when input is submitted from the keyboard
-  isSaveEnabled: boolean;  // To display a 'Save' button to save notes to the File system
+  onSubmit: Function; // Callback when input is submitted from the keyboard
+  isSaveEnabled: boolean; // To display a 'Save' button to save notes to the File system
 };
 
 /**
@@ -173,12 +173,10 @@ export default function TextVoiceInput(props: Props) {
   function constructJournalRecord(audios: Array<string>, texts: Array<string>) {
     return {
       timestamp: Date.now(),
-      images: [
-        'https://reactjs.org/logo-og.png'
-      ],
+      images: ['https://reactjs.org/logo-og.png'],
       audios: audios,
       texts: texts,
-    }
+    };
   }
 
   async function save() {
@@ -186,7 +184,10 @@ export default function TextVoiceInput(props: Props) {
     if (recordedAudio) {
       audioFilePath = await AudioUtil.toFile(recordedAudio);
     }
-    const journalRecord = constructJournalRecord(audioFilePath ? [audioFilePath] : [], [textInputValue]);
+    const journalRecord = constructJournalRecord(
+      audioFilePath ? [audioFilePath] : [],
+      [textInputValue],
+    );
     const result = await JournalUtil.saveAnnotation(journalRecord);
     console.log('Record saved!');
     setShowSaveNotesView(false);
@@ -199,7 +200,7 @@ export default function TextVoiceInput(props: Props) {
           flex: 1,
           marginLeft: 24,
           marginRight: 24,
-          bottom: showSaveNotesView ? 90: 0
+          bottom: showSaveNotesView ? 90 : 0,
         }}
       >
         <TextInput
@@ -258,16 +259,13 @@ export default function TextVoiceInput(props: Props) {
           </View>
         )}
       </View>
-       <View>
+      <View>
         {showSaveNotesView && (
           <View style={styles.saveButtonView}>
-            <TouchableOpacity
-              onPress={save} style={{width: '100%'}}>
+            <TouchableOpacity onPress={save} style={{width: '100%'}}>
               <View style={styles.saveButton}>
                 <View>
-                  <Text style={styles.saveButtonText}>
-                    SAVE
-                  </Text>
+                  <Text style={styles.saveButtonText}>SAVE</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -315,7 +313,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
     marginLeft: 24,
-    marginRight: 24
+    marginRight: 24,
   },
   saveButtonText: {
     color: 'rgba(0, 0, 0, 1)',

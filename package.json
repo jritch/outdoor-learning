@@ -18,6 +18,7 @@
     "prettier": "prettier --write .",
     "prettier-check": "prettier --check .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "npm run lint -- --fix",
     "prepare": "husky install"
   },
   "jest": {
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
@@ -39,7 +41,6 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
-    "@react-native-async-storage/async-storage": "~1.15.0",
     "react-native-pytorch-core": "0.0.0-04262022-1207-f4308c17e",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
@@ -48,7 +49,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@react-native-community/eslint-config": "^2.0.0",
-    "@types/react": "~17.0.21",
+    "@types/react": "^18.0.8",
     "@types/react-native": "~0.64.12",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",

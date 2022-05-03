@@ -2,7 +2,8 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 export default function JournalNUXScreen() {
-  const nuxMessageText = "Find and scan a eucalyptus tree to start your journal.";
+  const nuxMessageText =
+    'Find and scan a eucalyptus tree to start your journal.';
 
   return (
     <View style={styles.container}>
@@ -22,6 +23,6 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'white'
-  }
+    color: 'white',
+  },
 });
