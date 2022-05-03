@@ -31,6 +31,7 @@ import LessonContentScreen from '../screens/LessonContentScreen';
 import LearnScreen from '../screens/LearnScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
 import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScreen';
+import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTreesScreen';
 
 export default function Navigation({
   colorScheme,
@@ -83,6 +84,10 @@ function RootNavigator() {
       <Stack.Screen
         name="FindScanEucalyptusTreeScreen"
         component={FindScanEucalyptusTreeScreen}
+      />
+      <Stack.Screen
+        name="TipsToFindEucalyptusTreesScreen"
+        component={TipsToFindEucalyptusTreesScreen}
       />
       <Stack.Screen
         name="LessonContentScreen"
