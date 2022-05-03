@@ -17,6 +17,7 @@ import {useEffect, useState} from 'react';
 import {Audio, AudioUtil} from 'react-native-pytorch-core';
 import RecordingMicrophone from './RecordingMicrophone';
 import transcribe from './speechTranslation';
+import JournalUtil from './Journal';
 
 // Globals for audio recording timer
 var stopTimer: boolean = false;
@@ -164,6 +165,20 @@ export default function TextVoiceInput(props: Props) {
     if (onSubmitCallback) {
       onSubmitCallback(textInputValue);
     }
+    if (isSaveEnabled) {
+      setShowSaveNotesView(true);
+    }
+  }
+
+  function constructJournalRecord(audios: Array<string>, texts: Array<string>) {
+    return {
+      timestamp: Date.now(),
+      images: [
+        'https://reactjs.org/logo-og.png'
+      ],
+      audios: audios,
+      texts: texts,
+    }
   }
 
   async function save() {
@@ -171,6 +186,9 @@ export default function TextVoiceInput(props: Props) {
     if (recordedAudio) {
       audioFilePath = await AudioUtil.toFile(recordedAudio);
     }
+    const journalRecord = constructJournalRecord(audioFilePath ? [audioFilePath] : [], [textInputValue]);
+    const result = await JournalUtil.saveAnnotation(journalRecord);
+    console.log('Record saved!');
     setShowSaveNotesView(false);
   }
 
