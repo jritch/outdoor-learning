@@ -14,7 +14,7 @@ import {
   Pressable,
 } from 'react-native';
 import {useEffect, useState} from 'react';
-import {AudioUtil} from 'react-native-pytorch-core';
+import {Audio, AudioUtil} from 'react-native-pytorch-core';
 import RecordingMicrophone from './RecordingMicrophone';
 import transcribe from './speechTranslation';
 
@@ -23,11 +23,26 @@ var stopTimer: boolean = false;
 var timerStartedTimestamp: number = Date.now();
 
 type Props = {
-  placeHolderText: string;
-  onSubmit: Function;
+  placeHolderText: string; // Text input place holder text
+  onSubmit: Function;      // Callback when input is submitted from the keyboard
+  isSaveEnabled: boolean;  // To display a 'Save' button to save notes to the File system
 };
 
+/**
+ * Sample usage with KeyboardAvoidingView:
+ * NOTE: Set the keyboardVerticalOffset to an appropriate value to ensure that the text input is placed above the keyboard.
+ *
+ * <KeyboardAvoidingView style={styles.container} behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={110}>
+     <View style={styles.startButton} />
+     <TextVoiceInput placeHolderText={'Add notes'} onSubmit={() => {}} />
+   </KeyboardAvoidingView>
+ */
+
 export default function TextVoiceInput(props: Props) {
+  // Props
+  const onSubmitCallback = props.onSubmit;
+  const isSaveEnabled = props.isSaveEnabled;
+
   // Constants
   const defaultTimerText = '00:00:00';
   const defaultPlaceHolderText = props.placeHolderText;
@@ -38,7 +53,9 @@ export default function TextVoiceInput(props: Props) {
   const recordButtonImageSource =
     'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/recordButton.png';
 
+  // State variables
   const [showRecordingView, setShowRecordingView] = useState<boolean>(false);
+  const [showSaveNotesView, setShowSaveNotesView] = useState<boolean>(false);
   const [isAudioRecording, setIsAudioRecording] = useState<boolean>(false);
   const [textInputValue, setTextInputValue] = useState('');
   const [placeHolderText, setPlaceHolderText] = useState(
@@ -48,8 +65,7 @@ export default function TextVoiceInput(props: Props) {
     defaultPlaceHolderTextColor,
   );
   const [timerText, setTimerText] = useState(defaultTimerText);
-
-  const onSubmitCallback = props.onSubmit;
+  const [recordedAudio, setRecordedAudio] = useState<Audio | null>(null);
 
   /**
    * Add this part when the component is used with a screen which uses navigation to
@@ -77,12 +93,17 @@ export default function TextVoiceInput(props: Props) {
       setTextInputValue(transcribingPlaceHolderText);
       const result = await transcribe(audio);
       setTextInputValue(textInputValue + result.text);
+      setRecordedAudio(audio);
     }
     setTimerText(defaultTimerText);
+    if (isSaveEnabled) {
+      setShowSaveNotesView(true);
+    }
   }
 
   function startAudioRecording() {
     openAudioRecordingView();
+    setRecordedAudio(null);
     AudioUtil.startRecord();
     setIsAudioRecording(true);
   }
@@ -94,6 +115,7 @@ export default function TextVoiceInput(props: Props) {
       recordingPlaceHolderTextColor,
     );
     setShowRecordingView(true);
+    setShowSaveNotesView(false);
     timerStartedTimestamp = Date.now();
     startRecordingTimer();
   }
@@ -144,18 +166,22 @@ export default function TextVoiceInput(props: Props) {
     }
   }
 
+  async function save() {
+    var audioFilePath = null;
+    if (recordedAudio) {
+      audioFilePath = await AudioUtil.toFile(recordedAudio);
+    }
+    setShowSaveNotesView(false);
+  }
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      style={styles.wrapper}
-    >
+    <View style={styles.wrapper}>
       <View
         style={{
           flex: 1,
-          justifyContent: 'flex-end',
           marginLeft: 24,
           marginRight: 24,
-          bottom: showRecordingView ? 250 : 60,
+          bottom: showSaveNotesView ? 90: 0
         }}
       >
         <TextInput
@@ -214,7 +240,23 @@ export default function TextVoiceInput(props: Props) {
           </View>
         )}
       </View>
-    </KeyboardAvoidingView>
+       <View>
+        {showSaveNotesView && (
+          <View style={styles.saveButtonView}>
+            <TouchableOpacity
+              onPress={save} style={{width: '100%'}}>
+              <View style={styles.saveButton}>
+                <View>
+                  <Text style={styles.saveButtonText}>
+                    SAVE
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </View>
   );
 }
 
@@ -230,6 +272,13 @@ const styles = StyleSheet.create({
     height: 280,
     alignItems: 'center',
   },
+  saveButtonView: {
+    bottom: 0,
+    position: 'absolute',
+    width: '100%',
+    height: 120,
+    alignItems: 'center',
+  },
   timer: {
     top: 69,
     color: 'rgba(235, 235, 245, 0.6)',
@@ -240,5 +289,21 @@ const styles = StyleSheet.create({
     top: 90,
     width: 56,
     height: 56,
+  },
+  saveButton: {
+    height: 40,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    marginLeft: 24,
+    marginRight: 24
+  },
+  saveButtonText: {
+    color: 'rgba(0, 0, 0, 1)',
+    fontSize: 14,
+    alignContent: 'flex-end',
+    fontWeight: 'bold',
+    marginBottom: 2,
   },
 });
