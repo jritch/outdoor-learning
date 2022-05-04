@@ -1,20 +1,10 @@
 import * as React from 'react';
-import {
-  ImageBackground,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Dimensions} from 'react-native';
 import type {InformationalElement} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
-
-const leftArrow = require('../../assets/images/left-arrow-3x.png');
-const rightArrow = require('../../assets/images/right-arrow-3x.png');
+import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 
 type Props = {
   elementProps: InformationalElement;
@@ -24,76 +14,33 @@ type Props = {
 
 export default function InformationalComponent({
   navigation,
+  route,
   elementProps,
   elementId,
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
-  const windowHeight = Dimensions.get('window').height;
-
   const {imageFilenames, messages} = elementProps;
 
   const imageSource = imageFilenames?.[0];
 
   return (
-    <View style={styles.mainContainer}>
-      {imageSource != null && (
-        <View style={styles.imageSection}>
-          <ImageBackground
-            source={imageSource}
-            resizeMode="cover"
-            style={{
-              height: windowHeight * 0.4,
-            }}
-          />
-        </View>
-      )}
-      <View style={styles.messageSection}>
-        {messages.map((message, i) => (
-          <ChatBubble
-            key={i}
-            alignment="left"
-            view={<Text style={styles.bubbleText}>{message}</Text>}
-            bubbleColor={'rgba(38, 38, 39, 1)'}
-            backgroundColor={'#121212'}
-          />
-        ))}
-      </View>
-      <View style={styles.navigationSection}>
-        <View style={styles.arrowContainer}>
-          {elementId > 0 && (
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() =>
-                navigation.navigate('LessonContentScreen', {
-                  elementId: elementId - 1,
-                })
-              }
-            >
-              <Image source={leftArrow} style={styles.arrow} />
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={styles.lessonNumberContainer}>
-          <Text style={styles.lessonNumber}>{`${
-            elementId + 1
-          }/${totalElements}`}</Text>
-        </View>
-        <View style={styles.arrowContainer}>
-          {elementId + 1 < totalElements && (
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() =>
-                navigation.navigate('LessonContentScreen', {
-                  elementId: elementId + 1,
-                })
-              }
-            >
-              <Image source={rightArrow} style={styles.arrow} />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
-    </View>
+    <LessonPrimaryLayout
+      elementId={elementId}
+      totalElements={totalElements}
+      imageSource={imageSource ?? null}
+      navigation={navigation}
+      route={route}
+    >
+      {messages.map((message, i) => (
+        <ChatBubble
+          key={i}
+          alignment="left"
+          view={<Text style={styles.bubbleText}>{message}</Text>}
+          bubbleColor={'rgba(38, 38, 39, 1)'}
+          backgroundColor={'#121212'}
+        />
+      ))}
+    </LessonPrimaryLayout>
   );
 }
 
