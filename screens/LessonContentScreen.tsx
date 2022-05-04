@@ -4,6 +4,7 @@ import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
 import InformationalComponent from './lesson_elements/InformationalComponent';
+import LessonOptionsBar from '../components/LessonOptionsBar';
 
 export default function LessonContentScreen({
   navigation,
@@ -15,6 +16,7 @@ export default function LessonContentScreen({
   const element = EucalyptusLesson.elements[elementId];
 
   let reactElement = null;
+  let optionsBar = null;
 
   if (element.__type === 'InformationalElement') {
     reactElement = (
@@ -27,48 +29,30 @@ export default function LessonContentScreen({
     );
   }
 
-  return <View style={styles.mainContainer}>{reactElement}</View>;
+  if (element.__type === 'InformationalElement') {
+    optionsBar = (
+      <View style={styles.optionsBarArea}>
+        <LessonOptionsBar />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.mainContainer}>
+      {reactElement}
+      {optionsBar}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
-  headingText: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  headingSection: {
-    marginLeft: 24,
-    marginRight: 24,
-  },
-  startButtonText: {
-    color: '#000000',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 2,
-  },
-  button: {
-    height: 40,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
-    marginLeft: 24,
-    marginRight: 24,
-  },
-  buttonPosition: {
+  optionsBarArea: {
     position: 'absolute',
-    bottom: 84,
+    top: 0,
     width: '100%',
-  },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  imageSection: {
-    backgroundColor: '#ffffff',
-    flex: 1,
+    height: '100%',
   },
 });
