@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "node_modules/expo/AppEntry.js",
   "engines": {
-    "npm": ">=8.2.3",
+    "npm": "***PLEASE USE YARN INSTEAD OF NPM***",
     "yarn": ">=1"
   },
   "engineStrict": true,
@@ -18,7 +18,7 @@
     "prettier": "prettier --write .",
     "prettier-check": "prettier --check .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint-fix": "npm run lint -- --fix",
+    "lint-fix": "yarn run lint -- --fix",
     "prepare": "husky install"
   },
   "jest": {
