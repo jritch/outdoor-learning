@@ -2,18 +2,15 @@ import * as React from 'react';
 import {
   Image,
   Keyboard,
-  KeyboardAvoidingView,
   TouchableOpacity,
   View,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   TextInput,
   Text,
   Platform,
   Pressable,
 } from 'react-native';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {Audio, AudioUtil} from 'react-native-pytorch-core';
 import RecordingMicrophone from './RecordingMicrophone';
 import transcribe from './speechTranslation';
@@ -27,6 +24,7 @@ type Props = {
   placeHolderText: string; // Text input place holder text
   onSubmit: Function; // Callback when input is submitted from the keyboard
   isSaveEnabled: boolean; // To display a 'Save' button to save notes to the File system
+  targetImage: string | null; // The image for which notes are taken
 };
 
 /**
@@ -171,9 +169,12 @@ export default function TextVoiceInput(props: Props) {
   }
 
   function constructJournalRecord(audios: Array<string>, texts: Array<string>) {
+    const targetImagePath = props.targetImage
+      ? props.targetImage
+      : 'https://reactjs.org/logo-og.png';
     return {
       timestamp: Date.now(),
-      images: ['https://reactjs.org/logo-og.png'],
+      images: [targetImagePath],
       audios: audios,
       texts: texts,
     };

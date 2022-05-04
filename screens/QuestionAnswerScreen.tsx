@@ -1,12 +1,20 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {ScrollView, View, StyleSheet, Text} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import TextVoiceInput from '../components/TextVoiceInput';
 import ChatBubble from '../components/ChatBubble';
 import findAnswer from '../components/questionAnswerModelInference';
 
 export default function QuestionAnswerScreen() {
-  const chatBubbles: Array<any> = [];
+  const startPromptText = 'Type your question or ask through voice.';
+  const chatBubbles: Array<any> = [getChatBubbleForAnswer(startPromptText)];
   const [data, setData] = useState(chatBubbles);
   const textBlurb =
     'Eucalyptus trees can grow upto 33 meters in height. Eucalyptus trees are originally found in Australia and the islands surrounding it. Famously, these trees are home to some animals like koalas in Australia. The diet of koalas consists almost solely of eucalyptus leaves! You might also notice that eucalyptus has a distinctive bark pattern. You’ll notice that there’s a huge concentration of eucalyptus trees in California specifically.';
@@ -58,22 +66,29 @@ export default function QuestionAnswerScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={{width: '100%', height: '65%'}}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+    >
+      <View style={{width: '100%', height: '70%', marginTop: 45}}>
         <ScrollView style={styles.scrollView}>{data}</ScrollView>
       </View>
-      <TextVoiceInput
-        placeHolderText="Ask a question"
-        onSubmit={(text: string) => submitQuestion(text)}
-        isSaveEnabled={true}
-      />
-    </View>
+      <View style={{flex: 1, marginTop: 20}}>
+        <TextVoiceInput
+          placeHolderText="Ask a question"
+          onSubmit={(text: string) => submitQuestion(text)}
+          isSaveEnabled={false}
+          targetImage={null}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#121212',
   },
   scrollView: {
     backgroundColor: '#121212',
