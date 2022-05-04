@@ -3,11 +3,10 @@ import {Image, TouchableOpacity, View, StyleSheet, Text} from 'react-native';
 import {AudioUtil} from 'react-native-pytorch-core';
 
 type Props = {
-  source: string
+  source: string;
 };
 
 export default function PlayAudioButton(props: Props) {
-
   const playAudioIconSource =
     'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/play_audio.png';
 
@@ -18,17 +17,20 @@ export default function PlayAudioButton(props: Props) {
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={playAudio}>
+      <TouchableOpacity onPress={playAudio}>
         <View style={styles.playButton}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', width: 110}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: 110,
+            }}
+          >
             <Image
               style={styles.playAudioImage}
               source={{uri: playAudioIconSource}}
             />
-            <Text style={styles.playButtonText}>
-              PLAY AUDIO
-            </Text>
+            <Text style={styles.playButtonText}>PLAY AUDIO</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -55,6 +57,6 @@ const styles = StyleSheet.create({
   playAudioImage: {
     width: 14,
     height: 14,
-    marginTop: 2
-  }
+    marginTop: 2,
+  },
 });

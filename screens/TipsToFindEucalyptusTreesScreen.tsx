@@ -10,23 +10,21 @@ import {
 } from 'react-native';
 
 export default function TipsToFindEucalyptusTreesScreen() {
-  const text1 = "Eucalyptus leaves are long and thin, with a slight bulge in the middle.";
-  const text2 = "You might also notice that eucalyptus has a distinctive bark pattern.";
-  const heading = "Tips on how to find eucalyptus trees";
+  const text1 =
+    'Eucalyptus leaves are long and thin, with a slight bulge in the middle.';
+  const text2 =
+    'You might also notice that eucalyptus has a distinctive bark pattern.';
+  const heading = 'Tips on how to find eucalyptus trees';
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.mainContainer}>
         <ScrollView style={{height: '100%'}}>
           <View>
-            <Text style={styles.headingSection}>
-              {heading}
-            </Text>
+            <Text style={styles.headingSection}>{heading}</Text>
           </View>
           <View>
-            <Text style={styles.textSection}>
-              {text1}
-            </Text>
+            <Text style={styles.textSection}>{text1}</Text>
           </View>
           <View style={styles.imageSection}>
             <ImageBackground
@@ -37,9 +35,7 @@ export default function TipsToFindEucalyptusTreesScreen() {
             />
           </View>
           <View style={styles.textSection}>
-            <Text style={styles.textSection}>
-              {text2}
-            </Text>
+            <Text style={styles.textSection}>{text2}</Text>
           </View>
           <View style={styles.imageSection}>
             <ImageBackground
@@ -52,10 +48,7 @@ export default function TipsToFindEucalyptusTreesScreen() {
         </ScrollView>
       </View>
       <View style={styles.buttonPosition}>
-        <TouchableOpacity
-          onPress={() => {}}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={() => {}} style={styles.button}>
           <Text style={styles.findButtonText}>{'FIND'}</Text>
         </TouchableOpacity>
       </View>
@@ -109,6 +102,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     marginLeft: 24,
-    marginRight: 24
+    marginRight: 24,
   },
 });
