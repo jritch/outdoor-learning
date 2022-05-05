@@ -5,7 +5,6 @@
  */
 import {Foundation} from '@expo/vector-icons';
 import {Ionicons} from '@expo/vector-icons';
-import {FontAwesome} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NavigationContainer,
@@ -14,21 +13,14 @@ import {
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
-import {ColorSchemeName, Pressable} from 'react-native';
+import {ColorSchemeName} from 'react-native';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import DevIntroScreen from '../screens/DevIntroScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import {
-  RootStackParamList,
-  LessonTabParamList,
-  RootTabScreenProps,
-} from '../types';
+import {RootStackParamList, LessonTabParamList} from '../types';
 import LessonIntroScreen from '../screens/LessonIntroScreen';
 import LessonContentScreen from '../screens/LessonContentScreen';
-import HomeworkScreen from '../screens/HomeworkScreen';
 import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScreen';
 import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTreesScreen';
 import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
@@ -56,7 +48,6 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const colorScheme = useColorScheme();
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -123,8 +114,6 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<LessonTabParamList>();
 
 function LessonTabNavigator() {
-  const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="Learn"
@@ -133,7 +122,7 @@ function LessonTabNavigator() {
       <BottomTab.Screen
         name="Learn"
         component={FindScanEucalyptusTreeScreen}
-        options={({navigation}: RootTabScreenProps<'Learn'>) => ({
+        options={() => ({
           title: 'Learn',
           tabBarIcon: ({color}) => (
             <Foundation name="play-video" size={30} color={color} />
@@ -152,14 +141,4 @@ function LessonTabNavigator() {
       />
     </BottomTab.Navigator>
   );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{marginBottom: -3}} {...props} />;
 }
