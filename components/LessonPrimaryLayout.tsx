@@ -84,9 +84,7 @@ export default function LessonPrimaryLayout({
         <LessonOptionsBar
           displayQuestionAnswerScreen={false}
           onClose={() => navigation.navigate('LessonTabNavigator')}
-          onQuestionMark={() =>
-            navigation.navigate('QuestionAnswerScreen', {elementId})
-          }
+          onQuestionMark={() => navigation.navigate('QuestionAnswerScreen')}
         />
       </View>
     </View>

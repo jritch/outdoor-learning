@@ -27,7 +27,7 @@ export type RootStackParamList = {
   Playground: undefined;
   SampleEucalyptusTreesScreen: undefined;
   NotFound: undefined;
-  QuestionAnswerScreen: {elementId: number};
+  QuestionAnswerScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

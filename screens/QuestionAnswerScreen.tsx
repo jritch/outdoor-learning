@@ -17,7 +17,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export default function QuestionAnswerScreen({
   navigation,
-  route,
 }: NativeStackScreenProps<RootStackParamList, 'QuestionAnswerScreen'>) {
   const startPromptText = 'Type your question or ask through voice.';
   const chatBubbles: Array<any> = [getChatBubbleForAnswer(startPromptText)];
@@ -91,11 +90,6 @@ export default function QuestionAnswerScreen({
         <LessonOptionsBar
           displayQuestionAnswerScreen={true}
           onClose={() => navigation.goBack()}
-          onQuestionMark={() =>
-            navigation.navigate('QuestionAnswerScreen', {
-              elementId: route.params.elementId,
-            })
-          }
         />
       </View>
     </KeyboardAvoidingView>
