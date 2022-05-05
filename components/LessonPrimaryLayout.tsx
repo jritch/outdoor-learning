@@ -10,6 +10,7 @@ import {
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Dimensions} from 'react-native';
+import LessonOptionsBar from './LessonOptionsBar';
 
 const leftArrow = require('assets/images/left-arrow-3x.png');
 const rightArrow = require('assets/images/right-arrow-3x.png');
@@ -79,6 +80,16 @@ export default function LessonPrimaryLayout({
           )}
         </View>
       </View>
+      <View style={styles.optionBarWrapper}>
+        <LessonOptionsBar
+          navigation={navigation}
+          elementId={elementId}
+          displayQuestionAnswerScreen={false}
+          closeCallback={() =>
+            navigation.navigate('FindScanEucalyptusTreeScreen')
+          }
+        />
+      </View>
     </View>
   );
 }
@@ -89,6 +100,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100%',
+    position: 'relative',
+  },
+  optionBarWrapper: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
   },
   body: {
     display: 'flex',

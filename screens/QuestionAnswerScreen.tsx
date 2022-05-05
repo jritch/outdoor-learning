@@ -82,7 +82,7 @@ export default function QuestionAnswerScreen(props: Props) {
       style={styles.container}
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
     >
-      <View style={{width: '100%', height: '70%', marginTop: 45}}>
+      <View style={{width: '100%', height: '70%', marginTop: 104}}>
         <ScrollView style={styles.scrollView}>{data}</ScrollView>
       </View>
       <View style={{flex: 1, marginTop: 20}}>
