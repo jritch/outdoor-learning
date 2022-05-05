@@ -32,6 +32,7 @@ import LearnScreen from '../screens/LearnScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
 import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScreen';
 import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTreesScreen';
+import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
 
 export default function Navigation({
   colorScheme,
@@ -97,6 +98,10 @@ function RootNavigator() {
           headerBackVisible: true,
           title: 'Stanford Nature',
         }}
+      />
+      <Stack.Screen
+        name="QuestionAnswerScreen"
+        component={QuestionAnswerScreen}
       />
       <Stack.Screen
         name="NotFound"

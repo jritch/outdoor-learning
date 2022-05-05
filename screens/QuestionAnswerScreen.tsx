@@ -13,13 +13,12 @@ import ChatBubble from '../components/ChatBubble';
 import findAnswer from '../components/questionAnswerModelInference';
 import LessonOptionsBar from '../components/LessonOptionsBar';
 
-import type {RootStackParamList} from '../types';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+type Props = {
+  navigation: any;
+  route: any;
+};
 
-export default function QuestionAnswerScreen({
-  navigation,
-  route,
-}): NativeStackScreenProps<RootStackParamList, 'LessonIntroScreen'> {
+export default function QuestionAnswerScreen(props: Props) {
   const startPromptText = 'Type your question or ask through voice.';
   const chatBubbles: Array<any> = [getChatBubbleForAnswer(startPromptText)];
   const [data, setData] = useState(chatBubbles);
@@ -73,8 +72,8 @@ export default function QuestionAnswerScreen({
   }
 
   function goToPreviousScreen() {
-    navigation.navigate('LessonContentScreen', {
-      elementId: route.params.elementId,
+    props.navigation.navigate('LessonContentScreen', {
+      elementId: props.route.params.elementId,
     });
   }
 
@@ -96,7 +95,8 @@ export default function QuestionAnswerScreen({
       </View>
       <View style={styles.optionsBarArea}>
         <LessonOptionsBar
-          {...navigation}
+          navigation={props.navigation}
+          elementId={props.route.params.elementId}
           displayQuestionAnswerScreen={true}
           closeCallback={goToPreviousScreen}
         />

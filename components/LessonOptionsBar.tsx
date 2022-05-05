@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Image, TouchableOpacity, View, StyleSheet, Text} from 'react-native';
 
-import type {RootStackParamList} from '../types';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-
 //const closeIcon = require('../assets/images/close-icon.png');
 const closeIcon =
   'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close-icon.png';
@@ -18,16 +15,21 @@ const questionMarkSelectedIcon =
  *    <LessonOptionsBar />
  * </View>
  */
-export default function LessonOptionsBar({
-  navigation,
-  elementId,
-  displayQuestionAnswerScreen,
-  closeCallback,
-}): NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> {
-  const closeAction = closeCallback;
+type Props = {
+  navigation: any;
+  elementId: number;
+  displayQuestionAnswerScreen: boolean;
+  closeCallback: Function;
+};
+
+export default function LessonOptionsBar(props: Props) {
+  const closeAction = props.closeCallback;
+  const currentElementId = props.elementId;
 
   function openQAScreen() {
-    navigation.navigate('QuestionAnswerScreen', {elementId});
+    props.navigation.navigate('QuestionAnswerScreen', {
+      elementId: currentElementId,
+    });
   }
 
   return (
@@ -50,7 +52,7 @@ export default function LessonOptionsBar({
           >
             <Image
               source={{
-                uri: displayQuestionAnswerScreen
+                uri: props.displayQuestionAnswerScreen
                   ? questionMarkSelectedIcon
                   : questionMarkUnselectedIcon,
               }}
