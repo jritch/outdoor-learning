@@ -28,11 +28,11 @@ import {
 } from '../types';
 import LessonIntroScreen from '../screens/LessonIntroScreen';
 import LessonContentScreen from '../screens/LessonContentScreen';
-import LearnScreen from '../screens/LearnScreen';
 import HomeworkScreen from '../screens/HomeworkScreen';
 import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScreen';
 import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTreesScreen';
 import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
+import JournalScreen from '../screens/JournalScreen';
 
 export default function Navigation({
   colorScheme,
@@ -132,32 +132,17 @@ function LessonTabNavigator() {
     >
       <BottomTab.Screen
         name="Learn"
-        component={LearnScreen}
+        component={FindScanEucalyptusTreeScreen}
         options={({navigation}: RootTabScreenProps<'Learn'>) => ({
           title: 'Learn',
           tabBarIcon: ({color}) => (
             <Foundation name="play-video" size={30} color={color} />
           ),
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({pressed}) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{marginRight: 15}}
-              />
-            </Pressable>
-          ),
         })}
       />
       <BottomTab.Screen
         name="Homework"
-        component={HomeworkScreen}
+        component={JournalScreen}
         options={{
           title: 'Homework',
           tabBarIcon: ({color}) => (
