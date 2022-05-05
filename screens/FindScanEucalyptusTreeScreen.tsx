@@ -12,7 +12,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import classifyImage from '../components/ImageClassifier';
 import Bubble from '../components/Bubble';
 
-import SampleEucalyptusTreesScreen from './SampleEucalyptusTreesScreen';
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
