@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {useState} from 'react';
 import {Image, TouchableOpacity, View, StyleSheet, Text} from 'react-native';
 
-import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
+import type {RootStackParamList} from '../types';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 //const closeIcon = require('../assets/images/close-icon.png');
 const closeIcon =
@@ -18,36 +18,25 @@ const questionMarkSelectedIcon =
  *    <LessonOptionsBar />
  * </View>
  */
-export default function LessonOptionsBar() {
-  const [showQAScreen, setShowQAScreen] = useState<boolean>(false);
-  const [questionMarkIconSource, setQuestionMarkIconSource] = useState(
-    questionMarkUnselectedIcon,
-  );
+export default function LessonOptionsBar({
+  navigation,
+  elementId,
+  displayQuestionAnswerScreen,
+  closeCallback,
+}): NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> {
+  const closeAction = closeCallback;
 
   function openQAScreen() {
-    setShowQAScreen(true);
-    setQuestionMarkIconSource(questionMarkSelectedIcon);
-  }
-
-  function closeQAScreen() {
-    setShowQAScreen(false);
-    setQuestionMarkIconSource(questionMarkUnselectedIcon);
+    navigation.navigate('QuestionAnswerScreen', {elementId});
   }
 
   return (
     <View style={{flex: 1}}>
-      {showQAScreen && (
-        <View
-          style={{position: 'absolute', top: 0, width: '100%', height: '100%'}}
-        >
-          <QuestionAnswerScreen />
-        </View>
-      )}
       <View style={styles.optionsBar}>
         <View style={styles.closeIcon}>
           <TouchableOpacity
             onPress={() => {
-              closeQAScreen();
+              closeAction();
             }}
           >
             <Image source={{uri: closeIcon}} style={{width: 40, height: 40}} />
@@ -60,7 +49,11 @@ export default function LessonOptionsBar() {
             }}
           >
             <Image
-              source={{uri: questionMarkIconSource}}
+              source={{
+                uri: displayQuestionAnswerScreen
+                  ? questionMarkSelectedIcon
+                  : questionMarkUnselectedIcon,
+              }}
               style={{width: 40, height: 40}}
             />
           </TouchableOpacity>

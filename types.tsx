@@ -27,6 +27,7 @@ export type RootStackParamList = {
   Playground: undefined;
   Modal: undefined;
   NotFound: undefined;
+  QuestionAnswerScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

@@ -11,8 +11,15 @@ import {
 import TextVoiceInput from '../components/TextVoiceInput';
 import ChatBubble from '../components/ChatBubble';
 import findAnswer from '../components/questionAnswerModelInference';
+import LessonOptionsBar from '../components/LessonOptionsBar';
 
-export default function QuestionAnswerScreen() {
+import type {RootStackParamList} from '../types';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+export default function QuestionAnswerScreen({
+  navigation,
+  route,
+}): NativeStackScreenProps<RootStackParamList, 'LessonIntroScreen'> {
   const startPromptText = 'Type your question or ask through voice.';
   const chatBubbles: Array<any> = [getChatBubbleForAnswer(startPromptText)];
   const [data, setData] = useState(chatBubbles);
@@ -65,6 +72,12 @@ export default function QuestionAnswerScreen() {
     );
   }
 
+  function goToPreviousScreen() {
+    navigation.navigate('LessonContentScreen', {
+      elementId: route.params.elementId,
+    });
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -79,6 +92,13 @@ export default function QuestionAnswerScreen() {
           onSubmit={(text: string) => submitQuestion(text)}
           isSaveEnabled={false}
           targetImage={null}
+        />
+      </View>
+      <View style={styles.optionsBarArea}>
+        <LessonOptionsBar
+          {...navigation}
+          displayQuestionAnswerScreen={true}
+          closeCallback={goToPreviousScreen}
         />
       </View>
     </KeyboardAvoidingView>
@@ -107,5 +127,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 19,
     marginTop: 25,
+  },
+  optionsBarArea: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: 70,
   },
 });

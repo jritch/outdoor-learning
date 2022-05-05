@@ -10,6 +10,10 @@ export default function LessonContentScreen({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'>) {
+  function closeCallback() {
+    navigation.navigate('FindScanEucalyptusTreeScreen');
+  }
+
   const elementId = route.params?.elementId ?? 0;
   const totalElements = EucalyptusLesson.elements.length;
 
@@ -32,7 +36,12 @@ export default function LessonContentScreen({
   if (element.__type === 'InformationalElement') {
     optionsBar = (
       <View style={styles.optionsBarArea}>
-        <LessonOptionsBar />
+        <LessonOptionsBar
+          navigation={navigation}
+          elementId={elementId}
+          displayQuestionAnswerScreen={false}
+          closeCallback={closeCallback}
+        />
       </View>
     );
   }
@@ -53,6 +62,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: '100%',
-    height: '100%',
+    height: 70,
   },
 });
