@@ -101,6 +101,7 @@ export default function Playground({
         placeHolderText={'Add notes'}
         isSaveEnabled={true}
         onSubmit={() => {}}
+        targetImage={null}
       />
     </KeyboardAvoidingView>
   );

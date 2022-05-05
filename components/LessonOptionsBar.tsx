@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   optionsBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 40,
+    marginTop: 40,
   },
   closeIcon: {
     marginLeft: 24,

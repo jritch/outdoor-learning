@@ -94,14 +94,15 @@ function RootNavigator() {
         name="LessonContentScreen"
         component={LessonContentScreen}
         options={{
-          headerShown: true,
-          headerBackVisible: true,
-          title: 'Stanford Nature',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="QuestionAnswerScreen"
         component={QuestionAnswerScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="NotFound"
