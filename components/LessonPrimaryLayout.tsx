@@ -85,9 +85,7 @@ export default function LessonPrimaryLayout({
           navigation={navigation}
           elementId={elementId}
           displayQuestionAnswerScreen={false}
-          closeCallback={() =>
-            navigation.navigate('FindScanEucalyptusTreeScreen')
-          }
+          closeCallback={() => navigation.navigate('LessonTabNavigator')}
         />
       </View>
     </View>
