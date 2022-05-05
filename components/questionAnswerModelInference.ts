@@ -1,8 +1,10 @@
-import {MobileModel, torch, text} from 'react-native-pytorch-core';
+import {torch, text} from 'react-native-pytorch-core';
+import ModelCache from './ModelCache';
 
 const spec = require('../assets/specs/bert_model_spec.json');
 
 export default async function findAnswer(textString: string, question: string) {
+  const MODEL_KEY = 'bertQA';
   const {WordPieceTokenizer} = text;
   const tokenizer = new WordPieceTokenizer({
     vocab: spec.vocabulary_bert,
@@ -12,7 +14,7 @@ export default async function findAnswer(textString: string, question: string) {
   const inputText = `[CLS] ${question} [SEP] ${textString} [SEP]`;
   const arr = tokenizer.encode(inputText);
   const t = torch.tensor([arr], {dtype: torch.int});
-  const modelPath = await MobileModel.download(model); // TODO: Revisit this, cache the model download.
+  const modelPath = await ModelCache.getModelPath(MODEL_KEY);
   const nlpModel = await torch.jit._loadForMobile(modelPath);
   const output = await nlpModel.forward(t);
   const startId = output

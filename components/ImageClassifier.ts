@@ -1,18 +1,18 @@
 import {
   Image,
-  MobileModel,
   torch,
   torchvision,
   media,
   Module,
 } from 'react-native-pytorch-core';
 
+import ModelCache from './ModelCache';
+
 // Alias for torchvision transforms
 const T = torchvision.transforms;
 
 // The torchscripted model which runs classification on an image
-const MODEL_URL =
-  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/classifier.ptl';
+const MODEL_KEY = 'eucalyptusClassifier';
 
 // The possible classes returned by the model
 const IMAGE_CLASSES = ['background', 'eucalyptus tree', 'other tree'];
@@ -59,7 +59,7 @@ export default async function classifyImage(image: Image) {
   // 5. If the model has not been loaded already, it will be downloaded from
   // the URL and then loaded into memory.
   if (model == null) {
-    const filePath = await MobileModel.download(MODEL_URL);
+    const filePath = await ModelCache.getModelPath(MODEL_KEY);
     model = await torch.jit._loadForMobile(filePath);
   }
 
