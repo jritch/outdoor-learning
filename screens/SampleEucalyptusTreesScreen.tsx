@@ -1,3 +1,4 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {useState} from 'react';
 import {
@@ -8,10 +9,21 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import CloseButton from '../components/CloseButton';
+import {RootStackParamList} from '../types';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-export default function SampleEucalyptusTreesScreen() {
+const closeIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
+
+export default function SampleEucalyptusTreesScreen({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList, 'SampleEucalyptusTreesScreen'>) {
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
+      <View style={styles.closeIconContainer}>
+        <CloseButton onClick={() => navigation.goBack()} />
+      </View>
       <View style={styles.mainContainer}>
         <View>
           <Text style={styles.textSection}>
@@ -42,13 +54,27 @@ export default function SampleEucalyptusTreesScreen() {
           />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#121212',
+  },
+  closeIconContainer: {
+    marginLeft: 24,
+    marginBottom: 20,
+  },
+  closeIconButton: {
+    backgroundColor: '#262627',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  closeIconStyle: {
+    width: 14,
+    height: 14,
   },
   mainContainer: {
     marginLeft: 24,

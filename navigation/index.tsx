@@ -25,6 +25,7 @@ import FindScanEucalyptusTreeScreen from '../screens/FindScanEucalyptusTreeScree
 import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTreesScreen';
 import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
 import JournalScreen from '../screens/JournalScreen';
+import SampleEucalyptusTreesScreen from '../screens/SampleEucalyptusTreesScreen';
 
 export default function Navigation({
   colorScheme,
@@ -100,8 +101,11 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{title: 'Oops!'}}
       />
-      <Stack.Group screenOptions={{presentation: 'modal'}}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+      <Stack.Group screenOptions={{presentation: 'modal', headerShown: false}}>
+        <Stack.Screen
+          name="SampleEucalyptusTreesScreen"
+          component={SampleEucalyptusTreesScreen}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
