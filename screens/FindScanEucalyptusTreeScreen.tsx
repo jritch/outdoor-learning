@@ -27,12 +27,8 @@ export default function FindScanEucalyptusTreeScreen({
   const correctTreeText = 'Great job! You have found a eucalyptus tree.';
   const wouldYouLikeToLearnText =
     'Would you like to learn more about the tree?';
-  const closeIcon =
-    'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
 
   const [scanningStarted, setScanningStarted] = useState(false);
-  const [showSampleImageScreen, setShowSampleImageScreen] =
-    useState<boolean>(false);
   const [imageClass, setImageClass] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
 
@@ -56,9 +52,7 @@ export default function FindScanEucalyptusTreeScreen({
     messageElements.push(
       <Text style={styles.messageText}>{findTreeText}</Text>,
       <TouchableOpacity
-        onPress={() => {
-          setShowSampleImageScreen(true);
-        }}
+        onPress={() => navigation.navigate('SampleEucalyptusTreesScreen')}
       >
         <Text style={styles.linkText}>{viewTreeText}</Text>
       </TouchableOpacity>,
@@ -73,9 +67,7 @@ export default function FindScanEucalyptusTreeScreen({
     messageElements.push(
       <Text style={styles.messageText}>{incorrectTreeText}</Text>,
       <TouchableOpacity
-        onPress={() => {
-          setShowSampleImageScreen(true);
-        }}
+        onPress={() => navigation.navigate('SampleEucalyptusTreesScreen')}
       >
         <Text style={styles.linkText}>{viewTreeText}</Text>
       </TouchableOpacity>,
@@ -121,7 +113,7 @@ export default function FindScanEucalyptusTreeScreen({
             <View
               style={
                 index !== messageElements.length - 1
-                  ? styles.bottomSpacing
+                  ? styles.messageParagraphBottomSpacing
                   : null
               }
             >
@@ -130,22 +122,6 @@ export default function FindScanEucalyptusTreeScreen({
           ))}
         </View>
       </View>
-
-      {showSampleImageScreen && <SampleEucalyptusTreesScreen />}
-      {showSampleImageScreen && (
-        <View style={styles.closeIcon}>
-          <TouchableOpacity
-            onPress={() => {
-              setShowSampleImageScreen(false);
-            }}
-          >
-            <ImageRN
-              source={{uri: closeIcon}}
-              style={{width: 40, height: 40}}
-            />
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 }
@@ -158,10 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     alignItems: 'center',
   },
-  closeIcon: {
-    position: 'absolute',
-    marginLeft: 24,
-  },
+
   messageText: {
     color: 'white',
     fontSize: 16,
@@ -170,7 +143,7 @@ const styles = StyleSheet.create({
     color: 'background: rgba(70, 140, 247, 1)',
     fontSize: 16,
   },
-  bottomSpacing: {
+  messageParagraphBottomSpacing: {
     marginBottom: 24,
   },
   messageHolder: {

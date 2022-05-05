@@ -12,13 +12,13 @@ import TextVoiceInput from '../components/TextVoiceInput';
 import ChatBubble from '../components/ChatBubble';
 import findAnswer from '../components/questionAnswerModelInference';
 import LessonOptionsBar from '../components/LessonOptionsBar';
+import {RootStackParamList} from '../types';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-type Props = {
-  navigation: any;
-  route: any;
-};
-
-export default function QuestionAnswerScreen(props: Props) {
+export default function QuestionAnswerScreen({
+  navigation,
+  route,
+}: NativeStackScreenProps<RootStackParamList, 'QuestionAnswerScreen'>) {
   const startPromptText = 'Type your question or ask through voice.';
   const chatBubbles: Array<any> = [getChatBubbleForAnswer(startPromptText)];
   const [data, setData] = useState(chatBubbles);
@@ -71,12 +71,6 @@ export default function QuestionAnswerScreen(props: Props) {
     );
   }
 
-  function goToPreviousScreen() {
-    props.navigation.navigate('LessonContentScreen', {
-      elementId: props.route.params.elementId,
-    });
-  }
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -95,10 +89,13 @@ export default function QuestionAnswerScreen(props: Props) {
       </View>
       <View style={styles.optionsBarArea}>
         <LessonOptionsBar
-          navigation={props.navigation}
-          elementId={props.route.params.elementId}
           displayQuestionAnswerScreen={true}
-          closeCallback={goToPreviousScreen}
+          onClose={() => navigation.goBack()}
+          onQuestionMark={() =>
+            navigation.navigate('QuestionAnswerScreen', {
+              elementId: route.params.elementId,
+            })
+          }
         />
       </View>
     </KeyboardAvoidingView>

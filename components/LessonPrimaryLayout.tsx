@@ -82,10 +82,11 @@ export default function LessonPrimaryLayout({
       </View>
       <View style={styles.optionBarWrapper}>
         <LessonOptionsBar
-          navigation={navigation}
-          elementId={elementId}
           displayQuestionAnswerScreen={false}
-          closeCallback={() => navigation.navigate('LessonTabNavigator')}
+          onClose={() => navigation.navigate('LessonTabNavigator')}
+          onQuestionMark={() =>
+            navigation.navigate('QuestionAnswerScreen', {elementId})
+          }
         />
       </View>
     </View>

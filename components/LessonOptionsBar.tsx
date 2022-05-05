@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Image, TouchableOpacity, View, StyleSheet, Text} from 'react-native';
+import CloseButton from './CloseButton';
 
 //const closeIcon = require('../assets/images/close-icon.png');
 const closeIcon =
@@ -16,43 +17,27 @@ const questionMarkSelectedIcon =
  * </View>
  */
 type Props = {
-  navigation: any;
-  elementId: number;
   displayQuestionAnswerScreen: boolean;
-  closeCallback: Function;
+  onClose: () => void;
+  onQuestionMark: () => void;
 };
 
-export default function LessonOptionsBar(props: Props) {
-  const closeAction = props.closeCallback;
-  const currentElementId = props.elementId;
-
-  function openQAScreen() {
-    props.navigation.navigate('QuestionAnswerScreen', {
-      elementId: currentElementId,
-    });
-  }
-
+export default function LessonOptionsBar({
+  onClose,
+  displayQuestionAnswerScreen,
+  onQuestionMark,
+}: Props) {
   return (
     <View style={{flex: 1}}>
       <View style={styles.optionsBar}>
         <View style={styles.closeIcon}>
-          <TouchableOpacity
-            onPress={() => {
-              closeAction();
-            }}
-          >
-            <Image source={{uri: closeIcon}} style={{width: 40, height: 40}} />
-          </TouchableOpacity>
+          <CloseButton onClick={onClose} />
         </View>
         <View style={styles.questionMarkIcon}>
-          <TouchableOpacity
-            onPress={() => {
-              openQAScreen();
-            }}
-          >
+          <TouchableOpacity onPress={onQuestionMark}>
             <Image
               source={{
-                uri: props.displayQuestionAnswerScreen
+                uri: displayQuestionAnswerScreen
                   ? questionMarkSelectedIcon
                   : questionMarkUnselectedIcon,
               }}
