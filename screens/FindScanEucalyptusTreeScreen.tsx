@@ -42,6 +42,7 @@ export default function FindScanEucalyptusTreeScreen({
     setImageClass(null);
     try {
       const result = await classifyImage(image);
+      console.log('Image classification result:', result);
       setImageClass(result);
       image.release();
     } catch (error) {
@@ -49,8 +50,62 @@ export default function FindScanEucalyptusTreeScreen({
     }
   }
 
+  const messageElements = [];
+
+  if (!scanningStarted) {
+    messageElements.push(
+      <Text style={styles.messageText}>{findTreeText}</Text>,
+      <TouchableOpacity
+        onPress={() => {
+          setShowSampleImageScreen(true);
+        }}
+      >
+        <Text style={styles.linkText}>{viewTreeText}</Text>
+      </TouchableOpacity>,
+    );
+  }
+
+  if (
+    scanningStarted &&
+    imageClass &&
+    imageClass.indexOf('eucalyptus') === -1
+  ) {
+    messageElements.push(
+      <Text style={styles.messageText}>{incorrectTreeText}</Text>,
+      <TouchableOpacity
+        onPress={() => {
+          setShowSampleImageScreen(true);
+        }}
+      >
+        <Text style={styles.linkText}>{viewTreeText}</Text>
+      </TouchableOpacity>,
+    );
+  }
+
+  if (imageClass && imageClass.indexOf('eucalyptus') === 0) {
+    messageElements.push(
+      <Text style={styles.messageText}>{correctTreeText}</Text>,
+    );
+  }
+
+  if (imageClass && imageClass.indexOf('eucalyptus') === 0) {
+    messageElements.push(
+      <Text style={styles.messageText}>{wouldYouLikeToLearnText}</Text>,
+    );
+  }
+
+  messageElements.push(
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('LessonContentScreen');
+      }}
+    >
+      <Text style={styles.linkText}>{'Skip to the lesson'}</Text>
+    </TouchableOpacity>,
+  );
+
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.mainContainer}>
       <View style={StyleSheet.absoluteFill}>
         <Camera
           style={[StyleSheet.absoluteFill, {bottom: insets.bottom}]}
@@ -61,84 +116,21 @@ export default function FindScanEucalyptusTreeScreen({
             <Bubble text={imageClass} />
           </View>
         )}
-        {!scanningStarted && (
-          <View style={styles.messageHolder}>
-            <Text style={{color: 'white', fontSize: 16}}>{findTreeText}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                setShowSampleImageScreen(true);
-              }}
+        <View style={styles.messageHolder}>
+          {messageElements.map((element, index) => (
+            <View
+              style={
+                index !== messageElements.length - 1
+                  ? styles.bottomSpacing
+                  : null
+              }
             >
-              <Text
-                style={{
-                  color: 'background: rgba(70, 140, 247, 1)',
-                  fontSize: 16,
-                  marginTop: 24,
-                }}
-              >
-                {viewTreeText}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        {scanningStarted &&
-          imageClass &&
-          imageClass.indexOf('eucalyptus') == -1 && (
-            <View style={styles.messageHolder}>
-              <Text style={{color: 'white', fontSize: 16}}>
-                {incorrectTreeText}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setShowSampleImageScreen(true);
-                }}
-              >
-                <Text
-                  style={{
-                    color: 'background: rgba(70, 140, 247, 1)',
-                    fontSize: 16,
-                    marginTop: 24,
-                  }}
-                >
-                  {viewTreeText}
-                </Text>
-              </TouchableOpacity>
+              {element}
             </View>
-          )}
-        {imageClass && imageClass.indexOf('eucalyptus') == 0 && (
-          <View style={styles.successMessageHolder1}>
-            <Text style={{color: 'white', fontSize: 16}}>
-              {correctTreeText}
-            </Text>
-          </View>
-        )}
-        {imageClass && imageClass.indexOf('eucalyptus') == 0 && (
-          <View style={styles.successMessageHolder2}>
-            <Text style={{color: 'white', fontSize: 16}}>
-              {wouldYouLikeToLearnText}
-            </Text>
-          </View>
-        )}
+          ))}
+        </View>
       </View>
 
-      <View style={styles.messageHolder}>
-        <Text style={{color: 'white', fontSize: 16}}>{incorrectTreeText}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('LessonContentScreen');
-          }}
-        >
-          <Text
-            style={{
-              color: 'background: rgba(70, 140, 247, 1)',
-              fontSize: 16,
-              marginTop: 24,
-            }}
-          >
-            {'[DEV] Skip to next screen'}
-          </Text>
-        </TouchableOpacity>
-      </View>
       {showSampleImageScreen && <SampleEucalyptusTreesScreen />}
       {showSampleImageScreen && (
         <View style={styles.closeIcon}>
@@ -158,8 +150,10 @@ export default function FindScanEucalyptusTreeScreen({
   );
 }
 
-// Custom render style for label container
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   bubbleContainer: {
     marginTop: 24,
     alignItems: 'center',
@@ -168,6 +162,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginLeft: 24,
   },
+  messageText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  linkText: {
+    color: 'background: rgba(70, 140, 247, 1)',
+    fontSize: 16,
+  },
+  bottomSpacing: {
+    marginBottom: 24,
+  },
   messageHolder: {
     position: 'absolute',
     width: '70%',
@@ -175,33 +180,7 @@ const styles = StyleSheet.create({
     left: 24,
     backgroundColor: '#121212',
     borderRadius: 18,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 12,
-    paddingBottom: 12,
-  },
-  successMessageHolder1: {
-    position: 'absolute',
-    width: '70%',
-    bottom: 268,
-    left: 24,
-    backgroundColor: '#121212',
-    borderRadius: 18,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 12,
-    paddingBottom: 12,
-  },
-  successMessageHolder2: {
-    position: 'absolute',
-    width: '70%',
-    bottom: 196,
-    left: 24,
-    backgroundColor: '#121212',
-    borderRadius: 18,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
 });
