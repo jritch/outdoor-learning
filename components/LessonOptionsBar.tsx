@@ -19,7 +19,7 @@ const questionMarkSelectedIcon =
 type Props = {
   displayQuestionAnswerScreen: boolean;
   onClose: () => void;
-  onQuestionMark: () => void;
+  onQuestionMark?: () => void;
 };
 
 export default function LessonOptionsBar({
