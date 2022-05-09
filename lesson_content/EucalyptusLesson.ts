@@ -29,5 +29,13 @@ export const EucalyptusLesson: Lesson = {
       ],
       imageFilenames: [require('assets/images/usmap-placeholder.jpg')],
     },
+    {
+      __type: 'ImageCaptureElement',
+      messages: [
+        'What else makes eucalyptus trees unique? First, let’s take a closer look at their leaves. Take three close-up photos of their leaves for your records.',
+      ],
+      imageFilenames: [require('assets/images/GettyImages-480806545.jpeg')],
+      imagesCapturesRequired: 1,
+    },
   ],
 };

@@ -110,6 +110,7 @@ export default function FindScanEucalyptusTreeScreen({
         <View style={styles.messageHolder}>
           {messageElements.map((element, index) => (
             <View
+              key={index}
               style={
                 index !== messageElements.length - 1
                   ? styles.messageParagraphBottomSpacing
