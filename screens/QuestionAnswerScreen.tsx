@@ -14,29 +14,39 @@ import findAnswer from '../components/questionAnswerModelInference';
 import LessonOptionsBar from '../components/LessonOptionsBar';
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ChatBubbleObject} from '../types';
+
+enum ChatBubbleType {
+  REPLY = 'reply',
+  QUESTION = 'question',
+}
 
 export default function QuestionAnswerScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'QuestionAnswerScreen'>) {
   const startPromptText = 'Type your question or ask through voice.';
-  const chatBubbles: Array<any> = [getChatBubbleForAnswer(startPromptText)];
-  const [data, setData] = useState(chatBubbles);
+  const [data, setData] = useState([
+    {text: startPromptText, type: ChatBubbleType.REPLY},
+  ]);
   const textBlurb =
     'Eucalyptus trees can grow upto 33 meters in height. Eucalyptus trees are originally found in Australia and the islands surrounding it. Famously, these trees are home to some animals like koalas in Australia. The diet of koalas consists almost solely of eucalyptus leaves! You might also notice that eucalyptus has a distinctive bark pattern. You’ll notice that there’s a huge concentration of eucalyptus trees in California specifically.';
 
   async function submitQuestion(question: string) {
     if (question) {
-      const chatBubble = getChatBubbleForQuestion(question);
-      setData(oldArray => [...oldArray, chatBubble]);
+      setData(oldArray => [
+        ...oldArray,
+        {text: question, type: ChatBubbleType.QUESTION},
+      ]);
       await getAnswer(question);
     }
   }
 
   async function getAnswer(question: string) {
     const result = await findAnswer(textBlurb, question);
-    console.log(result);
-    const chatBubble = getChatBubbleForAnswer(result.text);
-    setData(oldArray => [...oldArray, chatBubble]);
+    setData(oldArray => [
+      ...oldArray,
+      {text: result.text, type: ChatBubbleType.REPLY},
+    ]);
   }
 
   function getChatBubbleForAnswer(answer: string) {
@@ -70,13 +80,23 @@ export default function QuestionAnswerScreen({
     );
   }
 
+  function renderChatBubble(item: ChatBubbleObject) {
+    const {type, text} = item;
+    if (type === ChatBubbleType.REPLY) {
+      return getChatBubbleForAnswer(text);
+    }
+    return getChatBubbleForQuestion(text);
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
     >
       <View style={{width: '100%', height: '70%', marginTop: 104}}>
-        <ScrollView style={styles.scrollView}>{data}</ScrollView>
+        <ScrollView style={styles.scrollView}>
+          {data.map(item => renderChatBubble(item))}
+        </ScrollView>
       </View>
       <View style={{flex: 1, marginTop: 20}}>
         <TextVoiceInput

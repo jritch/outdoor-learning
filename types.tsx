@@ -50,3 +50,8 @@ export type JournalEntry = {
   audios: Array<string>;
   texts: Array<string>;
 };
+
+export type ChatBubbleObject = {
+  text: string;
+  type: string;
+};
