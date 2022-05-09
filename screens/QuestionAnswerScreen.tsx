@@ -49,13 +49,13 @@ export default function QuestionAnswerScreen({
     ]);
   }
 
-  function getChatBubbleForAnswer(answer: string) {
+  function getChatBubbleForAnswer(answer: string, index: number) {
     const text = answer
       ? answer
       : "Sorry, I don't know the answer to that question";
     const textView = <Text style={styles.bubbleText}>{text}</Text>;
     return (
-      <View style={styles.answer}>
+      <View style={styles.answer} key={index}>
         <ChatBubble
           alignment={'left'}
           view={textView}
@@ -66,10 +66,10 @@ export default function QuestionAnswerScreen({
     );
   }
 
-  function getChatBubbleForQuestion(question: string) {
+  function getChatBubbleForQuestion(question: string, index: number) {
     const textView = <Text style={styles.bubbleText}>{question}</Text>;
     return (
-      <View style={styles.question}>
+      <View style={styles.question} key={index}>
         <ChatBubble
           alignment={'right'}
           view={textView}
@@ -80,12 +80,12 @@ export default function QuestionAnswerScreen({
     );
   }
 
-  function renderChatBubble(item: ChatBubbleObject) {
+  function renderChatBubble(item: ChatBubbleObject, index: number) {
     const {type, text} = item;
     if (type === ChatBubbleType.REPLY) {
-      return getChatBubbleForAnswer(text);
+      return getChatBubbleForAnswer(text, index);
     }
-    return getChatBubbleForQuestion(text);
+    return getChatBubbleForQuestion(text, index);
   }
 
   return (
@@ -95,7 +95,7 @@ export default function QuestionAnswerScreen({
     >
       <View style={{width: '100%', height: '70%', marginTop: 104}}>
         <ScrollView style={styles.scrollView}>
-          {data.map(item => renderChatBubble(item))}
+          {data.map((item, index) => renderChatBubble(item, index))}
         </ScrollView>
       </View>
       <View style={{flex: 1, marginTop: 20}}>
