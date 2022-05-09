@@ -65,7 +65,7 @@ export interface ObjectFinderElement extends GenericElement {
 export interface ImageCaptureElement extends GenericElementWithImages {
   __type: 'ImageCaptureElement';
   messages: Messages;
-  imagesRequired: number;
+  imagesCapturesRequired: number;
 }
 
 /**

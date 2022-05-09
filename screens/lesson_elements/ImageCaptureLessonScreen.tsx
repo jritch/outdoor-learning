@@ -1,0 +1,101 @@
+import * as React from 'react';
+import {Text, StyleSheet} from 'react-native';
+import type {RootStackParamList} from '../../types';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import type {ImageCaptureElement} from '../../lesson_content/lessonTypes';
+import ChatBubble from '../../components/ChatBubble';
+import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
+
+type Props = {
+  elementProps: ImageCaptureElement;
+  elementId: number;
+  totalElements: number;
+};
+
+export default function ImageCaptureLessonScreen({
+  navigation,
+  route,
+  elementProps,
+  elementId,
+  totalElements,
+}: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
+  const {imageFilenames, imagesCapturesRequired, messages} = elementProps;
+
+  const imageSource = imageFilenames?.[0];
+
+  return (
+    <LessonPrimaryLayout
+      elementId={elementId}
+      totalElements={totalElements}
+      imageSource={imageSource ?? null}
+      navigation={navigation}
+      route={route}
+    >
+      {messages.map((message, i) => (
+        <ChatBubble
+          key={i}
+          alignment="left"
+          view={<Text style={styles.bubbleText}>{message}</Text>}
+          bubbleColor={'rgba(38, 38, 39, 1)'}
+          backgroundColor={'#121212'}
+        />
+      ))}
+    </LessonPrimaryLayout>
+  );
+}
+
+// TODO: Use colors from the theme instead of hardcoding
+const styles = StyleSheet.create({
+  mainContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100%',
+  },
+  messageSection: {
+    display: 'flex',
+    flexGrow: 1,
+    margin: 12,
+  },
+  imageSection: {
+    display: 'flex',
+    flexBasis: 'auto',
+    flexGrow: 0,
+  },
+  navigationSection: {
+    flexGrow: 0,
+    marginBottom: 90,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  arrowContainer: {
+    // flexGrow: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 10 + 50,
+    height: 22 + 50,
+  },
+  arrowButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 10 + 50,
+    height: 22 + 50,
+  },
+  arrow: {
+    width: 10,
+    height: 22,
+  },
+  lessonNumber: {
+    textAlign: 'center',
+    fontSize: 11,
+    fontWeight: '500',
+    // TODO: is this font natively supported on both platforms?
+    fontFamily: 'SF Pro Text',
+    color: 'white',
+  },
+  lessonNumberContainer: {flexGrow: 1, textAlign: 'center'},
+  bubbleText: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 1)',
+  },
+});

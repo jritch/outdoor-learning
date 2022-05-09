@@ -4,6 +4,7 @@ import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
 import InformationalComponent from './lesson_elements/InformationalComponent';
+import ImageCaptureLessonScreen from './lesson_elements/ImageCaptureLessonScreen';
 
 export default function LessonContentScreen({
   navigation,
@@ -19,6 +20,16 @@ export default function LessonContentScreen({
   if (element.__type === 'InformationalElement') {
     reactElement = (
       <InformationalComponent
+        {...{navigation, route}}
+        elementProps={element}
+        elementId={elementId}
+        totalElements={totalElements}
+      />
+    );
+  }
+  if (element.__type === 'ImageCaptureElement') {
+    reactElement = (
+      <ImageCaptureLessonScreen
         {...{navigation, route}}
         elementProps={element}
         elementId={elementId}
