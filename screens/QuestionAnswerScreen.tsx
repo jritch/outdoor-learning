@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -30,6 +30,7 @@ export default function QuestionAnswerScreen({
   ]);
   const textBlurb =
     'Eucalyptus trees can grow upto 33 meters in height. Eucalyptus trees are originally found in Australia and the islands surrounding it. Famously, these trees are home to some animals like koalas in Australia. The diet of koalas consists almost solely of eucalyptus leaves! You might also notice that eucalyptus has a distinctive bark pattern. You’ll notice that there’s a huge concentration of eucalyptus trees in California specifically.';
+  const scrollViewRef = useRef<ScrollView>(null);
 
   async function submitQuestion(question: string) {
     if (question) {
@@ -94,7 +95,13 @@ export default function QuestionAnswerScreen({
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
     >
       <View style={{width: '100%', height: '70%', marginTop: 104}}>
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={styles.scrollView}
+          ref={scrollViewRef}
+          onContentSizeChange={() =>
+            scrollViewRef?.current?.scrollToEnd({animated: true})
+          }
+        >
           {data.map((item, index) => renderChatBubble(item, index))}
         </ScrollView>
       </View>
