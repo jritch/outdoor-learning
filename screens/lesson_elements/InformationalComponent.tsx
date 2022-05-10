@@ -6,6 +6,7 @@ import type {InformationalElement} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
+import FeaturedCoverImage from '../../components/FeaturedCoverImage';
 
 type Props = {
   elementProps: InformationalElement;
@@ -22,13 +23,13 @@ export default function InformationalComponent({
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
   const {imageFilenames, messages} = elementProps;
 
-  const imageSource = imageFilenames?.[0];
+  const imageSource = imageFilenames?.[0] ?? null;
 
   return (
     <LessonPrimaryLayout
       elementId={elementId}
       totalElements={totalElements}
-      imageSource={imageSource ?? null}
+      topElement={<FeaturedCoverImage imageSource={imageSource} />}
       navigation={navigation}
       route={route}
     >
