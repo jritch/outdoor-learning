@@ -5,6 +5,8 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {ImageCaptureElement} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
+import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
+import FeaturedCoverImage from '../../components/FeaturedCoverImage';
 
 type Props = {
   elementProps: ImageCaptureElement;
@@ -21,25 +23,27 @@ export default function ImageCaptureLessonScreen({
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
   const {imageFilenames, imagesCapturesRequired, messages} = elementProps;
 
-  const imageSource = imageFilenames?.[0];
+  const imageSource = imageFilenames?.[0] ?? null;
 
   return (
     <LessonPrimaryLayout
       elementId={elementId}
       totalElements={totalElements}
-      imageSource={imageSource ?? null}
+      topElement={<FeaturedCoverImage imageSource={imageSource} />}
       navigation={navigation}
       route={route}
     >
-      {messages.map((message, i) => (
-        <ChatBubble
-          key={i}
-          alignment="left"
-          view={<Text style={styles.bubbleText}>{message}</Text>}
-          bubbleColor={'rgba(38, 38, 39, 1)'}
-          backgroundColor={'#121212'}
-        />
-      ))}
+      <ChatScrollViewContainer
+        chatElements={messages.map((message, i) => (
+          <ChatBubble
+            key={i}
+            alignment="left"
+            view={<Text style={styles.bubbleText}>{message}</Text>}
+            bubbleColor={'rgba(38, 38, 39, 1)'}
+            backgroundColor={'#121212'}
+          />
+        ))}
+      />
     </LessonPrimaryLayout>
   );
 }

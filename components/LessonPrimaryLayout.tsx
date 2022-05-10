@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {Dimensions} from 'react-native';
 import LessonOptionsBar from './LessonOptionsBar';
 
 const leftArrow = require('assets/images/left-arrow-3x.png');
@@ -18,7 +17,7 @@ const rightArrow = require('assets/images/right-arrow-3x.png');
 type Props = {
   elementId: number;
   totalElements: number;
-  imageSource: number | null;
+  topElement: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -26,24 +25,12 @@ export default function LessonPrimaryLayout({
   navigation,
   elementId,
   totalElements,
-  imageSource,
+  topElement,
   children,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
-  const windowHeight = Dimensions.get('window').height;
-
   return (
     <View style={styles.mainContainer}>
-      {imageSource != null && (
-        <View style={styles.imageSection}>
-          <ImageBackground
-            source={imageSource}
-            resizeMode="cover"
-            style={{
-              height: windowHeight * 0.4,
-            }}
-          />
-        </View>
-      )}
+      <View style={styles.topSection}>{topElement}</View>
       <View style={styles.body}>{children}</View>
       <View style={styles.navigationSection}>
         <View style={styles.arrowContainer}>
@@ -112,7 +99,7 @@ const styles = StyleSheet.create({
     flexBasis: 'auto',
     height: '100%',
   },
-  imageSection: {
+  topSection: {
     // display: 'flex',
     // flexBasis: 'auto',
     flexGrow: 0,
