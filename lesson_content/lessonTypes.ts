@@ -66,6 +66,7 @@ export interface ImageCaptureElement extends GenericElementWithImages {
   __type: 'ImageCaptureElement';
   messages: Messages;
   imagesCapturesRequired: number;
+  afterCaptureMessages: Messages;
 }
 
 /**
