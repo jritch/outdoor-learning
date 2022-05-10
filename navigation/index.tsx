@@ -26,6 +26,7 @@ import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTree
 import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
 import JournalScreen from '../screens/JournalScreen';
 import SampleEucalyptusTreesScreen from '../screens/SampleEucalyptusTreesScreen';
+import appName from 'constants/appName';
 
 export default function Navigation({
   colorScheme,
@@ -50,29 +51,25 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={DevIntroScreen}
-        options={{
-          headerShown: true,
-          headerBackVisible: true,
-          title: '[DEV] Intro Screen',
-        }}
-      />
+    <Stack.Navigator
+      screenOptions={{
+        headerTintColor: '#fff',
+        headerTitleAlign: 'center',
+        title: appName,
+      }}
+    >
       <Stack.Screen
         name="LessonIntroScreen"
         component={LessonIntroScreen}
         options={{
           headerShown: true,
           headerBackVisible: true,
-          title: 'Stanford Nature',
         }}
       />
       <Stack.Screen
         name="LessonTabNavigator"
         component={LessonTabNavigator}
-        options={{headerShown: true, headerTitle: 'Stanford Nature'}}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="FindScanEucalyptusTreeScreen"
