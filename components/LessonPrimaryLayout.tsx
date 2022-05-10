@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -18,6 +19,7 @@ type Props = {
   elementId: number;
   totalElements: number;
   topElement: React.ReactNode;
+  bottomElement?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -26,11 +28,15 @@ export default function LessonPrimaryLayout({
   elementId,
   totalElements,
   topElement,
+  bottomElement,
   children,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
+  const windowWidth = Dimensions.get('window').width;
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.topSection}>{topElement}</View>
+      <View style={(styles.topSection, {height: windowWidth})}>
+        {topElement}
+      </View>
       <View style={styles.body}>{children}</View>
       <View style={styles.navigationSection}>
         <View style={styles.arrowContainer}>
@@ -47,10 +53,14 @@ export default function LessonPrimaryLayout({
             </TouchableOpacity>
           )}
         </View>
-        <View style={styles.lessonNumberContainer}>
-          <Text style={styles.lessonNumber}>{`${
-            elementId + 1
-          }/${totalElements}`}</Text>
+        <View style={styles.bottomCenterContainer}>
+          {bottomElement != null ? (
+            bottomElement
+          ) : (
+            <Text style={styles.lessonNumber}>{`${
+              elementId + 1
+            }/${totalElements}`}</Text>
+          )}
         </View>
         <View style={styles.arrowContainer}>
           {elementId + 1 < totalElements && (
@@ -104,6 +114,7 @@ const styles = StyleSheet.create({
     // flexBasis: 'auto',
     flexGrow: 0,
     flexShrink: 0,
+    position: 'relative',
   },
   navigationSection: {
     flexGrow: 0,
@@ -131,14 +142,13 @@ const styles = StyleSheet.create({
     height: 22,
   },
   lessonNumber: {
-    textAlign: 'center',
     fontSize: 11,
     fontWeight: '500',
     // TODO: is this font natively supported on both platforms?
     fontFamily: 'SF Pro Text',
     color: 'white',
   },
-  lessonNumberContainer: {flexGrow: 1, textAlign: 'center'},
+  bottomCenterContainer: {flexGrow: 1, display: 'flex', alignItems: 'center'},
   bubbleText: {
     fontSize: 16,
     color: 'rgba(255, 255, 255, 1)',

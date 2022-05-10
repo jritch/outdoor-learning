@@ -36,6 +36,9 @@ export const EucalyptusLesson: Lesson = {
       ],
       imageFilenames: [require('assets/images/GettyImages-480806545.jpeg')],
       imagesCapturesRequired: 1,
+      afterCaptureMessages: [
+        'How would you describe these leaves? Please record your thoughts through typing or audio.',
+      ],
     },
   ],
 };
