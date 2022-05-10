@@ -5,6 +5,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {InformationalElement} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
+import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 
 type Props = {
   elementProps: InformationalElement;
@@ -31,15 +32,17 @@ export default function InformationalComponent({
       navigation={navigation}
       route={route}
     >
-      {messages.map((message, i) => (
-        <ChatBubble
-          key={i}
-          alignment="left"
-          view={<Text style={styles.bubbleText}>{message}</Text>}
-          bubbleColor={'rgba(38, 38, 39, 1)'}
-          backgroundColor={'#121212'}
-        />
-      ))}
+      <ChatScrollViewContainer
+        chatElements={messages.map((message, i) => (
+          <ChatBubble
+            key={i}
+            alignment="left"
+            view={<Text style={styles.bubbleText}>{message}</Text>}
+            bubbleColor={'rgba(38, 38, 39, 1)'}
+            backgroundColor={'#121212'}
+          />
+        ))}
+      />
     </LessonPrimaryLayout>
   );
 }

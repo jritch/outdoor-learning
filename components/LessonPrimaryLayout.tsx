@@ -96,8 +96,9 @@ const styles = StyleSheet.create({
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100%',
+    maxHeight: '100%',
     position: 'relative',
+    backgroundColor: '#121212',
   },
   optionBarWrapper: {
     position: 'absolute',
@@ -105,17 +106,21 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   body: {
-    display: 'flex',
+    // display: 'flex',
     flexGrow: 1,
-    margin: 12,
+    flexShrink: 1,
+    flexBasis: 'auto',
+    height: '100%',
   },
   imageSection: {
-    display: 'flex',
-    flexBasis: 'auto',
+    // display: 'flex',
+    // flexBasis: 'auto',
     flexGrow: 0,
+    flexShrink: 0,
   },
   navigationSection: {
     flexGrow: 0,
+    flexShrink: 0,
     marginBottom: 90,
     display: 'flex',
     flexDirection: 'row',
