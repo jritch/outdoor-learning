@@ -15,8 +15,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {ColorSchemeName} from 'react-native';
 
-import DevIntroScreen from '../screens/DevIntroScreen';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import {RootStackParamList, LessonTabParamList} from '../types';
 import LessonIntroScreen from '../screens/LessonIntroScreen';
@@ -26,7 +24,7 @@ import TipsToFindEucalyptusTreesScreen from '../screens/TipsToFindEucalyptusTree
 import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
 import JournalScreen from '../screens/JournalScreen';
 import SampleEucalyptusTreesScreen from '../screens/SampleEucalyptusTreesScreen';
-import appName from 'constants/appName';
+import appName from '../constants/appName';
 
 export default function Navigation({
   colorScheme,
