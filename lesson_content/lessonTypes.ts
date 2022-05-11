@@ -12,6 +12,7 @@ export type Lesson = {
     | InformationalElement
     | QuizElement
     | NoteTakingElement
+    | LiveCameraWithAROverlay
   >;
 };
 
@@ -27,6 +28,71 @@ export interface GenericElement {
 export interface GenericElementWithImages extends GenericElement {
   imageFilenames: Array<ImageReference> | null;
 }
+
+/**
+ * An Informational element simply displays 1+ pictures and provides 1+ messages of information
+ */
+export interface InformationalElement extends GenericElementWithImages {
+  __type: 'InformationalElement';
+  messages: Messages;
+}
+
+/**
+ * An Image Capture element prompts the user to capture 1+ images for their journal,
+ * but does not run any ML models on them
+ */
+export interface ImageCaptureElement extends GenericElementWithImages {
+  __type: 'ImageCaptureElement';
+  messages: Messages;
+  imagesCapturesRequired: number;
+  afterCaptureMessages: Messages;
+}
+
+/**
+ * This element shows a live camera view that displays an AR overlay of fire
+ * when the correct object is detected
+ */
+export interface LiveCameraWithAROverlay extends GenericElement {
+  __type: 'LiveCameraWithAROverlay';
+  messages: Messages;
+}
+
+/**
+ * A YouTube embed element shows an embedded youtube video with messages below it
+ */
+export interface YouTubeEmbedElement extends GenericElementWithImages {
+  __type: 'YouTubeEmbedElement';
+  youTubeURL: string;
+  messages: Messages;
+}
+
+/**
+ * A quiz element shows the message and provides the possible answers.
+ * If the correct answer is chosen we say something like "That is correct!"
+ * If the wrong answer is chosen we say "That is incorrect", and then in the next
+ * message we provide the correct answer.
+ */
+export interface QuizElement extends GenericElementWithImages {
+  __type: 'QuizElement';
+  messages: Messages;
+  possibleAnswers: Array<string>;
+  correctAnswerIndex: number;
+}
+
+/**
+ * A NoteTaking element shows one or more images and prompts the user to record
+ * their observations through typing or speech to text.
+ */
+export interface NoteTakingElement extends GenericElementWithImages {
+  __type: 'NoteTakingElement';
+  messages: Messages;
+}
+
+/**
+ * ****************************************************************************************
+ * Unused elements
+ * ****************************************************************************************
+ */
 
 /**
  * A Title element shows a title with a large picture and a start button
@@ -56,54 +122,4 @@ export interface ObjectFinderElement extends GenericElement {
   targetClassifierResult: string;
   failureMessages: Messages;
   successMessages: Messages;
-}
-
-/**
- * An Image Capture element prompts the user to capture 1+ images for their journal,
- * but does not run any ML models on them
- */
-export interface ImageCaptureElement extends GenericElementWithImages {
-  __type: 'ImageCaptureElement';
-  messages: Messages;
-  imagesCapturesRequired: number;
-  afterCaptureMessages: Messages;
-}
-
-/**
- * A YouTube embed element shows an embedded youtube video with messages below it
- */
-export interface YouTubeEmbedElement extends GenericElementWithImages {
-  __type: 'YouTubeEmbedElement';
-  youTubeURL: string;
-  messages: Messages;
-}
-
-/**
- * An Informational element simply displays 1+ pictures and provides 1+ messages of information
- */
-export interface InformationalElement extends GenericElementWithImages {
-  __type: 'InformationalElement';
-  messages: Messages;
-}
-
-/**
- * A quiz element shows the message and provides the possible answers.
- * If the correct answer is chosen we say something like "That is correct!"
- * If the wrong answer is chosen we say "That is incorrect", and then in the next
- * message we provide the correct answer.
- */
-export interface QuizElement extends GenericElementWithImages {
-  __type: 'QuizElement';
-  messages: Messages;
-  possibleAnswers: Array<string>;
-  correctAnswerIndex: number;
-}
-
-/**
- * A NoteTaking element shows one or more images and prompts the user to record
- * their observations through typing or speech to text.
- */
-export interface NoteTakingElement extends GenericElementWithImages {
-  __type: 'NoteTakingElement';
-  messages: Messages;
 }
