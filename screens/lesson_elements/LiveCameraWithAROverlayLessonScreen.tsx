@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, Image, TouchableOpacity, View} from 'react-native';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {LiveCameraWithAROverlay} from '../../lesson_content/lessonTypes';
+import type {LiveCameraWithAROverlayElement} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
@@ -12,16 +12,13 @@ import {
   Image as PTLImage,
 } from 'react-native-pytorch-core';
 import {useState, useCallback} from 'react';
-import debounce from 'lodash.debounce';
+import classifyImage from '../../components/ImageClassifier';
 
 type Props = {
-  elementProps: LiveCameraWithAROverlay;
+  elementProps: LiveCameraWithAROverlayElement;
   elementId: number;
   totalElements: number;
 };
-
-const DEBOUNCE_WAIT = 1000;
-const DEBOUNCE_MAX_WAIT = 1000;
 
 export default function LiveCameraWithAROverlayLessonScreen({
   navigation,
@@ -37,11 +34,16 @@ export default function LiveCameraWithAROverlayLessonScreen({
 
   const cameraRef = React.useRef<Camera>(null);
 
-  const handleImage = useCallback(async function handleImage(image: PTLImage) {
-    // Clear out the
-    setImageClass(null);
-    // TODO: Save captured image before releasing it.
-    console.log('Picture taken!', image);
+  const onFrame = useCallback(async function handleImage(image: PTLImage) {
+    // setImageClass(null);
+    try {
+      const result = await classifyImage(image);
+      console.log('Image classification result:', result);
+      setImageClass(result);
+      image.release();
+    } catch (error) {
+      console.log(error);
+    }
     image.release();
     setImageCaptured(true);
   }, []);
@@ -61,14 +63,21 @@ export default function LiveCameraWithAROverlayLessonScreen({
   }
 
   const topElement = (
-    <Camera
-      ref={cameraRef}
-      onCapture={handleImage}
-      hideCaptureButton={true}
-      hideFlipButton={true}
-      style={StyleSheet.absoluteFill}
-      targetResolution={{width: 480, height: 640}}
-    />
+    <>
+      <Camera
+        ref={cameraRef}
+        onFrame={onFrame}
+        hideCaptureButton={true}
+        hideFlipButton={true}
+        style={StyleSheet.absoluteFill}
+        targetResolution={{width: 480, height: 640}}
+      />
+      <Image
+        source={require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif')}
+        style={[StyleSheet.absoluteFill, styles.flameGif]}
+        opacity={0.5}
+      />
+    </>
   );
 
   return (
@@ -76,19 +85,6 @@ export default function LiveCameraWithAROverlayLessonScreen({
       elementId={elementId}
       totalElements={totalElements}
       topElement={topElement}
-      bottomElement={
-        imageCaptured ? undefined : (
-          <TouchableOpacity
-            style={styles.captureButton}
-            onPress={handleTakePicture}
-          >
-            <Image
-              source={require('assets/TakePhoto3x.png')}
-              style={styles.captureButtonImage}
-            />
-          </TouchableOpacity>
-        )
-      }
       navigation={navigation}
       route={route}
     >
@@ -109,6 +105,14 @@ export default function LiveCameraWithAROverlayLessonScreen({
 
 // TODO: Use colors from the theme instead of hardcoding
 const styles = StyleSheet.create({
+  arContainer: {
+    position: 'relative',
+  },
+  flameGif: {
+    // zIndex: 10000000,
+    height: '100%',
+    width: '100%',
+  },
   captureButton: {},
   captureButtonImage: {width: 60, height: 60},
   bubbleText: {

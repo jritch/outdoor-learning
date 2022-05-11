@@ -12,7 +12,7 @@ export type Lesson = {
     | InformationalElement
     | QuizElement
     | NoteTakingElement
-    | LiveCameraWithAROverlay
+    | LiveCameraWithAROverlayElement
   >;
 };
 
@@ -52,8 +52,8 @@ export interface ImageCaptureElement extends GenericElementWithImages {
  * This element shows a live camera view that displays an AR overlay of fire
  * when the correct object is detected
  */
-export interface LiveCameraWithAROverlay extends GenericElement {
-  __type: 'LiveCameraWithAROverlay';
+export interface LiveCameraWithAROverlayElement extends GenericElement {
+  __type: 'LiveCameraWithAROverlayElement';
   messages: Messages;
 }
 
