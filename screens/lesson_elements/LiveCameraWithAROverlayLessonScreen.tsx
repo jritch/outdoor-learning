@@ -72,7 +72,7 @@ export default function LiveCameraWithAROverlayLessonScreen({
       // setImageCaptured(true);
     };
 
-    return throttle(onFrame, 1000);
+    return throttle(onFrame, 5000);
   }, []);
 
   const topElement = (
@@ -85,7 +85,7 @@ export default function LiveCameraWithAROverlayLessonScreen({
         style={StyleSheet.absoluteFill}
         targetResolution={{width: 480, height: 640}}
       />
-      {imageClass?.indexOf('eucalyptus') !== -1 && (
+      {imageClass != null && imageClass.indexOf('eucalyptus') !== -1 && (
         <Image
           source={flameGif}
           style={[StyleSheet.absoluteFill, styles.flameGif]}
