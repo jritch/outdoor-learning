@@ -20,6 +20,8 @@ type Props = {
   totalElements: number;
 };
 
+let frameRate: Array<number> = [];
+
 export default function LiveCameraWithAROverlayLessonScreen({
   navigation,
   route,
@@ -34,33 +36,38 @@ export default function LiveCameraWithAROverlayLessonScreen({
 
   const cameraRef = React.useRef<Camera>(null);
 
-  const onFrame = useCallback(async function handleImage(image: PTLImage) {
-    // setImageClass(null);
+  const onFrame = useCallback(async function handleImage(
+    image: PTLImage | null,
+  ) {
+    frameRate.push(performance.now());
+    frameRate = frameRate.slice(-20);
+    if (frameRate.length > 2) {
+      console.log(
+        'Framerate:',
+        (frameRate.length / (frameRate[frameRate.length - 1] - frameRate[0])) *
+          1000,
+      );
+    }
+
+    if (image == null) {
+      console.warn('Image returned from PTL camera is null');
+      return;
+    }
     try {
       const result = await classifyImage(image);
       console.log('Image classification result:', result);
+
       setImageClass(result);
       image.release();
     } catch (error) {
       console.log(error);
     }
+    // This doesn't seem to have an effect when used in an emulator
     image.release();
-    setImageCaptured(true);
-  }, []);
-
-  // const handleImageDebounced = useCallback(
-  //   debounce(handleImage, DEBOUNCE_WAIT, {maxWait: DEBOUNCE_MAX_WAIT}),
-  //   [handleImage],
-  // );
-
-  function handleTakePicture() {
-    const camera = cameraRef.current;
-    if (camera != null) {
-      camera.takePicture();
-      // TODO: Remove this. Android emulator doesn't support the camera, so we need another way to advance
-      setImageCaptured(true);
-    }
-  }
+    // console.time('[LiveCameraWithAROverlayLessonScreen] onFrame');
+    // setImageCaptured(true);
+  },
+  []);
 
   const topElement = (
     <>
@@ -72,11 +79,12 @@ export default function LiveCameraWithAROverlayLessonScreen({
         style={StyleSheet.absoluteFill}
         targetResolution={{width: 480, height: 640}}
       />
-      <Image
-        source={require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif')}
-        style={[StyleSheet.absoluteFill, styles.flameGif]}
-        opacity={0.5}
-      />
+      {true && (
+        <Image
+          source={require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif')}
+          style={[StyleSheet.absoluteFill, styles.flameGif]}
+        />
+      )}
     </>
   );
 
@@ -109,9 +117,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   flameGif: {
-    // zIndex: 10000000,
     height: '100%',
     width: '100%',
+    opacity: 0.5,
   },
   captureButton: {},
   captureButtonImage: {width: 60, height: 60},
