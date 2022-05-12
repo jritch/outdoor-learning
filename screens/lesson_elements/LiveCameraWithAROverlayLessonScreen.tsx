@@ -79,7 +79,7 @@ export default function LiveCameraWithAROverlayLessonScreen({
         style={StyleSheet.absoluteFill}
         targetResolution={{width: 480, height: 640}}
       />
-      {imageClass === 'eucalyptus' && (
+      {imageClass?.indexOf('eucalyptus') !== -1 && (
         <Image
           source={require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif')}
           style={[StyleSheet.absoluteFill, styles.flameGif]}
