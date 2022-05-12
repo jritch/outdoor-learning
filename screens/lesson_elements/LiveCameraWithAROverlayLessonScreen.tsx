@@ -11,8 +11,11 @@ import {
   CameraFacing,
   Image as PTLImage,
 } from 'react-native-pytorch-core';
-import {useState, useCallback} from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import classifyImage from '../../components/ImageClassifier';
+import throttle from 'lodash.throttle';
+
+const flameGif = require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif');
 
 type Props = {
   elementProps: LiveCameraWithAROverlayElement;
@@ -21,6 +24,7 @@ type Props = {
 };
 
 let frameRate: Array<number> = [];
+let renderCount: number = 0;
 
 export default function LiveCameraWithAROverlayLessonScreen({
   navigation,
@@ -30,50 +34,52 @@ export default function LiveCameraWithAROverlayLessonScreen({
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
+  console.log('Render count:', renderCount++);
   const [imageClass, setImageClass] = useState<string | null>(null);
-  const [imageCaptured, setImageCaptured] = useState(false);
   const {messages} = elementProps;
 
   const cameraRef = React.useRef<Camera>(null);
 
-  const onFrame = useCallback(async function handleImage(
-    image: PTLImage | null,
-  ) {
-    frameRate.push(performance.now());
-    frameRate = frameRate.slice(-20);
-    if (frameRate.length > 2) {
-      console.log(
-        'Framerate:',
-        (frameRate.length / (frameRate[frameRate.length - 1] - frameRate[0])) *
-          1000,
-      );
-    }
+  const onFrameThrottled = useMemo(() => {
+    const onFrame = async (image: PTLImage | null) => {
+      frameRate.push(performance.now());
+      frameRate = frameRate.slice(-20);
+      if (frameRate.length > 2) {
+        console.log(
+          'Framerate:',
+          (frameRate.length /
+            (frameRate[frameRate.length - 1] - frameRate[0])) *
+            1000,
+        );
+      }
 
-    if (image == null) {
-      console.warn('Image returned from PTL camera is null');
-      return;
-    }
-    try {
-      const result = await classifyImage(image);
-      console.log('Image classification result:', result);
+      if (image == null) {
+        console.warn('Image returned from PTL camera is null');
+        return;
+      }
+      try {
+        const result = await classifyImage(image);
+        console.log('Image classification result:', result);
 
-      setImageClass(result);
+        setImageClass(result);
+        image.release();
+      } catch (error) {
+        console.log(error);
+      }
+      // This doesn't seem to have an effect when used in an emulator
       image.release();
-    } catch (error) {
-      console.log(error);
-    }
-    // This doesn't seem to have an effect when used in an emulator
-    image.release();
-    // console.time('[LiveCameraWithAROverlayLessonScreen] onFrame');
-    // setImageCaptured(true);
-  },
-  []);
+      // console.time('[LiveCameraWithAROverlayLessonScreen] onFrame');
+      // setImageCaptured(true);
+    };
+
+    return throttle(onFrame, 1000);
+  }, []);
 
   const topElement = (
     <>
       <Camera
         ref={cameraRef}
-        onFrame={onFrame}
+        onFrame={onFrameThrottled}
         hideCaptureButton={true}
         hideFlipButton={true}
         style={StyleSheet.absoluteFill}
@@ -81,7 +87,7 @@ export default function LiveCameraWithAROverlayLessonScreen({
       />
       {imageClass?.indexOf('eucalyptus') !== -1 && (
         <Image
-          source={require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif')}
+          source={flameGif}
           style={[StyleSheet.absoluteFill, styles.flameGif]}
         />
       )}
