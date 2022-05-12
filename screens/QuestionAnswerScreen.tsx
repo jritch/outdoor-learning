@@ -16,6 +16,8 @@ import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ChatBubbleObject} from '../types';
 
+const eucalyptusInformation = require('../assets/content/eucalyptus_information.json');
+
 enum ChatBubbleType {
   REPLY = 'reply',
   QUESTION = 'question',
@@ -28,8 +30,7 @@ export default function QuestionAnswerScreen({
   const [data, setData] = useState([
     {text: startPromptText, type: ChatBubbleType.REPLY},
   ]);
-  const textBlurb =
-    'Eucalyptus trees can grow upto 33 meters in height. Eucalyptus trees are originally found in Australia and the islands surrounding it. Famously, these trees are home to some animals like koalas in Australia. The diet of koalas consists almost solely of eucalyptus leaves! You might also notice that eucalyptus has a distinctive bark pattern. You’ll notice that there’s a huge concentration of eucalyptus trees in California specifically.';
+  const textBlurb = eucalyptusInformation.content;
   const scrollViewRef = useRef<ScrollView>(null);
 
   async function submitQuestion(question: string) {
