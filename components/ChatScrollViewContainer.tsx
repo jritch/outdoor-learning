@@ -28,9 +28,11 @@ export default function ChatScrollViewContainer({
     <ScrollView
       style={styles.scrollView}
       ref={scrollViewRef}
-      onContentSizeChange={() =>
-        scrollViewRef?.current?.scrollToEnd({animated: true})
-      }
+      onContentSizeChange={() => {
+        if (chatElements.length > 1) {
+          scrollViewRef?.current?.scrollToEnd({animated: true});
+        }
+      }}
     >
       <View style={styles.scrollContents}>
         {chatElements.map((element, index) => (

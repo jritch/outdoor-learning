@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
 import InformationalComponent from './lesson_elements/InformationalComponent';
 import ImageCaptureLessonScreen from './lesson_elements/ImageCaptureLessonScreen';
+import LiveCameraWithAROverlayLessonScreen from './lesson_elements/LiveCameraWithAROverlayLessonScreen';
 
 export default function LessonContentScreen({
   navigation,
@@ -15,7 +16,15 @@ export default function LessonContentScreen({
 
   const element = EucalyptusLesson.elements[elementId];
 
-  let reactElement = null;
+  let reactElement = (
+    <View style={styles.unableToRenderContainer}>
+      <View>
+        <Text
+          style={styles.unableToRenderMessage}
+        >{`Unable to render lesson content: No component for ${element.__type}`}</Text>
+      </View>
+    </View>
+  );
 
   if (element.__type === 'InformationalElement') {
     reactElement = (
@@ -37,11 +46,31 @@ export default function LessonContentScreen({
       />
     );
   }
+  if (element.__type === 'LiveCameraWithAROverlayElement') {
+    reactElement = (
+      <LiveCameraWithAROverlayLessonScreen
+        {...{navigation, route}}
+        elementProps={element}
+        elementId={elementId}
+        totalElements={totalElements}
+      />
+    );
+  }
 
   return <View style={styles.mainContainer}>{reactElement}</View>;
 }
 
 const styles = StyleSheet.create({
+  unableToRenderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  unableToRenderMessage: {
+    fontSize: 24,
+    color: 'white',
+  },
   mainContainer: {
     flex: 1,
   },
