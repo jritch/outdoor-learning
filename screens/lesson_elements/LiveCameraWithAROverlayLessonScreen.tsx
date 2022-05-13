@@ -1,17 +1,13 @@
 import * as React from 'react';
-import {Text, StyleSheet, Image, TouchableOpacity, View} from 'react-native';
+import {Text, StyleSheet, Image} from 'react-native';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {LiveCameraWithAROverlayElement} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
-import {
-  Camera,
-  CameraFacing,
-  Image as PTLImage,
-} from 'react-native-pytorch-core';
-import {useState, useCallback, useMemo} from 'react';
+import {Camera, Image as PTLImage} from 'react-native-pytorch-core';
+import {useState, useMemo} from 'react';
 import classifyImage from '../../components/ImageClassifier';
 import throttle from 'lodash.throttle';
 
@@ -24,7 +20,6 @@ type Props = {
 };
 
 let frameRate: Array<number> = [];
-let renderCount: number = 0;
 
 export default function LiveCameraWithAROverlayLessonScreen({
   navigation,
@@ -34,7 +29,6 @@ export default function LiveCameraWithAROverlayLessonScreen({
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
-  console.log('Render count:', renderCount++);
   const [imageClass, setImageClass] = useState<string | null>(null);
   const {messages} = elementProps;
 
@@ -64,15 +58,13 @@ export default function LiveCameraWithAROverlayLessonScreen({
         setImageClass(result);
         image.release();
       } catch (error) {
-        console.log(error);
+        console.error(error);
+      } finally {
+        image.release();
       }
-      // This doesn't seem to have an effect when used in an emulator
-      image.release();
-      // console.time('[LiveCameraWithAROverlayLessonScreen] onFrame');
-      // setImageCaptured(true);
     };
 
-    return throttle(onFrame, 5000);
+    return throttle(onFrame, 250);
   }, []);
 
   const topElement = (
@@ -117,7 +109,6 @@ export default function LiveCameraWithAROverlayLessonScreen({
   );
 }
 
-// TODO: Use colors from the theme instead of hardcoding
 const styles = StyleSheet.create({
   arContainer: {
     position: 'relative',

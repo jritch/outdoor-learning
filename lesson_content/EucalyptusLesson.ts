@@ -30,6 +30,12 @@ export const EucalyptusLesson: Lesson = {
       imageFilenames: [require('assets/images/usmap-placeholder.jpg')],
     },
     {
+      __type: 'LiveCameraWithAROverlayElement',
+      messages: [
+        'Unfortunately, these unique properties of eucalyptus trees’ leaves and bark also lead them being extremely flammable. Point your camera to the tree and take a look at the ground around the base of the tree. Notice the dry leaves and bark that pile up there. This, combined with the oil in eucalyptus leaves, means that eucalyptus trees catch fire easily.',
+      ],
+    },
+    {
       __type: 'ImageCaptureElement',
       messages: [
         'What else makes eucalyptus trees unique? First, let’s take a closer look at their leaves. Take three close-up photos of their leaves for your records.',
@@ -38,12 +44,6 @@ export const EucalyptusLesson: Lesson = {
       imagesCapturesRequired: 1,
       afterCaptureMessages: [
         'How would you describe these leaves? Please record your thoughts through typing or audio.',
-      ],
-    },
-    {
-      __type: 'LiveCameraWithAROverlayElement',
-      messages: [
-        'Unfortunately, these unique properties of eucalyptus trees’ leaves and bark also lead them being extremely flammable. Point your camera to the tree and take a look at the ground around the base of the tree. Notice the dry leaves and bark that pile up there. This, combined with the oil in eucalyptus leaves, means that eucalyptus trees catch fire easily.',
       ],
     },
   ],
