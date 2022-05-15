@@ -22,7 +22,8 @@ var timerStartedTimestamp: number = Date.now();
 
 type Props = {
   placeHolderText: string; // Text input place holder text
-  onSubmit: Function; // Callback when input is submitted from the keyboard
+  onSubmit?: Function; // Callback when input is submitted from the keyboard
+  onSave?: Function; // Callback when save function completes
   isSaveEnabled: boolean; // To display a 'Save' button to save notes to the File system
   targetImage: string | null; // The image for which notes are taken
 };
@@ -192,6 +193,9 @@ export default function TextVoiceInput(props: Props) {
     const result = await JournalUtil.saveAnnotation(journalRecord);
     console.log('Record saved!');
     setShowSaveNotesView(false);
+    if (props.onSave) {
+      props.onSave();
+    }
   }
 
   return (

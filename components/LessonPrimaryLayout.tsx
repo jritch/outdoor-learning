@@ -21,6 +21,7 @@ type Props = {
   topElement: React.ReactNode;
   bottomElement?: React.ReactNode;
   children: React.ReactNode;
+  showNavigation?: boolean;
 };
 
 export default function LessonPrimaryLayout({
@@ -30,6 +31,7 @@ export default function LessonPrimaryLayout({
   topElement,
   bottomElement,
   children,
+  showNavigation = true,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
   const windowWidth = Dimensions.get('window').width;
   return (
@@ -38,45 +40,47 @@ export default function LessonPrimaryLayout({
         {topElement}
       </View>
       <View style={styles.body}>{children}</View>
-      <View style={styles.navigationSection}>
-        <View style={styles.arrowContainer}>
-          {elementId > 0 && (
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() =>
-                navigation.navigate('LessonContentScreen', {
-                  elementId: elementId - 1,
-                })
-              }
-            >
-              <Image source={leftArrow} style={styles.arrow} />
-            </TouchableOpacity>
-          )}
+      {showNavigation && (
+        <View style={styles.navigationSection}>
+          <View style={styles.arrowContainer}>
+            {elementId > 0 && (
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={() =>
+                  navigation.navigate('LessonContentScreen', {
+                    elementId: elementId - 1,
+                  })
+                }
+              >
+                <Image source={leftArrow} style={styles.arrow} />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={styles.bottomCenterContainer}>
+            {bottomElement != null ? (
+              bottomElement
+            ) : (
+              <Text style={styles.lessonNumber}>{`${
+                elementId + 1
+              }/${totalElements}`}</Text>
+            )}
+          </View>
+          <View style={styles.arrowContainer}>
+            {elementId + 1 < totalElements && (
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={() =>
+                  navigation.navigate('LessonContentScreen', {
+                    elementId: elementId + 1,
+                  })
+                }
+              >
+                <Image source={rightArrow} style={styles.arrow} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-        <View style={styles.bottomCenterContainer}>
-          {bottomElement != null ? (
-            bottomElement
-          ) : (
-            <Text style={styles.lessonNumber}>{`${
-              elementId + 1
-            }/${totalElements}`}</Text>
-          )}
-        </View>
-        <View style={styles.arrowContainer}>
-          {elementId + 1 < totalElements && (
-            <TouchableOpacity
-              style={styles.arrowButton}
-              onPress={() =>
-                navigation.navigate('LessonContentScreen', {
-                  elementId: elementId + 1,
-                })
-              }
-            >
-              <Image source={rightArrow} style={styles.arrow} />
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
+      )}
       <View style={styles.optionBarWrapper}>
         <LessonOptionsBar
           displayQuestionAnswerScreen={false}

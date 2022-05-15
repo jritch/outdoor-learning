@@ -37,6 +37,7 @@ export default function JournalScreen() {
       for (let index = 0; index < journalDataToPopulate.length; index += 2) {
         journalRecordRows.push(
           createJournalRecordRow(
+            index,
             journalDataToPopulate[index],
             journalDataToPopulate[index + 1],
           ),
@@ -46,6 +47,7 @@ export default function JournalScreen() {
     }
 
     function createJournalRecordRow(
+      index: number,
       entry1: JournalEntry,
       entry2: JournalEntry,
     ) {
@@ -58,6 +60,7 @@ export default function JournalScreen() {
       }
       return (
         <View
+          key={index}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-evenly',
