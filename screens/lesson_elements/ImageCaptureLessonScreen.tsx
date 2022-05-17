@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   KeyboardAvoidingView,
   Text,
@@ -8,7 +8,9 @@ import {
   Platform,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {ImageCaptureElement} from '../../lesson_content/lessonTypes';
@@ -17,12 +19,7 @@ import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 import FeaturedCoverImage from '../../components/FeaturedCoverImage';
 import TextVoiceInput from '../../components/TextVoiceInput';
-import {
-  Camera,
-  CameraFacing,
-  Image as PTLImage,
-  ImageUtil,
-} from 'react-native-pytorch-core';
+import {Camera} from 'expo-camera';
 
 type Props = {
   elementProps: ImageCaptureElement;
@@ -38,10 +35,22 @@ export default function ImageCaptureLessonScreen({
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [cameraReady, setCameraReady] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const {status} = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
   const [imageCaptured, setImageCaptured] = useState<Boolean>(false);
   const [showNavigation, setShowNavigation] = useState<boolean>(true);
   const {imageSources, messages, afterCaptureMessages} = elementProps;
-  const [imageFilePath, setImageFilePath] = useState<string>('');
+  const [imageFilePath, setImageFilePath] = useState<string | null>(null);
+  const [imageCaptureStarted, setImageCaptureStarted] =
+    useState<boolean>(false);
 
   const imageSource = imageSources?.[0] ?? null;
 
@@ -49,23 +58,40 @@ export default function ImageCaptureLessonScreen({
 
   const messagesToDisplay = imageCaptured ? afterCaptureMessages : messages;
 
-  async function handleCapture(image: PTLImage) {
-    // TODO: Save captured image before releasing it.
-    console.log('Picture taken!', image);
-    setImageFilePath(await ImageUtil.toFile(image));
-    console.log(imageFilePath);
-    image.release();
-    setImageCaptured(true);
-  }
+  // async function handleCapture(image: PTLImage) {
+  //   // TODO: Save captured image before releasing it.
+  //   console.log('Picture taken!', image);
+  //   image.release();
+  //   setImageFilePath(await ImageUtil.toFile(image));
+  //   console.log(imageFilePath);
+  //   setImageCaptured(true);
+  // }
 
-  function handleTakePicture() {
+  async function handleTakePicture() {
+    setImageCaptureStarted(true);
     const camera = cameraRef.current;
-    if (camera != null) {
-      camera.takePicture();
-      console.log('Picture taken');
-      // TODO: Remove this. Android emulator doesn't support the camera, so we need another way to advance
-      setImageCaptured(true);
-      setShowNavigation(false);
+    if (camera == null) {
+      console.error('Camera is nullish when trying to take a picture');
+      return;
+    }
+    const pictureObj = await camera.takePictureAsync();
+
+    console.log('Picture taken!', pictureObj);
+    setImageCaptured(true);
+    setShowNavigation(false);
+
+    try {
+      console.log('Saving temporary file to permanent location');
+      const newFilePath = `${
+        FileSystem?.documentDirectory ?? ''
+      }/${new Date().toJSON()}-image.jpg`;
+      FileSystem.copyAsync({
+        from: pictureObj.uri,
+        to: newFilePath,
+      });
+      setImageFilePath(newFilePath);
+    } catch (error) {
+      console.error('Error when attempting to save image', error);
     }
   }
 
@@ -73,18 +99,30 @@ export default function ImageCaptureLessonScreen({
     // Navigate to the next screen
   }
 
-  const topElement = imageCaptured ? (
-    <FeaturedCoverImage imageSource={imageSource} />
+  console.log('imageFilePath', imageFilePath);
+  let topElement = imageCaptured ? (
+    imageFilePath != null && (
+      <FeaturedCoverImage imageSource={{uri: imageFilePath}} />
+    )
   ) : (
     <Camera
       ref={cameraRef}
-      onCapture={handleCapture}
-      hideCaptureButton={true}
-      hideFlipButton={true}
       style={StyleSheet.absoluteFill}
-      targetResolution={{width: 480, height: 640}}
+      type={'back'}
+      onCameraReady={() => setCameraReady(true)}
     />
   );
+
+  if (hasPermission === null) {
+    topElement = (
+      <View>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+  if (hasPermission === false) {
+    topElement = <Text>No access to camera</Text>;
+  }
 
   const notesView = (
     <View style={{flex: 1, marginTop: 20}}>
@@ -108,7 +146,9 @@ export default function ImageCaptureLessonScreen({
         totalElements={totalElements}
         topElement={topElement}
         bottomElement={
-          imageCaptured ? undefined : (
+          imageCaptured ? undefined : imageCaptureStarted ? (
+            <ActivityIndicator />
+          ) : (
             <TouchableOpacity
               style={styles.captureButton}
               onPress={handleTakePicture}
