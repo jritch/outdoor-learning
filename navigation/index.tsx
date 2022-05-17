@@ -57,14 +57,16 @@ function RootNavigator() {
         title: appName,
       }}
     >
-      <Stack.Screen
-        name="DevIntroScreen"
-        component={DevIntroScreen}
-        options={{
-          headerShown: true,
-          headerBackVisible: true,
-        }}
-      />
+      {__DEV__ && (
+        <Stack.Screen
+          name="DevIntroScreen"
+          component={DevIntroScreen}
+          options={{
+            headerShown: true,
+            headerBackVisible: true,
+          }}
+        />
+      )}
       <Stack.Screen
         name="LessonIntroScreen"
         component={LessonIntroScreen}
