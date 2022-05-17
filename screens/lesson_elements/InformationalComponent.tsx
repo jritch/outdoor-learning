@@ -21,9 +21,9 @@ export default function InformationalComponent({
   elementId,
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
-  const {imageFilenames, messages} = elementProps;
+  const {imageSources, messages} = elementProps;
 
-  const imageSource = imageFilenames?.[0] ?? null;
+  const imageSource = imageSources?.[0] ?? null;
 
   return (
     <LessonPrimaryLayout

@@ -28,9 +28,9 @@ export default function ImageCaptureLessonScreen({
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
   const [imageCaptured, setImageCaptured] = React.useState(false);
-  const {imageFilenames, messages, afterCaptureMessages} = elementProps;
+  const {imageSources, messages, afterCaptureMessages} = elementProps;
 
-  const imageSource = imageFilenames?.[0] ?? null;
+  const imageSource = imageSources?.[0] ?? null;
 
   const cameraRef = React.useRef<Camera>(null);
 
