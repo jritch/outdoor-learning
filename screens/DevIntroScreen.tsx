@@ -1,32 +1,78 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import type {RootStackParamList} from '../types';
+import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
+
+const ROUTES_TO_IGNORE = ['DevIntroScreen'];
 
 export default function DevIntroScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'Root'>) {
+  const navState = navigation.getState();
+  const routeNames = navState.routeNames.filter(
+    name => !ROUTES_TO_IGNORE.includes(name),
+  );
+  const {elements} = EucalyptusLesson;
+
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>
-          [DEV] Stanford Nature App: Dev Screen
-        </Text>
-      </View>
-      <View style={styles.buttonWrapper}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('LessonIntroScreen')}
-          style={styles.button}
-        >
-          <Text style={styles.startButtonText}>{'Start App'}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.buttonWrapper}>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
-          <Text style={styles.startButtonText}>{'[WIP] Dev Menu'}</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.mainContainer}>
+          <View style={styles.headingContainer}>
+            <Text style={styles.headingText}>[DEV] Flora Dev Screen</Text>
+          </View>
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('LessonIntroScreen')}
+              style={styles.button}
+            >
+              <Text style={styles.startButtonText}>{'Start App'}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.screensHeaderContainer}>
+            <Text style={styles.screensHeader}>Screen Shortcuts</Text>
+          </View>
+          {elements.map((element, index) => {
+            return (
+              <View style={styles.buttonWrapper} key={index}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('LessonContentScreen', {
+                      elementId: index,
+                    })
+                  }
+                  style={styles.button}
+                >
+                  <Text
+                    style={styles.startButtonText}
+                  >{`Lesson ID: ${index} ${element.__type}`}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+          {routeNames.map((routeName, index) => {
+            return (
+              <View style={styles.buttonWrapper} key={routeName ?? index}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(routeName)}
+                  style={styles.button}
+                >
+                  <Text style={styles.startButtonText}>{routeName}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -36,11 +82,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  screensHeaderContainer: {marginTop: 40, marginBottom: 20},
+  screensHeader: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
   headingContainer: {
     marginLeft: 24,
     marginRight: 24,
     marginTop: 22,
-    height: 160,
+    marginBottom: 20,
   },
   headingText: {
     fontSize: 28,
