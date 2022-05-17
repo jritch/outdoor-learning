@@ -25,6 +25,7 @@ import QuestionAnswerScreen from '../screens/QuestionAnswerScreen';
 import JournalScreen from '../screens/JournalScreen';
 import SampleEucalyptusTreesScreen from '../screens/SampleEucalyptusTreesScreen';
 import appName from '../constants/appName';
+import DevIntroScreen from '../screens/DevIntroScreen';
 
 export default function Navigation({
   colorScheme,
@@ -56,6 +57,14 @@ function RootNavigator() {
         title: appName,
       }}
     >
+      <Stack.Screen
+        name="DevIntroScreen"
+        component={DevIntroScreen}
+        options={{
+          headerShown: true,
+          headerBackVisible: true,
+        }}
+      />
       <Stack.Screen
         name="LessonIntroScreen"
         component={LessonIntroScreen}

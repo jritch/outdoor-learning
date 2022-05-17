@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import LessonContentScreen from './screens/LessonContentScreen';
+import DevIntroScreen from './screens/DevIntroScreen';
 
 declare global {
   namespace ReactNavigation {
@@ -18,6 +19,7 @@ declare global {
 }
 
 export type RootStackParamList = {
+  DevIntroScreen: undefined;
   Root: undefined;
   LessonIntroScreen: undefined;
   LessonContentScreen: {elementId: number} | undefined;
