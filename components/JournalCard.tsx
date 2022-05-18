@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {ImageBackground, Pressable, View, StyleSheet, Text} from 'react-native';
+import TimestampUtils from '../components/TimestampUtils';
 
 type Props = {
   thumbnailImage: string;
@@ -12,11 +13,11 @@ export default function JournalCard(props: Props) {
   const timeString = calculateTimeString(props.timestamp);
 
   function calculateDateString(timestamp: number) {
-    return '04/22/2022'; // TODO: Add function to parse the date string from timestamp.
+    return TimestampUtils.getDateString(timestamp);
   }
 
   function calculateTimeString(timestamp: number) {
-    return '2:22 PM'; // TODO: Add function to parse the time string from timestamp.
+    return TimestampUtils.getTimeString(timestamp);
   }
 
   function handleOnPressCallback() {
@@ -31,7 +32,7 @@ export default function JournalCard(props: Props) {
         <View style={styles.imageSection}>
           <ImageBackground
             imageStyle={{borderRadius: 20}}
-            source={{uri: 'https://reactjs.org/logo-og.png'}}
+            source={{uri: props.thumbnailImage}}
             resizeMode="cover"
             style={styles.image}
           />

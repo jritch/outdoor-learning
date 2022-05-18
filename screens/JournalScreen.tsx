@@ -85,7 +85,11 @@ export default function JournalScreen() {
           onClick={() => {
             displayJournalRecord(journalEntry);
           }}
-          thumbnailImage={'https://reactjs.org/logo-og.png'}
+          thumbnailImage={
+            journalEntry.images.length > 0
+              ? journalEntry.images[0]
+              : 'https://reactjs.org/logo-og.png'
+          }
         />
       );
     }
