@@ -10,11 +10,12 @@ import {
   Platform,
   Pressable,
 } from 'react-native';
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Audio, AudioUtil} from 'react-native-pytorch-core';
 import RecordingMicrophone from './RecordingMicrophone';
 import transcribe from './speechTranslation';
 import JournalUtil from './Journal';
+import {useIsFocused} from '@react-navigation/native';
 
 // Globals for audio recording timer
 var stopTimer: boolean = false;
@@ -66,24 +67,27 @@ export default function TextVoiceInput(props: Props) {
   );
   const [timerText, setTimerText] = useState(defaultTimerText);
   const [recordedAudio, setRecordedAudio] = useState<Audio | null>(null);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   /**
    * Add this part when the component is used with a screen which uses navigation to
    * avoid keeping the mic recording audio even if the screen is not in focus.
-   *
-   * const isFocused = useIsFocused();
-   * useEffect(() => {
-   *    return () => {
-   *        AudioUtil.isRecording().then(isRecording => {
-   *            if (isRecording) {
-   *                // Make sure we stop the current recording before we navigate
-   *                console.log('Finishing ongoing recording..');
-   *                AudioUtil.stopRecord();
-   *            }
-   *        });
-   *    };
-   * }, [isFocused]);
    */
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    return () => {
+      AudioUtil.isRecording().then(isRecording => {
+        if (isRecording) {
+          // Make sure we stop the current recording before we navigate
+          console.log('Finishing ongoing recording..');
+          AudioUtil.stopRecord();
+          if (recordingTimerRef.current) {
+            clearTimeout(recordingTimerRef.current);
+          }
+        }
+      });
+    };
+  }, [isFocused]);
 
   async function stopAudioRecording() {
     const audio = await AudioUtil.stopRecord();
@@ -150,12 +154,11 @@ export default function TextVoiceInput(props: Props) {
   }
 
   function startRecordingTimer() {
-    setTimeout(function () {
+    recordingTimerRef.current = setTimeout(function () {
       if (!stopTimer) {
         startRecordingTimer();
       }
       updateTimerText();
-      // @ts-ignore TODO: revisit need for .bind(this)
     }, 1000);
   }
 
