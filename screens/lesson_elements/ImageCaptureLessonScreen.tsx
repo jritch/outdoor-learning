@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {
   KeyboardAvoidingView,
   Text,
@@ -20,6 +20,7 @@ import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 import FeaturedCoverImage from '../../components/FeaturedCoverImage';
 import TextVoiceInput from '../../components/TextVoiceInput';
 import {Camera} from 'expo-camera';
+import {navigationDelay} from '../../constants/navigationDelay';
 
 type Props = {
   elementProps: ImageCaptureElement;
@@ -47,25 +48,23 @@ export default function ImageCaptureLessonScreen({
 
   const [imageCaptured, setImageCaptured] = useState<Boolean>(false);
   const [showNavigation, setShowNavigation] = useState<boolean>(true);
-  const {imageSources, messages, afterCaptureMessages} = elementProps;
+  const {messages, afterCaptureMessages} = elementProps;
   const [imageFilePath, setImageFilePath] = useState<string | null>(null);
   const [imageCaptureStarted, setImageCaptureStarted] =
     useState<boolean>(false);
-
-  const imageSource = imageSources?.[0] ?? null;
+  const navigationDelayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const cameraRef = React.useRef<Camera>(null);
 
   const messagesToDisplay = imageCaptured ? afterCaptureMessages : messages;
 
-  // async function handleCapture(image: PTLImage) {
-  //   // TODO: Save captured image before releasing it.
-  //   console.log('Picture taken!', image);
-  //   image.release();
-  //   setImageFilePath(await ImageUtil.toFile(image));
-  //   console.log(imageFilePath);
-  //   setImageCaptured(true);
-  // }
+  useEffect(() => {
+    return () => {
+      if (navigationDelayTimerRef.current) {
+        clearTimeout(navigationDelayTimerRef.current);
+      }
+    };
+  }, []);
 
   async function handleTakePicture() {
     setImageCaptureStarted(true);
@@ -96,21 +95,26 @@ export default function ImageCaptureLessonScreen({
   }
 
   function onSaveCallback() {
-    // Navigate to the next screen
+    navigationDelayTimerRef.current = setTimeout(() => {
+      if (elementId < totalElements - 1) {
+        navigation.navigate('LessonContentScreen', {elementId: elementId + 1});
+      }
+    }, navigationDelay);
   }
 
-  console.log('imageFilePath', imageFilePath);
   let topElement = imageCaptured ? (
     imageFilePath != null && (
       <FeaturedCoverImage imageSource={{uri: imageFilePath}} />
     )
   ) : (
-    <Camera
-      ref={cameraRef}
-      style={StyleSheet.absoluteFill}
-      type={'back'}
-      onCameraReady={() => setCameraReady(true)}
-    />
+    <View style={styles.cameraContainer}>
+      <Camera
+        ref={cameraRef}
+        style={styles.camera}
+        type={'back'}
+        onCameraReady={() => setCameraReady(true)}
+      />
+    </View>
   );
 
   if (hasPermission === null) {
@@ -139,7 +143,7 @@ export default function ImageCaptureLessonScreen({
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <LessonPrimaryLayout
         elementId={elementId}
@@ -149,10 +153,7 @@ export default function ImageCaptureLessonScreen({
           imageCaptured ? undefined : imageCaptureStarted ? (
             <ActivityIndicator />
           ) : (
-            <TouchableOpacity
-              style={styles.captureButton}
-              onPress={handleTakePicture}
-            >
+            <TouchableOpacity onPress={handleTakePicture}>
               <Image
                 source={require('assets/TakePhoto3x.png')}
                 style={styles.captureButtonImage}
@@ -183,7 +184,13 @@ export default function ImageCaptureLessonScreen({
 
 // TODO: Use colors from the theme instead of hardcoding
 const styles = StyleSheet.create({
-  captureButton: {},
+  cameraContainer: {
+    // flex: 1,
+    height: '100%',
+    width: '100%',
+    // backgroundColor: 'red',
+  },
+  camera: {flex: 1},
   captureButtonImage: {width: 60, height: 60},
   bubbleText: {
     fontSize: 16,

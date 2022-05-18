@@ -38,7 +38,6 @@ export const EucalyptusLesson: Lesson = {
       messages: [
         'What else makes eucalyptus trees unique? First, let’s take a closer look at their leaves. Take three close-up photos of their leaves for your records.',
       ],
-      imageSources: [require('assets/images/GettyImages-480806545.jpeg')],
       imagesCapturesRequired: 1,
       afterCaptureMessages: [
         'How would you describe these leaves? Please record your thoughts through typing or audio.',
