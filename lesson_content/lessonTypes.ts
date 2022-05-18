@@ -55,7 +55,7 @@ export interface InformationalElement extends GenericElementWithImages {
  * An Image Capture element prompts the user to capture 1+ images for their journal,
  * but does not run any ML models on them
  */
-export interface ImageCaptureElement extends GenericElementWithImages {
+export interface ImageCaptureElement extends GenericElement {
   __type: 'ImageCaptureElement';
   messages: Messages;
   imagesCapturesRequired: number;

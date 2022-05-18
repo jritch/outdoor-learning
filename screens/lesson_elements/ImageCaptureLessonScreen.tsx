@@ -1,5 +1,16 @@
 import * as React from 'react';
-import {Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {useState, useEffect, useRef} from 'react';
+import {
+  KeyboardAvoidingView,
+  Text,
+  StyleSheet,
+  Image,
+  Platform,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {ImageCaptureElement} from '../../lesson_content/lessonTypes';
@@ -7,11 +18,9 @@ import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 import FeaturedCoverImage from '../../components/FeaturedCoverImage';
-import {
-  Camera,
-  CameraFacing,
-  Image as PTLImage,
-} from 'react-native-pytorch-core';
+import TextVoiceInput from '../../components/TextVoiceInput';
+import {Camera} from 'expo-camera';
+import {navigationDelay} from '../../constants/navigationDelay';
 
 type Props = {
   elementProps: ImageCaptureElement;
@@ -27,86 +36,168 @@ export default function ImageCaptureLessonScreen({
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
-  const [imageCaptured, setImageCaptured] = React.useState(false);
-  const {imageSources, messages, afterCaptureMessages} = elementProps;
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [cameraReady, setCameraReady] = useState(false);
 
-  const imageSource = imageSources?.[0] ?? null;
+  useEffect(() => {
+    (async () => {
+      const {status} = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  const [imageCaptured, setImageCaptured] = useState<Boolean>(false);
+  const [showNavigation, setShowNavigation] = useState<boolean>(true);
+  const {messages, afterCaptureMessages} = elementProps;
+  const [imageFilePath, setImageFilePath] = useState<string | null>(null);
+  const [imageCaptureStarted, setImageCaptureStarted] =
+    useState<boolean>(false);
+  const navigationDelayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const cameraRef = React.useRef<Camera>(null);
 
   const messagesToDisplay = imageCaptured ? afterCaptureMessages : messages;
 
-  async function handleCapture(image: PTLImage) {
-    // TODO: Save captured image before releasing it.
-    console.log('Picture taken!', image);
-    image.release();
-    setImageCaptured(true);
-  }
+  useEffect(() => {
+    return () => {
+      if (navigationDelayTimerRef.current) {
+        clearTimeout(navigationDelayTimerRef.current);
+      }
+    };
+  }, []);
 
-  function handleTakePicture() {
+  async function handleTakePicture() {
+    setImageCaptureStarted(true);
     const camera = cameraRef.current;
-    if (camera != null) {
-      camera.takePicture();
-      // TODO: Remove this. Android emulator doesn't support the camera, so we need another way to advance
-      setImageCaptured(true);
+    if (camera == null) {
+      console.error('Camera is nullish when trying to take a picture');
+      return;
+    }
+    const pictureObj = await camera.takePictureAsync();
+
+    console.log('Picture taken!', pictureObj);
+    setImageCaptured(true);
+    setShowNavigation(false);
+
+    try {
+      console.log('Saving temporary file to permanent location');
+      const newFilePath = `${
+        FileSystem?.documentDirectory ?? ''
+      }/${new Date().toJSON()}-image.jpg`;
+      FileSystem.copyAsync({
+        from: pictureObj.uri,
+        to: newFilePath,
+      });
+      setImageFilePath(newFilePath);
+    } catch (error) {
+      console.error('Error when attempting to save image', error);
     }
   }
 
-  const topElement = imageCaptured ? (
-    <FeaturedCoverImage imageSource={imageSource} />
+  function onSaveCallback() {
+    navigationDelayTimerRef.current = setTimeout(() => {
+      if (elementId < totalElements - 1) {
+        navigation.navigate('LessonContentScreen', {elementId: elementId + 1});
+      }
+    }, navigationDelay);
+  }
+
+  let topElement = imageCaptured ? (
+    imageFilePath != null && (
+      <FeaturedCoverImage imageSource={{uri: imageFilePath}} />
+    )
   ) : (
-    <Camera
-      ref={cameraRef}
-      onCapture={handleCapture}
-      hideCaptureButton={true}
-      hideFlipButton={true}
-      style={StyleSheet.absoluteFill}
-      targetResolution={{width: 480, height: 640}}
-    />
+    <View style={styles.cameraContainer}>
+      <Camera
+        ref={cameraRef}
+        style={styles.camera}
+        type={'back'}
+        onCameraReady={() => setCameraReady(true)}
+      />
+    </View>
+  );
+
+  if (hasPermission === null) {
+    topElement = (
+      <View>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+  if (hasPermission === false) {
+    topElement = <Text>No access to camera</Text>;
+  }
+
+  const notesView = (
+    <View style={{flex: 1, marginTop: 20}}>
+      <TextVoiceInput
+        placeHolderText="Ask a question"
+        onSubmit={() => {}}
+        onSave={onSaveCallback}
+        isSaveEnabled={true}
+        targetImage={imageFilePath}
+      />
+    </View>
   );
 
   return (
-    <LessonPrimaryLayout
-      elementId={elementId}
-      totalElements={totalElements}
-      topElement={topElement}
-      bottomElement={
-        imageCaptured ? undefined : (
-          <TouchableOpacity
-            style={styles.captureButton}
-            onPress={handleTakePicture}
-          >
-            <Image
-              source={require('assets/TakePhoto3x.png')}
-              style={styles.captureButtonImage}
-            />
-          </TouchableOpacity>
-        )
-      }
-      navigation={navigation}
-      route={route}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ChatScrollViewContainer
-        chatElements={messagesToDisplay.map((message, i) => (
-          <ChatBubble
-            key={i}
-            alignment="left"
-            view={<Text style={styles.bubbleText}>{message}</Text>}
-            bubbleColor={'rgba(38, 38, 39, 1)'}
-            backgroundColor={'#121212'}
-          />
-        ))}
-      />
-    </LessonPrimaryLayout>
+      <LessonPrimaryLayout
+        elementId={elementId}
+        totalElements={totalElements}
+        topElement={topElement}
+        bottomElement={
+          imageCaptured ? undefined : imageCaptureStarted ? (
+            <ActivityIndicator />
+          ) : (
+            <TouchableOpacity onPress={handleTakePicture}>
+              <Image
+                source={require('assets/TakePhoto3x.png')}
+                style={styles.captureButtonImage}
+              />
+            </TouchableOpacity>
+          )
+        }
+        navigation={navigation}
+        route={route}
+        showNavigation={showNavigation}
+      >
+        <ChatScrollViewContainer
+          chatElements={messagesToDisplay.map((message, i) => (
+            <ChatBubble
+              key={i}
+              alignment="left"
+              view={<Text style={styles.bubbleText}>{message}</Text>}
+              bubbleColor={'rgba(38, 38, 39, 1)'}
+              backgroundColor={'#121212'}
+            />
+          ))}
+        />
+        {imageCaptured ? notesView : null}
+      </LessonPrimaryLayout>
+    </KeyboardAvoidingView>
   );
 }
 
 // TODO: Use colors from the theme instead of hardcoding
 const styles = StyleSheet.create({
-  captureButton: {},
+  cameraContainer: {
+    // flex: 1,
+    height: '100%',
+    width: '100%',
+    // backgroundColor: 'red',
+  },
+  camera: {flex: 1},
   captureButtonImage: {width: 60, height: 60},
   bubbleText: {
     fontSize: 16,
     color: 'rgba(255, 255, 255, 1)',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#121212',
   },
 });

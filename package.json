@@ -45,7 +45,9 @@
     "react-native-pytorch-core": "0.0.0-04262022-1207-f4308c17e",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
-    "react-native-web": "0.17.1"
+    "react-native-web": "0.17.1",
+    "expo-camera": "~12.1.2",
+    "expo-file-system": "~13.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
