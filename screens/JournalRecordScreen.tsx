@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import {ImageBackground, Platform, View, StyleSheet, Text} from 'react-native';
 import PlayAudioButton from '../components/PlayAudioButton';
+import TimestampUtils from '../components/TimestampUtils';
 
 import {JournalEntry} from '../types';
 
@@ -20,14 +21,15 @@ export default function JournalRecordScreen(props: Props) {
     Platform.OS == 'ios'
       ? props.entry.images[0]
       : 'file://' + props.entry.images[0]; // android expects the 'file://' for local file paths.
-  const audioSource = props.entry.audios[0];
+  const audioSource =
+    props.entry.audios.length > 0 ? props.entry.audios[0] : undefined;
 
   function calculateDateText(timestamp: number) {
-    return '04/22/2022'; // TODO: Write a function to parse the date string from timestamp
+    return TimestampUtils.getDateString(timestamp);
   }
 
   function calculateTimeText(timestamp: number) {
-    return '1:32 PM'; // TODO: Write a function to parse the time string from timestamp
+    return TimestampUtils.getTimeString(timestamp);
   }
 
   const handleError = (e: any) => {
@@ -52,9 +54,11 @@ export default function JournalRecordScreen(props: Props) {
         <View style={styles.notesTextView}>
           <Text style={styles.notesText}>{notesText}</Text>
         </View>
-        <View style={styles.playAudioButtonView}>
-          <PlayAudioButton source={audioSource} />
-        </View>
+        {audioSource && (
+          <View style={styles.playAudioButtonView}>
+            <PlayAudioButton source={audioSource} />
+          </View>
+        )}
       </View>
     </View>
   );
