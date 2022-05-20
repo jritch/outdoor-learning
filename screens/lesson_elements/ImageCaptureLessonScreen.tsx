@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect, useRef} from 'react';
+import {useCallback, useState, useEffect, useRef} from 'react';
 import {
   Dimensions,
   Keyboard,
@@ -54,7 +54,7 @@ export default function ImageCaptureLessonScreen({
 
   const [imageCaptured, setImageCaptured] = useState<Boolean>(false);
   const [showNavigation, setShowNavigation] = useState<boolean>(true);
-  const [showChatBubble, setShowChatBubble] = useState<boolean>(false);
+  const [showChatArea, setShowChatArea] = useState<boolean>(true);
   const {messages, afterCaptureMessages} = elementProps;
   const [imageFilePath, setImageFilePath] = useState<string | null>(null);
   const [imageCaptureStarted, setImageCaptureStarted] =
@@ -76,18 +76,19 @@ export default function ImageCaptureLessonScreen({
     };
   }, []);
 
-  function onKeyboardDidShow(e: KeyboardEvent) {
+  const onKeyboardDidShow = useCallback((e: KeyboardEvent) => {
+    setShowChatArea(false);
     const availableWindowHeight =
       Dimensions.get('window').height - e.endCoordinates.height;
     if (availableWindowHeight > DEFAULT_AVAILABLE_WINDOW_HEIGHT_THRESHOLD) {
       setTextVoiceInputBottom(0);
     }
-  }
+  }, []);
 
-  function onKeyboardDidHide() {
+  const onKeyboardDidHide = useCallback(() => {
     const availableWindowHeight = Dimensions.get('window').height;
     setTextVoiceInputBottom(DEFAULT_TEXT_VOICE_INPUT_BOTTOM);
-  }
+  }, []);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener(
@@ -102,7 +103,7 @@ export default function ImageCaptureLessonScreen({
       showSubscription.remove();
       hideSubscription.remove();
     };
-  }, []);
+  }, [onKeyboardDidHide, onKeyboardDidShow]);
 
   async function handleTakePicture() {
     setImageCaptureStarted(true);
@@ -218,7 +219,7 @@ export default function ImageCaptureLessonScreen({
         route={route}
         showNavigation={showNavigation}
       >
-        {showChatBubble && (
+        {showChatArea && (
           <ChatScrollViewContainer
             chatElements={messagesToDisplay.map((message, i) => (
               <ChatBubble
