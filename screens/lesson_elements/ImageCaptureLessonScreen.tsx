@@ -1,6 +1,9 @@
 import * as React from 'react';
-import {useState, useEffect, useRef} from 'react';
+import {useCallback, useState, useEffect, useRef} from 'react';
 import {
+  Dimensions,
+  Keyboard,
+  KeyboardEvent,
   KeyboardAvoidingView,
   Text,
   StyleSheet,
@@ -36,6 +39,9 @@ export default function ImageCaptureLessonScreen({
   totalElements,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
+  const DEFAULT_TEXT_VOICE_INPUT_BOTTOM = 45;
+  const DEFAULT_AVAILABLE_WINDOW_HEIGHT_THRESHOLD = 510;
+
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraReady, setCameraReady] = useState(false);
 
@@ -48,11 +54,15 @@ export default function ImageCaptureLessonScreen({
 
   const [imageCaptured, setImageCaptured] = useState<Boolean>(false);
   const [showNavigation, setShowNavigation] = useState<boolean>(true);
+  const [showChatArea, setShowChatArea] = useState<boolean>(true);
   const {messages, afterCaptureMessages} = elementProps;
   const [imageFilePath, setImageFilePath] = useState<string | null>(null);
   const [imageCaptureStarted, setImageCaptureStarted] =
     useState<boolean>(false);
   const navigationDelayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [textVoiceInputBottom, setTextVoiceInputBottom] = useState<number>(
+    DEFAULT_TEXT_VOICE_INPUT_BOTTOM,
+  );
 
   const cameraRef = React.useRef<Camera>(null);
 
@@ -65,6 +75,35 @@ export default function ImageCaptureLessonScreen({
       }
     };
   }, []);
+
+  const onKeyboardDidShow = useCallback((e: KeyboardEvent) => {
+    setShowChatArea(false);
+    const availableWindowHeight =
+      Dimensions.get('window').height - e.endCoordinates.height;
+    if (availableWindowHeight > DEFAULT_AVAILABLE_WINDOW_HEIGHT_THRESHOLD) {
+      setTextVoiceInputBottom(0);
+    }
+  }, []);
+
+  const onKeyboardDidHide = useCallback(() => {
+    const availableWindowHeight = Dimensions.get('window').height;
+    setTextVoiceInputBottom(DEFAULT_TEXT_VOICE_INPUT_BOTTOM);
+  }, []);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener(
+      'keyboardDidShow',
+      onKeyboardDidShow,
+    );
+    const hideSubscription = Keyboard.addListener(
+      'keyboardDidHide',
+      onKeyboardDidHide,
+    );
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [onKeyboardDidHide, onKeyboardDidShow]);
 
   async function handleTakePicture() {
     setImageCaptureStarted(true);
@@ -129,14 +168,29 @@ export default function ImageCaptureLessonScreen({
   }
 
   const notesView = (
-    <View style={{flex: 1, marginTop: 20}}>
-      <TextVoiceInput
-        placeHolderText="Ask a question"
-        onSubmit={() => {}}
-        onSave={onSaveCallback}
-        isSaveEnabled={true}
-        targetImage={imageFilePath}
-      />
+    <View
+      style={{
+        width: '100%',
+        position: 'absolute',
+        height: 350,
+        bottom: 0,
+      }}
+    >
+      <View
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: textVoiceInputBottom,
+        }}
+      >
+        <TextVoiceInput
+          placeHolderText="Ask a question"
+          onSubmit={() => {}}
+          onSave={onSaveCallback}
+          isSaveEnabled={true}
+          targetImage={imageFilePath}
+        />
+      </View>
     </View>
   );
 
@@ -165,17 +219,19 @@ export default function ImageCaptureLessonScreen({
         route={route}
         showNavigation={showNavigation}
       >
-        <ChatScrollViewContainer
-          chatElements={messagesToDisplay.map((message, i) => (
-            <ChatBubble
-              key={i}
-              alignment="left"
-              view={<Text style={styles.bubbleText}>{message}</Text>}
-              bubbleColor={'rgba(38, 38, 39, 1)'}
-              backgroundColor={'#121212'}
-            />
-          ))}
-        />
+        {showChatArea && (
+          <ChatScrollViewContainer
+            chatElements={messagesToDisplay.map((message, i) => (
+              <ChatBubble
+                key={i}
+                alignment="left"
+                view={<Text style={styles.bubbleText}>{message}</Text>}
+                bubbleColor={'rgba(38, 38, 39, 1)'}
+                backgroundColor={'#121212'}
+              />
+            ))}
+          />
+        )}
         {imageCaptured ? notesView : null}
       </LessonPrimaryLayout>
     </KeyboardAvoidingView>
