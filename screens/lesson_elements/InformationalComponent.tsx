@@ -7,6 +7,7 @@ import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 import FeaturedCoverImage from '../../components/FeaturedCoverImage';
+import useTextToSpeech from '../../hooks/useTextToSpeech';
 
 type Props = {
   elementProps: InformationalElement;
@@ -24,6 +25,8 @@ export default function InformationalComponent({
   const {imageSources, messages} = elementProps;
 
   const imageSource = imageSources?.[0] ?? null;
+
+  const {onStartSpeaking, onStopSpeaking} = useTextToSpeech(messages, true);
 
   return (
     <LessonPrimaryLayout
