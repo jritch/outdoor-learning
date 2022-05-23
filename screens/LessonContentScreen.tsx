@@ -6,6 +6,7 @@ import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
 import InformationalComponent from './lesson_elements/InformationalComponent';
 import ImageCaptureLessonScreen from './lesson_elements/ImageCaptureLessonScreen';
 import LiveCameraWithAROverlayLessonScreen from './lesson_elements/LiveCameraWithAROverlayLessonScreen';
+import QuizElementScreen from './lesson_elements/QuizElementScreen';
 
 export default function LessonContentScreen({
   navigation,
@@ -49,6 +50,16 @@ export default function LessonContentScreen({
   if (element.__type === 'LiveCameraWithAROverlayElement') {
     reactElement = (
       <LiveCameraWithAROverlayLessonScreen
+        {...{navigation, route}}
+        elementProps={element}
+        elementId={elementId}
+        totalElements={totalElements}
+      />
+    );
+  }
+  if (element.__type === 'QuizElement') {
+    reactElement = (
+      <QuizElementScreen
         {...{navigation, route}}
         elementProps={element}
         elementId={elementId}
