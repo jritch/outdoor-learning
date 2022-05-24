@@ -22,23 +22,15 @@ export default function useTextToSpeech(
   // @state isSpeaking - whether or not the expo speech api is currently speaking
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
 
-  // const textNotYetSpoken =
-  //   currentlySpeakingIndex != null
-  //     ? textToSpeak.slice(currentlySpeakingIndex)
-  //     : textToSpeak;
-
   useEffect(() => {
-    console.log('useTextToSpeech useEffect');
     if (
       shouldSpeak &&
       !isSpeaking &&
       lastCompletedIndex < textToSpeak.length - 1
     ) {
-      console.log('should start speaking');
       const textToSpeakNextIndex = lastCompletedIndex + 1;
       Speech.speak(textToSpeak[textToSpeakNextIndex], {
         onDone: () => {
-          console.log('speech block done!');
           setIsSpeaking(false);
           setLastCompletedIndex(textToSpeakNextIndex);
         },

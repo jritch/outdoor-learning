@@ -31,6 +31,7 @@ export default function LessonContentScreen({
     reactElement = (
       <InformationalComponent
         {...{navigation, route}}
+        key={elementId}
         elementProps={element}
         elementId={elementId}
         totalElements={totalElements}
@@ -41,6 +42,7 @@ export default function LessonContentScreen({
     reactElement = (
       <ImageCaptureLessonScreen
         {...{navigation, route}}
+        key={elementId}
         elementProps={element}
         elementId={elementId}
         totalElements={totalElements}
@@ -51,6 +53,7 @@ export default function LessonContentScreen({
     reactElement = (
       <LiveCameraWithAROverlayLessonScreen
         {...{navigation, route}}
+        key={elementId}
         elementProps={element}
         elementId={elementId}
         totalElements={totalElements}
@@ -61,6 +64,7 @@ export default function LessonContentScreen({
     reactElement = (
       <QuizElementScreen
         {...{navigation, route}}
+        key={elementId}
         elementProps={element}
         elementId={elementId}
         totalElements={totalElements}
