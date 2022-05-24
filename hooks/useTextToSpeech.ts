@@ -28,14 +28,17 @@ export default function useTextToSpeech(
   //     : textToSpeak;
 
   useEffect(() => {
+    console.log('useTextToSpeech useEffect');
     if (
       shouldSpeak &&
       !isSpeaking &&
       lastCompletedIndex < textToSpeak.length - 1
     ) {
+      console.log('should start speaking');
       const textToSpeakNextIndex = lastCompletedIndex + 1;
       Speech.speak(textToSpeak[textToSpeakNextIndex], {
         onDone: () => {
+          console.log('speech block done!');
           setIsSpeaking(false);
           setLastCompletedIndex(textToSpeakNextIndex);
         },
