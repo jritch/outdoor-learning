@@ -31,8 +31,10 @@
     "@react-navigation/native-stack": "^6.1.0",
     "expo": "~44.0.0",
     "expo-asset": "~8.4.4",
+    "expo-camera": "~12.1.2",
     "expo-constants": "~13.0.0",
     "expo-dev-client": "~0.8.5",
+    "expo-file-system": "~13.1.4",
     "expo-font": "~10.0.4",
     "expo-linking": "~3.0.0",
     "expo-splash-screen": "~0.14.0",
@@ -45,9 +47,7 @@
     "react-native-pytorch-core": "0.0.0-04262022-1207-f4308c17e",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
-    "react-native-web": "0.17.1",
-    "expo-camera": "~12.1.2",
-    "expo-file-system": "~13.1.4"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
