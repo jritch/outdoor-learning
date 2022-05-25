@@ -152,6 +152,17 @@ export const EucalyptusLesson: Lesson = {
       ],
       imageSources: [
         {
+          uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/debate-both@3x.png',
+        },
+      ],
+    },
+    {
+      __type: 'InformationalElement',
+      messages: [
+        '“We should get rid of eucalyptus trees! They’re a non-native species that contribute to wildfires.”',
+      ],
+      imageSources: [
+        {
           uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/debate-anti@3x.png',
         },
       ],
