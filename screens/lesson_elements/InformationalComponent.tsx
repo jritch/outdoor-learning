@@ -26,7 +26,7 @@ export default function InformationalComponent({
 
   const imageSource = imageSources?.[0] ?? null;
 
-  const {onStartSpeaking, onStopSpeaking} = useTextToSpeech(messages, true);
+  useTextToSpeech(messages, true);
 
   return (
     <LessonPrimaryLayout

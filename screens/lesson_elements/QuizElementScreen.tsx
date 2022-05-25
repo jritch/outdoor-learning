@@ -69,7 +69,7 @@ export default function QuizElementScreen({
     }
   }
 
-  const {onStartSpeaking, onStopSpeaking} = useTextToSpeech(
+  useTextToSpeech(
     chatViewPrompts.map(cvp => cvp.text),
     true,
   );
