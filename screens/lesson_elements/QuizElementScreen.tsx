@@ -9,6 +9,7 @@ import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 import FeaturedCoverImage from '../../components/FeaturedCoverImage';
 import QuizAnswerBubble from '../../components/QuizAnswerBubble';
+import useTextToSpeech from '../../hooks/useTextToSpeech';
 
 type Props = {
   elementProps: QuizElement;
@@ -67,6 +68,11 @@ export default function QuizElementScreen({
       setChatViewPrompts(oldArray => [...oldArray, inCorrectAnswerPrompt]);
     }
   }
+
+  useTextToSpeech(
+    chatViewPrompts.map(cvp => cvp.text),
+    true,
+  );
 
   return (
     <LessonPrimaryLayout

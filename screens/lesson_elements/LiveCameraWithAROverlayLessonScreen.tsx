@@ -10,6 +10,7 @@ import {Camera, Image as PTLImage} from 'react-native-pytorch-core';
 import {useState, useMemo} from 'react';
 import classifyImage from '../../components/ImageClassifier';
 import throttle from 'lodash.throttle';
+import useTextToSpeech from '../../hooks/useTextToSpeech';
 
 const flameGif = require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif');
 
@@ -33,6 +34,8 @@ export default function LiveCameraWithAROverlayLessonScreen({
   const {messages} = elementProps;
 
   const cameraRef = React.useRef<Camera>(null);
+
+  useTextToSpeech(messages, true);
 
   const onFrameThrottled = useMemo(() => {
     const onFrame = async (image: PTLImage | null) => {
