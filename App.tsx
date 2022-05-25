@@ -6,6 +6,7 @@ import 'expo-dev-client';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import React, {useEffect} from 'react';
+import ModelCache from './components/ModelCache';
 
 function checkForPytorchCoreLib(): boolean {
   try {
@@ -27,6 +28,11 @@ function checkForPytorchCoreLib(): boolean {
 checkForPytorchCoreLib();
 
 export default function App() {
+  // Cache all models required by the app
+  useEffect(() => {
+ModelCache.downloadAllModels().catch(console.error);
+  }, []);
+
   const isLoadingComplete = useCachedResources();
   // NOTE: We're hardcoding the dark theme here but in the future
   // we could support a light mode
