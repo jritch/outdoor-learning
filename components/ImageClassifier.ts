@@ -4,6 +4,7 @@ import {
   torchvision,
   media,
   Module,
+  Tensor,
 } from 'react-native-pytorch-core';
 
 import ModelCache from './ModelCache';
@@ -64,14 +65,11 @@ export default async function classifyImage(image: Image) {
   }
 
   // 6. Run the ML inference with the pre-processed image tensor
-  const result = await model.forward(tensor);
+  const resultTensor = await model.forward<Tensor, Tensor>(tensor);
 
-  // 7. Get the inference result as a tensor
-  const resultTensor = result.toTensor();
-
-  // 8. Get the index of the value with the highest probability
+  // 7. Get the index of the value with the highest probability
   const maxIdx = resultTensor.argmax().item();
 
-  // 9. Resolve the most likely class label and return it
+  // 8. Resolve the most likely class label and return it
   return IMAGE_CLASSES[maxIdx];
 }
