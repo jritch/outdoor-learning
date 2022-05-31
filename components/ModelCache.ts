@@ -19,6 +19,13 @@ class ModelCache {
     return modelPath;
   }
 
+  static async downloadAllModels(): Promise<void> {
+    for (const [key, _] of Object.entries(MODEL_URLS)) {
+      console.log('Caching model ' + key);
+      await ModelCache.getModelPath(key);
+    }
+  }
+
   static async getModelPath(modelKey: string): Promise<string> {
     const modelPathKey = ModelCache.constructModelPathCacheKey(modelKey);
     const cachedModelPath = await AsyncStorage.getItem(modelPathKey);
@@ -30,6 +37,15 @@ class ModelCache {
     console.log('loaded into cache');
     await AsyncStorage.setItem(modelPathKey, modelPath);
     return modelPath;
+  }
+
+  // Probably not needed for the app, only for dev purposes.
+  static async clearModelCache(): Promise<void> {
+    for (const [key, _] of Object.entries(MODEL_URLS)) {
+      const modelKey = ModelCache.constructModelPathCacheKey(key);
+      await AsyncStorage.removeItem(modelKey);
+      console.log('Removed model ' + key + ' from cache.');
+    }
   }
 
   static constructModelPathCacheKey(modelKey: string): string {

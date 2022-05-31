@@ -24,6 +24,7 @@ import FeaturedCoverImage from '../../components/FeaturedCoverImage';
 import TextVoiceInput from '../../components/TextVoiceInput';
 import {Camera} from 'expo-camera';
 import {navigationDelay} from '../../constants/navigationDelay';
+import useTextToSpeech from '../../hooks/useTextToSpeech';
 
 type Props = {
   elementProps: ImageCaptureElement;
@@ -67,6 +68,13 @@ export default function ImageCaptureLessonScreen({
   const cameraRef = React.useRef<Camera>(null);
 
   const messagesToDisplay = imageCaptured ? afterCaptureMessages : messages;
+
+  // The array of messages passed to this hook should never change, except by appending new messages to read.
+  // So after image capture we still need to provide the original messages array to the hook.
+  useTextToSpeech(
+    imageCaptured ? messages.concat(afterCaptureMessages) : messages,
+    true,
+  );
 
   useEffect(() => {
     return () => {

@@ -5,6 +5,7 @@ import expo.modules.devlauncher.DevLauncherController;
 
 import android.os.Build;
 import android.os.Bundle;
+import androidx.core.app.ActivityCompat;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,6 +14,8 @@ import com.facebook.react.ReactRootView;
 import expo.modules.ReactActivityDelegateWrapper;
 
 public class MainActivity extends DevMenuAwareReactActivity {
+
+  private static final int REQUEST_RECORD_AUDIO = 13;
 
   @Override
   public void onNewIntent(Intent intent) {
@@ -24,10 +27,11 @@ public class MainActivity extends DevMenuAwareReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
+    // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
+    requestMicrophonePermission();
     super.onCreate(null);
   }
 
@@ -65,5 +69,14 @@ public class MainActivity extends DevMenuAwareReactActivity {
     // Use the default back button implementation on Android S
     // because it's doing more than {@link Activity#moveTaskToBack} in fact.
     super.invokeDefaultOnBackPressed();
+  }
+
+  private void requestMicrophonePermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      ActivityCompat.requestPermissions(
+          this,
+          new String[] {android.Manifest.permission.RECORD_AUDIO},
+          REQUEST_RECORD_AUDIO);
+    }
   }
 }

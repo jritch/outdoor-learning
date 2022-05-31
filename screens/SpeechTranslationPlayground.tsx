@@ -25,7 +25,6 @@ export default function SpeechTranslationTest() {
     }
     const result = await translate(audio);
     setTranslatedText(result.text);
-    setMetrics(result.metrics ?? null);
   }
 
   return (
@@ -39,12 +38,6 @@ export default function SpeechTranslationTest() {
           </View>
         </TouchableOpacity>
         <Text style={styles.small}>{'Translated Text: ' + translatedText}</Text>
-        {metrics && (
-          <Text style={styles.small}>
-            Time taken: {metrics?.totalTime}ms (p={metrics?.packTime}/i=
-            {metrics?.inferenceTime}/u={metrics?.unpackTime}
-          </Text>
-        )}
       </View>
     </>
   );
