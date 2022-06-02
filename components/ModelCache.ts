@@ -34,7 +34,7 @@ class ModelCache {
       return cachedModelPath;
     }
     const modelPath = await ModelCache.downloadModelFromURL(modelKey);
-    console.log('loaded into cache');
+    console.log('loaded into cache with path: ' + modelPath);
     await AsyncStorage.setItem(modelPathKey, modelPath);
     return modelPath;
   }
