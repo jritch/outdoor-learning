@@ -1,6 +1,15 @@
-import {useEffect, useRef, useState, useCallback} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import React from 'react';
-import * as Speech from 'expo-speech';
+
+// Define a fallback no-op Speech object if the expo-speech module is not available.
+// @ts-ignore
+let Speech = {speak: (..._args) => {}, stop: (..._args) => {}};
+
+try {
+  Speech = require('expo-speech');
+} catch (e) {
+  console.error('expo-speech module not available. ');
+}
 
 /**
  *
@@ -10,10 +19,7 @@ import * as Speech from 'expo-speech';
 export default function useTextToSpeech(
   textToSpeak: Array<string>,
   initialShouldSpeak: boolean,
-) {
-  // const [speechQueue, setSpeechQueue] = useState<Array<string>>([]);
-  // const [currentlySpeakingIndex, setCurrentlySpeakingIndex] =
-  //   useState<number>(0);
+): {onStartSpeaking: () => void; onStopSpeaking: () => void} {
   const [lastCompletedIndex, setLastCompletedIndex] = useState<number>(-1);
 
   // @state shouldSpeak - whether or not the consumer of this hook wants us to be speaking
@@ -24,6 +30,7 @@ export default function useTextToSpeech(
 
   useEffect(() => {
     if (
+      Speech != null &&
       shouldSpeak &&
       !isSpeaking &&
       lastCompletedIndex < textToSpeak.length - 1
@@ -50,7 +57,10 @@ export default function useTextToSpeech(
   useEffect(() => {
     return () => {
       // Stop speaking on unmount
-      Speech.stop();
+      if (Speech != null) {
+        Speech.stop();
+      }
+
       setIsSpeaking(false);
     };
   }, []);
@@ -60,7 +70,9 @@ export default function useTextToSpeech(
   }, []);
 
   const onStopSpeaking = useCallback(() => {
-    Speech.stop();
+    if (Speech != null) {
+      Speech.stop();
+    }
     setIsSpeaking(false);
     setShouldSpeak(false);
   }, []);
