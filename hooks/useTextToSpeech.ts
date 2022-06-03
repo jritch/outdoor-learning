@@ -8,7 +8,9 @@ let Speech = {speak: (..._args) => {}, stop: (..._args) => {}};
 try {
   Speech = require('expo-speech');
 } catch (e) {
-  console.error('expo-speech module not available. ');
+  console.warn(
+    'expo-speech module not available. text-to-speech functionality will not work.',
+  );
 }
 
 /**
