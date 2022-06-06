@@ -93,8 +93,8 @@ export default function QuestionAnswerScreen({
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={180}
+      behavior={'height'}
+      keyboardVerticalOffset={90}
     >
       <View style={{width: '100%', height: '70%', marginTop: 104}}>
         <ScrollView
