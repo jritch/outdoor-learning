@@ -14,7 +14,7 @@ const questionMarkSelectedIcon =
 /**
  * To use it as a header or at a fixed position, wrap it in a View with 'absolute' position.
  * <View style={{position: 'absolute', top: 0, width: '100%'}}>
- *    <LessonOptionsBar />
+ *    <JournalRecordOptionsBar onClose={} onDelete={} />
  * </View>
  */
 type Props = {
