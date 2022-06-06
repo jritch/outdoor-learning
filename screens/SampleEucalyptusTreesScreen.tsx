@@ -33,7 +33,7 @@ export default function SampleEucalyptusTreesScreen({
         <View style={styles.imageSection}>
           <ImageBackground
             imageStyle={{borderRadius: 20}}
-            source={{uri: 'https://reactjs.org/logo-og.png'}}
+            source={require('../assets/images/sample-eucalyptus-image-leaves.png')}
             resizeMode="cover"
             style={styles.image}
           />
@@ -41,14 +41,13 @@ export default function SampleEucalyptusTreesScreen({
         <View style={styles.textSection}>
           <Text style={styles.textSection}>
             You might also notice that eucalyptus has a distinctive bark
-            pattern. See if you can use the bark and the leaves to identify
-            eucalyptus.
+            pattern.
           </Text>
         </View>
         <View style={styles.imageSection}>
           <ImageBackground
             imageStyle={{borderRadius: 20}}
-            source={{uri: 'https://reactjs.org/logo-og.png'}}
+            source={require('../assets/images/sample-eucalyptus-image-bark.png')}
             resizeMode="cover"
             style={styles.image}
           />
@@ -91,7 +90,7 @@ const styles = StyleSheet.create({
   },
   imageSection: {
     width: '100%',
-    height: 250,
+    height: 230,
     marginTop: 16,
   },
 });
