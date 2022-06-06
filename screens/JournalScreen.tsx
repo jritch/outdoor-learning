@@ -7,6 +7,7 @@ import JournalRecordScreen from './JournalRecordScreen';
 import JournalNUXScreen from './JournalNUXScreen';
 
 import {JournalEntry} from '../types';
+import JournalRecordOptionsBar from '../components/JournalRecordOptionsBar';
 
 export default function JournalScreen() {
   const journalData: Array<any> = [];
@@ -119,24 +120,14 @@ export default function JournalScreen() {
   function showOptionsIconBar() {
     return (
       <View style={styles.optionsArea}>
-        <View style={styles.closeIconArea}>
-          <Pressable
-            onPress={() => {
-              setShowJournalRecord(false);
-            }}
-          >
-            <Image source={{uri: closeIcon}} style={{width: 40, height: 40}} />
-          </Pressable>
-        </View>
-        <View style={styles.deleteIconArea}>
-          <Pressable
-            onPress={() => {
-              deleteJournalRecord();
-            }}
-          >
-            <Image source={{uri: deleteIcon}} style={{width: 50, height: 50}} />
-          </Pressable>
-        </View>
+        <JournalRecordOptionsBar
+          onClose={() => {
+            setShowJournalRecord(false);
+          }}
+          onDelete={() => {
+            deleteJournalRecord();
+          }}
+        />
       </View>
     );
   }
