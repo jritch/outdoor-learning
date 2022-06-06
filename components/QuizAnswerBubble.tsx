@@ -5,11 +5,13 @@ import {View, StyleSheet, Text, Pressable} from 'react-native';
 type Props = {
   text: string; // text to be rendered in the bubble
   onSelect: Function; // callback to execute when selected
+  disabled: boolean; // flag to disable selection of this component
 };
 
 export default function QuizAnswerBubble(props: Props) {
   const textToBeRendered = props.text;
   const onSelectCallback = props.onSelect;
+  const disabled = props.disabled;
 
   const DEFAULT_BACKGROUND_COLOR = 'rgba(18, 18, 18, 1)';
   const SELECTED_BACKGROUND_COLOR = 'rgba(70, 140, 247, 1)';
@@ -27,10 +29,12 @@ export default function QuizAnswerBubble(props: Props) {
   return (
     <Pressable
       onPress={() => {
-        if (!isSelected) {
-          select();
-          if (onSelectCallback) {
-            onSelectCallback();
+        if (!disabled) {
+          if (!isSelected) {
+            select();
+            if (onSelectCallback) {
+              onSelectCallback();
+            }
           }
         }
       }}

@@ -36,6 +36,7 @@ export default function QuizElementScreen({
   const [chatViewPrompts, setChatViewPrompts] = useState(
     getChatViewPrompts(messages, possibleAnswers, correctAnswerIndex),
   );
+  const [disableSelection, setDisableSelection] = useState<boolean>(false);
 
   const imageSource = imageSources?.[0] ?? null;
 
@@ -101,7 +102,9 @@ export default function QuizElementScreen({
                 text={entry.text}
                 onSelect={() => {
                   answerSelectedCallback(entry.response);
+                  setDisableSelection(true);
                 }}
+                disabled={disableSelection}
               />
             );
           }
