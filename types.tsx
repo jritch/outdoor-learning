@@ -48,7 +48,7 @@ export type RootTabScreenProps<Screen extends keyof LessonTabParamList> =
 
 export type JournalEntry = {
   timestamp: number;
-  images: Array<string>;
+  images: Array<{uri: string}>;
   audios: Array<string>;
   texts: Array<string>;
 };

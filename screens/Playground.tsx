@@ -39,9 +39,9 @@ function getRecord() {
   return {
     timestamp: Date.now(),
     images: [
-      Platform.OS == 'ios' ? localIOSImagePath : localAndroidImagePath,
-      localIOSImagePath,
-      'https://reactjs.org/logo-og.png',
+      {uri: Platform.OS == 'ios' ? localIOSImagePath : localAndroidImagePath},
+      {uri: localIOSImagePath},
+      {uri: 'https://reactjs.org/logo-og.png'},
     ],
     audios: [Platform.OS == 'ios' ? localIOSAudioPath : localAndroidAudioPath],
     texts: [
@@ -64,9 +64,9 @@ export default function Playground({
   const record = {
     timestamp: 0,
     images: [
-      Platform.OS == 'ios' ? localIOSImagePath : localAndroidImagePath,
-      localIOSImagePath,
-      'https://reactjs.org/logo-og.png',
+      {uri: Platform.OS == 'ios' ? localIOSImagePath : localAndroidImagePath},
+      {uri: localIOSImagePath},
+      {uri: 'https://reactjs.org/logo-og.png'},
     ],
     audios: [Platform.OS == 'ios' ? localIOSAudioPath : localAndroidAudioPath],
     texts: [

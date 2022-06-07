@@ -3,7 +3,7 @@ import {ImageBackground, Pressable, View, StyleSheet, Text} from 'react-native';
 import TimestampUtils from '../components/TimestampUtils';
 
 type Props = {
-  thumbnailImage: string;
+  thumbnailImage: {uri: string} | null;
   timestamp: number;
   onClick: Function;
 };
@@ -32,7 +32,7 @@ export default function JournalCard(props: Props) {
         <View style={styles.imageSection}>
           <ImageBackground
             imageStyle={{borderRadius: 20}}
-            source={{uri: props.thumbnailImage}}
+            source={props.thumbnailImage ?? {uri: undefined}}
             resizeMode="cover"
             style={styles.image}
           />
