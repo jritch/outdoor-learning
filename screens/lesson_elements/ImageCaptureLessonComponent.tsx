@@ -1,9 +1,6 @@
 import * as React from 'react';
-import {useCallback, useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import {
-  Dimensions,
-  Keyboard,
-  KeyboardEvent,
   KeyboardAvoidingView,
   Text,
   StyleSheet,
@@ -16,33 +13,29 @@ import {
 import * as FileSystem from 'expo-file-system';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {ImageCaptureElement} from '../../lesson_content/lessonTypes';
+import type {Messages} from '../../lesson_content/lessonTypes';
 import ChatBubble from '../../components/ChatBubble';
 import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
-import FeaturedCoverImage from '../../components/FeaturedCoverImage';
-import TextVoiceInput from '../../components/TextVoiceInput';
 import {Camera} from 'expo-camera';
-import {navigationDelay} from '../../constants/navigationDelay';
 import useTextToSpeech from '../../hooks/useTextToSpeech';
 
 type Props = {
-  elementProps: ImageCaptureElement;
+  messages: Messages;
   elementId: number;
   totalElements: number;
+  onImageFilePath: (imageFilePath: string) => void;
 };
 
-export default function ImageCaptureLessonScreen({
+export default function ImageCaptureLessonComponent({
   navigation,
   route,
-  elementProps,
+  messages,
   elementId,
   totalElements,
+  onImageFilePath,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> &
   Props): JSX.Element {
-  const DEFAULT_TEXT_VOICE_INPUT_BOTTOM = 45;
-  const DEFAULT_AVAILABLE_WINDOW_HEIGHT_THRESHOLD = 510;
-
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraReady, setCameraReady] = useState(false);
 
@@ -55,63 +48,14 @@ export default function ImageCaptureLessonScreen({
 
   const [imageCaptured, setImageCaptured] = useState<Boolean>(false);
   const [showNavigation, setShowNavigation] = useState<boolean>(true);
-  const [showChatArea, setShowChatArea] = useState<boolean>(true);
-  const {messages, afterCaptureMessages} = elementProps;
-  const [imageFilePath, setImageFilePath] = useState<string | null>(null);
   const [imageCaptureStarted, setImageCaptureStarted] =
     useState<boolean>(false);
-  const navigationDelayTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [textVoiceInputBottom, setTextVoiceInputBottom] = useState<number>(
-    DEFAULT_TEXT_VOICE_INPUT_BOTTOM,
-  );
 
   const cameraRef = React.useRef<Camera>(null);
 
-  const messagesToDisplay = imageCaptured ? afterCaptureMessages : messages;
-
   // The array of messages passed to this hook should never change, except by appending new messages to read.
   // So after image capture we still need to provide the original messages array to the hook.
-  useTextToSpeech(
-    imageCaptured ? messages.concat(afterCaptureMessages) : messages,
-    true,
-  );
-
-  useEffect(() => {
-    return () => {
-      if (navigationDelayTimerRef.current) {
-        clearTimeout(navigationDelayTimerRef.current);
-      }
-    };
-  }, []);
-
-  const onKeyboardDidShow = useCallback((e: KeyboardEvent) => {
-    setShowChatArea(false);
-    const availableWindowHeight =
-      Dimensions.get('window').height - e.endCoordinates.height;
-    if (availableWindowHeight > DEFAULT_AVAILABLE_WINDOW_HEIGHT_THRESHOLD) {
-      setTextVoiceInputBottom(0);
-    }
-  }, []);
-
-  const onKeyboardDidHide = useCallback(() => {
-    const availableWindowHeight = Dimensions.get('window').height;
-    setTextVoiceInputBottom(DEFAULT_TEXT_VOICE_INPUT_BOTTOM);
-  }, []);
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener(
-      'keyboardDidShow',
-      onKeyboardDidShow,
-    );
-    const hideSubscription = Keyboard.addListener(
-      'keyboardDidHide',
-      onKeyboardDidHide,
-    );
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, [onKeyboardDidHide, onKeyboardDidShow]);
+  useTextToSpeech(messages, true);
 
   async function handleTakePicture() {
     setImageCaptureStarted(true);
@@ -135,25 +79,13 @@ export default function ImageCaptureLessonScreen({
         from: pictureObj.uri,
         to: newFilePath,
       });
-      setImageFilePath(newFilePath);
+      onImageFilePath(newFilePath);
     } catch (error) {
       console.error('Error when attempting to save image', error);
     }
   }
 
-  function onSaveCallback() {
-    navigationDelayTimerRef.current = setTimeout(() => {
-      if (elementId < totalElements - 1) {
-        navigation.navigate('LessonContentScreen', {elementId: elementId + 1});
-      }
-    }, navigationDelay);
-  }
-
-  let topElement = imageCaptured ? (
-    imageFilePath != null && (
-      <FeaturedCoverImage imageSource={{uri: imageFilePath}} />
-    )
-  ) : (
+  let topElement = (
     <View style={styles.cameraContainer}>
       <Camera
         ref={cameraRef}
@@ -166,41 +98,15 @@ export default function ImageCaptureLessonScreen({
 
   if (hasPermission === null) {
     topElement = (
-      <View>
-        <ActivityIndicator />
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator color="#FFF" size="large" />
       </View>
     );
   }
+
   if (hasPermission === false) {
     topElement = <Text>No access to camera</Text>;
   }
-
-  const notesView = (
-    <View
-      style={{
-        width: '100%',
-        position: 'absolute',
-        height: 350,
-        bottom: 0,
-      }}
-    >
-      <View
-        style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: textVoiceInputBottom,
-        }}
-      >
-        <TextVoiceInput
-          placeHolderText="Ask a question"
-          onSubmit={() => {}}
-          onSave={onSaveCallback}
-          isSaveEnabled={true}
-          targetImage={imageFilePath}
-        />
-      </View>
-    </View>
-  );
 
   return (
     <KeyboardAvoidingView
@@ -213,9 +119,12 @@ export default function ImageCaptureLessonScreen({
         topElement={topElement}
         bottomElement={
           imageCaptured ? undefined : imageCaptureStarted ? (
-            <ActivityIndicator />
+            <ActivityIndicator size="large" color="#FFF" />
           ) : (
-            <TouchableOpacity onPress={handleTakePicture}>
+            <TouchableOpacity
+              onPress={handleTakePicture}
+              disabled={!cameraReady}
+            >
               <Image
                 source={require('assets/TakePhoto3x.png')}
                 style={styles.captureButtonImage}
@@ -227,27 +136,28 @@ export default function ImageCaptureLessonScreen({
         route={route}
         showNavigation={showNavigation}
       >
-        {showChatArea && (
-          <ChatScrollViewContainer
-            chatElements={messagesToDisplay.map((message, i) => (
-              <ChatBubble
-                key={i}
-                alignment="left"
-                view={<Text style={styles.bubbleText}>{message}</Text>}
-                bubbleColor={'rgba(38, 38, 39, 1)'}
-                backgroundColor={'#121212'}
-              />
-            ))}
-          />
-        )}
-        {imageCaptured ? notesView : null}
+        <ChatScrollViewContainer
+          chatElements={messages.map((message, i) => (
+            <ChatBubble
+              key={i}
+              alignment="left"
+              view={<Text style={styles.bubbleText}>{message}</Text>}
+              bubbleColor={'rgba(38, 38, 39, 1)'}
+              backgroundColor={'#121212'}
+            />
+          ))}
+        />
       </LessonPrimaryLayout>
     </KeyboardAvoidingView>
   );
 }
 
-// TODO: Use colors from the theme instead of hardcoding
 const styles = StyleSheet.create({
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
   cameraContainer: {
     // flex: 1,
     height: '100%',

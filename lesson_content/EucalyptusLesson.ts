@@ -94,17 +94,17 @@ export const EucalyptusLesson: Lesson = {
       ],
     },
     // TODO (alan): not yet implemented? this should be a note taking element with camera view
-    // {
-    //   __type: 'NoteTakingElement',
-    //   messages: [
-    //     'But there’s something else that’s special about eucalyptus leaves. Look for a fresh, green leaf on the tree and pick it off the tree. Then, break it in half and sniff it. What do you notice? Please record your thoughts.',
-    //   ],
-    //   imageSources: [
-    //     {
-    //       uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/eucalyptus-leaf@3x.png',
-    //     },
-    //   ],
-    // },
+    {
+      __type: 'NoteTakingElement',
+      messages: [
+        'But there’s something else that’s special about eucalyptus leaves. Look for a fresh, green leaf on the tree and pick it off the tree. Then, break it in half and sniff it. What do you notice? Please record your thoughts.',
+      ],
+      imageSources: [
+        {
+          uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/eucalyptus-leaf@3x.png',
+        },
+      ],
+    },
     {
       __type: 'InformationalElement',
       messages: [
