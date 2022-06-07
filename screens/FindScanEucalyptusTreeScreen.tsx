@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {
   Image as ImageRN,
   StyleSheet,
@@ -11,6 +11,7 @@ import {Camera, Image} from 'react-native-pytorch-core';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import classifyImage from '../components/ImageClassifier';
 import Bubble from '../components/Bubble';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -29,7 +30,16 @@ export default function FindScanEucalyptusTreeScreen({
 
   const [scanningStarted, setScanningStarted] = useState(false);
   const [imageClass, setImageClass] = useState<string | null>(null);
+  const [cameraKey, setCameraKey] = useState<number>(0);
+
   const insets = useSafeAreaInsets();
+
+  // The PTL camera has a bug where it shows a black screen when focus is returned after navigating away.
+  // This is a hack to force the camera to unmount and remount when the screen is refocused.
+  const bumpCameraKey = useCallback(() => {
+    setCameraKey(key => key + 1);
+  }, []);
+  useFocusEffect(bumpCameraKey);
 
   // Function to handle images whenever the user presses the capture button
   async function handleImage(image: Image) {
@@ -101,6 +111,7 @@ export default function FindScanEucalyptusTreeScreen({
         <Camera
           style={[StyleSheet.absoluteFill, {bottom: insets.bottom}]}
           onCapture={handleImage}
+          key={cameraKey}
         />
         {imageClass && (
           <View style={styles.bubbleContainer}>
