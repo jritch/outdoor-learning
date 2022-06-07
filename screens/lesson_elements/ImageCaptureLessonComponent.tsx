@@ -19,6 +19,7 @@ import LessonPrimaryLayout from '../../components/LessonPrimaryLayout';
 import ChatScrollViewContainer from '../../components/ChatScrollViewContainer';
 import {Camera} from 'expo-camera';
 import useTextToSpeech from '../../hooks/useTextToSpeech';
+import getAppropriateFilePath from '../../utils/getAppropriateFilePath';
 
 type Props = {
   messages: Messages;
@@ -79,7 +80,7 @@ export default function ImageCaptureLessonComponent({
         from: pictureObj.uri,
         to: newFilePath,
       });
-      onImageFilePath(newFilePath);
+      onImageFilePath(getAppropriateFilePath(newFilePath));
     } catch (error) {
       console.error('Error when attempting to save image', error);
     }

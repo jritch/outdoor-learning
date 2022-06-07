@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
-import {ImageBackground, Platform, View, StyleSheet, Text} from 'react-native';
+import {ImageBackground, View, StyleSheet, Text} from 'react-native';
 import PlayAudioButton from '../components/PlayAudioButton';
 import TimestampUtils from '../components/TimestampUtils';
 
@@ -14,13 +13,16 @@ type Props = {
  * Currently, assumes only a single entry for images, audios and texts.
  */
 export default function JournalRecordScreen(props: Props) {
+  const {images} = props.entry;
+  // For now we're only using the first image
+  // Because images used to be strings we're adding in this check so that previous journal entries still display
+  const imageSource =
+    typeof images[0] === 'string' ? {uri: images[0]} : images[0];
+
   const dateText = calculateDateText(props.entry.timestamp);
   const timeText = calculateTimeText(props.entry.timestamp);
   const notesText = props.entry.texts[0];
-  const imageSource =
-    Platform.OS == 'ios'
-      ? props.entry.images[0]
-      : 'file://' + props.entry.images[0]; // android expects the 'file://' for local file paths.
+
   const audioSource =
     props.entry.audios.length > 0 ? props.entry.audios[0] : undefined;
 
@@ -40,12 +42,20 @@ export default function JournalRecordScreen(props: Props) {
     <View style={styles.container}>
       <View>
         <View style={styles.imageSection}>
-          <ImageBackground
-            source={{uri: imageSource}}
-            resizeMode="cover"
-            style={styles.image}
-            onError={handleError}
-          />
+          {imageSource == null ? (
+            <View style={styles.imageNotProvidedWrapper}>
+              <Text style={styles.imageNotProvidedText}>
+                {'No image provided'}
+              </Text>
+            </View>
+          ) : (
+            <ImageBackground
+              source={imageSource}
+              resizeMode="cover"
+              style={styles.image}
+              onError={handleError}
+            />
+          )}
         </View>
         <View style={styles.timestampTextView}>
           <Text style={styles.timestampText}>{dateText}</Text>
@@ -71,6 +81,17 @@ const styles = StyleSheet.create({
   timestampText: {
     color: 'white',
     fontSize: 13,
+  },
+  imageNotProvidedText: {
+    color: 'white',
+    fontSize: 16,
+    width: '100%',
+    textAlign: 'center',
+  },
+  imageNotProvidedWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   notesText: {
     color: 'white',

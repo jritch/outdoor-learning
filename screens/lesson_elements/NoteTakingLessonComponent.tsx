@@ -100,8 +100,11 @@ export default function NoteTakingLessonComponent({
           onSubmit={() => {}}
           onSave={onComplete}
           isSaveEnabled={true}
-          // @ts-ignore Not sure why it's having a hard time recognizing that uri can be a property of imageSource
-          targetImage={imageSource?.uri != null ? imageSource.uri : null}
+          targetImage={
+            typeof imageSource === 'object' && 'uri' in imageSource
+              ? imageSource.uri ?? null
+              : null
+          }
         />
       </View>
     </View>

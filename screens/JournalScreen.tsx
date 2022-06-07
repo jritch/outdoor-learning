@@ -9,6 +9,11 @@ import JournalNUXScreen from './JournalNUXScreen';
 import {JournalEntry} from '../types';
 import JournalRecordOptionsBar from '../components/JournalRecordOptionsBar';
 
+const closeIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
+const deleteIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/delete-icon.png';
+
 export default function JournalScreen() {
   const journalData: Array<any> = [];
   const [journalRecords, setJournalRecords] = useState(journalData);
@@ -16,11 +21,6 @@ export default function JournalScreen() {
   const [showJournalRecord, setShowJournalRecord] = useState<boolean>(false);
   const [currentJournalRecord, setCurrentJournalRecord] =
     useState<JournalEntry>();
-
-  const closeIcon =
-    'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
-  const deleteIcon =
-    'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/delete-icon.png';
 
   useEffect(() => {
     const fetchJournalData = async () => {
@@ -80,17 +80,17 @@ export default function JournalScreen() {
     }
 
     function createJournalRecordView(journalEntry: JournalEntry) {
+      const image = journalEntry.images[0];
+      // Check if image is a string to support older records
+      const imageSource = typeof image === 'string' ? {uri: image} : image;
+
       return (
         <JournalCard
           timestamp={journalEntry.timestamp}
           onClick={() => {
             displayJournalRecord(journalEntry);
           }}
-          thumbnailImage={
-            journalEntry.images.length > 0
-              ? journalEntry.images[0]
-              : 'https://reactjs.org/logo-og.png'
-          }
+          thumbnailImage={imageSource}
         />
       );
     }
@@ -151,9 +151,7 @@ export default function JournalScreen() {
       );
     } else {
       return (
-        <View style={{width: '100%', height: '85%'}}>
-          <ScrollView style={styles.scrollView}>{journalRecords}</ScrollView>
-        </View>
+        <ScrollView style={styles.scrollView}>{journalRecords}</ScrollView>
       );
     }
   }
@@ -172,6 +170,7 @@ export default function JournalScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: '100%',
   },
   scrollView: {
     backgroundColor: '#121212',

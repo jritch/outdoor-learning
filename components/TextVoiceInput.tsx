@@ -16,6 +16,7 @@ import RecordingMicrophone from './RecordingMicrophone';
 import transcribe from './speechTranslation';
 import JournalUtil from './Journal';
 import {useIsFocused} from '@react-navigation/native';
+import getAppropriateFilePath from '../utils/getAppropriateFilePath';
 
 // Globals for audio recording timer
 var stopTimer: boolean = false;
@@ -39,7 +40,7 @@ type Props = {
    </KeyboardAvoidingView>
  */
 
-export default function TextVoiceInput(props: Props) {
+export default function TextVoiceInput({targetImage, ...props}: Props) {
   // Props
   const onSubmitCallback = props.onSubmit;
   const isSaveEnabled = props.isSaveEnabled;
@@ -173,12 +174,9 @@ export default function TextVoiceInput(props: Props) {
   }
 
   function constructJournalRecord(audios: Array<string>, texts: Array<string>) {
-    const targetImagePath = props.targetImage
-      ? props.targetImage
-      : 'https://reactjs.org/logo-og.png';
     return {
       timestamp: Date.now(),
-      images: [targetImagePath],
+      images: targetImage != null ? [{uri: targetImage}] : [],
       audios: audios,
       texts: texts,
     };
