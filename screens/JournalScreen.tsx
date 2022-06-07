@@ -47,6 +47,8 @@ export default function JournalScreen() {
       setJournalRecords(oldArray => [...oldArray, journalRecordRows]);
     }
 
+    // Flexbox has the ability to wrap things to a new line, so we *should* be able to generate one list and have the items
+    // display in a row that wraps as many times as needed
     function createJournalRecordRow(
       index: number,
       entry1: JournalEntry,
@@ -74,11 +76,14 @@ export default function JournalScreen() {
       );
     }
 
+    // Using react navigation for this logic will simplify this a bit and better integrate with overall navigation,
+    // including the Android OS back button
     function displayJournalRecord(entry: JournalEntry) {
       setCurrentJournalRecord(entry);
       setShowJournalRecord(true);
     }
 
+    // Great opportunity for a new component altogether
     function createJournalRecordView(journalEntry: JournalEntry) {
       const image = journalEntry.images[0];
       // Check if image is a string to support older records
@@ -100,6 +105,8 @@ export default function JournalScreen() {
 
   async function deleteJournalRecord() {
     if (currentJournalRecord) {
+      // A cleaner option here would be to keep the journal data in state and then sync it in a useEffect back to
+      // Async storage. That allows us to take advantage of some important react performance optimizations.
       await JournalUtil.deleteRecord(currentJournalRecord.timestamp.toString());
       setDataLoaded(false); // force loading from file system to reflect the changes.
       setJournalRecords([]);
