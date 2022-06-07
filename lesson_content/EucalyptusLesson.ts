@@ -93,7 +93,6 @@ export const EucalyptusLesson: Lesson = {
         },
       ],
     },
-    // TODO (alan): not yet implemented? this should be a note taking element with camera view
     {
       __type: 'NoteTakingElement',
       messages: [
@@ -200,18 +199,17 @@ export const EucalyptusLesson: Lesson = {
         },
       ],
     },
-    // TODO (alan): not yet implemented
-    // {
-    //   __type: 'NoteTakingElement',
-    //   messages: [
-    //     'What’s your take on the debate? Do you think eucalyptus trees in Palo Alto should be removed, or do you think they should be kept?',
-    //   ],
-    //   imageSources: [
-    //     {
-    //       uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/eucalyptus-campus-1.jpg',
-    //     },
-    //   ],
-    // },
+    {
+      __type: 'NoteTakingElement',
+      messages: [
+        'What’s your take on the debate? Do you think eucalyptus trees in Palo Alto should be removed, or do you think they should be kept?',
+      ],
+      imageSources: [
+        {
+          uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/eucalyptus-campus-1.jpg',
+        },
+      ],
+    },
     {
       __type: 'InformationalElement',
       messages: [
