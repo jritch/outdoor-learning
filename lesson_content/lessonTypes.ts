@@ -33,7 +33,7 @@ export type Messages = Array<string>;
       ],
  *
  */
-type ImageReference = ImageSourcePropType;
+export type ImageReference = ImageSourcePropType;
 
 export interface GenericElement {
   __type: string;
