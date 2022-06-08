@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
-import {ColorSchemeName} from 'react-native';
+import {ColorSchemeName, Image} from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import {RootStackParamList, LessonTabParamList} from '../types';
@@ -122,6 +122,14 @@ function RootNavigator() {
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 const BottomTab = createBottomTabNavigator<LessonTabParamList>();
+const learnSelectedIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/learn-selected-icon.png';
+const learnUnselectedIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/learn-unselected-icon.png';
+const journalSelectedIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/journal-selected-icon.png';
+const journalUnselectedIcon =
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/journal-unselected-icon.png';
 
 function LessonTabNavigator() {
   return (
@@ -134,18 +142,28 @@ function LessonTabNavigator() {
         component={FindScanEucalyptusTreeScreen}
         options={() => ({
           title: 'Learn',
-          tabBarIcon: ({color}) => (
-            <Foundation name="play-video" size={30} color={color} />
+          tabBarIcon: ({focused}) => (
+            <Image
+              source={{
+                uri: focused ? learnSelectedIcon : learnUnselectedIcon,
+              }}
+              style={{width: 30, height: 30}}
+            />
           ),
         })}
       />
       <BottomTab.Screen
-        name="Homework"
+        name="Journal"
         component={JournalScreen}
         options={{
-          title: 'Homework',
-          tabBarIcon: ({color}) => (
-            <Ionicons name="newspaper-outline" size={30} color={color} />
+          title: 'Journal',
+          tabBarIcon: ({focused}) => (
+            <Image
+              source={{
+                uri: focused ? journalSelectedIcon : journalUnselectedIcon,
+              }}
+              style={{width: 30, height: 30}}
+            />
           ),
         }}
       />

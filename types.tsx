@@ -37,7 +37,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type LessonTabParamList = {
   Learn: undefined;
-  Homework: undefined;
+  Journal: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof LessonTabParamList> =
