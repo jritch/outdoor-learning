@@ -58,6 +58,9 @@ export default function JournalScreen() {
       }
       if (entry2) {
         view2 = createJournalRecordView(entry2);
+      } else {
+        // Add a placeholder view so that 'space-evenly' places the views correctly in the row
+        view2 = <View style={{width: '45%'}} />;
       }
       return (
         <View
