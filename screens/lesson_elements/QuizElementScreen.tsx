@@ -159,8 +159,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 11,
     fontWeight: '500',
-    // TODO: is this font natively supported on both platforms?
-    fontFamily: 'SF Pro Text',
     color: 'white',
   },
   lessonNumberContainer: {flexGrow: 1, textAlign: 'center'},
