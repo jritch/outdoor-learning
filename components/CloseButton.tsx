@@ -15,7 +15,7 @@ type Props = {
 };
 
 const closeIcon =
-  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
+  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close-icon.png';
 
 export default function CloseButton({onClick}: Props) {
   return (
@@ -27,7 +27,6 @@ export default function CloseButton({onClick}: Props) {
 
 const styles = StyleSheet.create({
   closeIconButton: {
-    backgroundColor: '#262627',
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeIconStyle: {
-    width: 20,
-    height: 20,
+    width: 40,
+    height: 40,
   },
 });
