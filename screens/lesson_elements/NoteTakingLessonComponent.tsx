@@ -50,8 +50,17 @@ export default function NoteTakingLessonComponent({
   // So after image capture we still need to provide the original messages array to the hook.
   useTextToSpeech(messages, true);
 
-  const onKeyboardDidShow = useCallback((e: KeyboardEvent) => {
+  // This will trigger only on iOS
+  const onKeyboardWillShow = useCallback(() => {
     setShowChatArea(false);
+  }, []);
+
+  const onKeyboardDidShow = useCallback((e: KeyboardEvent) => {
+    if (Platform.OS === 'android') {
+      // The best time to hide the chat area is when the keyboard is about to be shown.
+      // Since the keyboardWillShow event is not available on Android, we use this event.
+      setShowChatArea(false);
+    }
     const availableWindowHeight =
       Dimensions.get('window').height - e.endCoordinates.height;
     if (availableWindowHeight > DEFAULT_AVAILABLE_WINDOW_HEIGHT_THRESHOLD) {
@@ -73,11 +82,16 @@ export default function NoteTakingLessonComponent({
       'keyboardDidHide',
       onKeyboardDidHide,
     );
+    const willShowSubscription = Keyboard.addListener(
+      'keyboardWillShow',
+      onKeyboardWillShow,
+    );
     return () => {
       showSubscription.remove();
       hideSubscription.remove();
+      willShowSubscription.remove();
     };
-  }, [onKeyboardDidHide, onKeyboardDidShow]);
+  }, [onKeyboardDidHide, onKeyboardDidShow, onKeyboardWillShow]);
 
   const notesView = (
     <View
