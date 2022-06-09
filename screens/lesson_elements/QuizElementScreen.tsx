@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import type {RootStackParamList} from '../../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {QuizElement} from '../../lesson_content/lessonTypes';
@@ -97,15 +97,17 @@ export default function QuizElementScreen({
             );
           } else {
             return (
-              <QuizAnswerBubble
-                key={i}
-                text={entry.text}
-                onSelect={() => {
-                  answerSelectedCallback(entry.response);
-                  setDisableSelection(true);
-                }}
-                disabled={disableSelection}
-              />
+              <View style={{alignItems: 'flex-end'}}>
+                <QuizAnswerBubble
+                  key={i}
+                  text={entry.text}
+                  onSelect={() => {
+                    answerSelectedCallback(entry.response);
+                    setDisableSelection(true);
+                  }}
+                  disabled={disableSelection}
+                />
+              </View>
             );
           }
         })}
