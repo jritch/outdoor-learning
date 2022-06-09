@@ -163,7 +163,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'white',
   },
-  lessonNumberContainer: {flexGrow: 1, textAlign: 'center'},
+  lessonNumberContainer: {
+    flexGrow: 1,
+    textAlign: 'center',
+  },
   bubbleText: {
     fontSize: 16,
     color: 'rgba(255, 255, 255, 1)',

@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   bubbleText: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 2,
   },
 });
