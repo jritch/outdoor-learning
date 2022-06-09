@@ -27,7 +27,7 @@ export default function JournalCard(props: Props) {
   }
 
   return (
-    <View style={{width: '45%'}}>
+    <View style={{width: 155, height: 200}}>
       <Pressable onPress={handleOnPressCallback} style={{flex: 1}}>
         <View style={styles.imageSection}>
           <ImageBackground
