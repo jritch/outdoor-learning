@@ -3,8 +3,6 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import {Foundation} from '@expo/vector-icons';
-import {Ionicons} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NavigationContainer,
@@ -57,6 +55,7 @@ function RootNavigator() {
         title: appName,
         headerBackButtonMenuEnabled: false,
         headerBackTitleVisible: false,
+        headerShown: false,
       }}
     >
       {__DEV__ && (
@@ -64,7 +63,6 @@ function RootNavigator() {
           name="DevIntroScreen"
           component={DevIntroScreen}
           options={{
-            headerShown: true,
             headerBackVisible: true,
           }}
         />
@@ -73,15 +71,10 @@ function RootNavigator() {
         name="LessonIntroScreen"
         component={LessonIntroScreen}
         options={{
-          headerShown: true,
           headerBackVisible: true,
         }}
       />
-      <Stack.Screen
-        name="LessonTabNavigator"
-        component={LessonTabNavigator}
-        options={{headerShown: true}}
-      />
+      <Stack.Screen name="LessonTabNavigator" component={LessonTabNavigator} />
       <Stack.Screen
         name="FindScanEucalyptusTreeScreen"
         component={FindScanEucalyptusTreeScreen}

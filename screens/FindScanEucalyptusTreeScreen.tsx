@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useState, useCallback} from 'react';
 import {
   Image as ImageRN,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -114,7 +115,7 @@ export default function FindScanEucalyptusTreeScreen({
   }
 
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       <View style={StyleSheet.absoluteFill}>
         <Camera
           style={[StyleSheet.absoluteFill, {bottom: insets.bottom}]}
@@ -142,7 +143,7 @@ export default function FindScanEucalyptusTreeScreen({
           ))}
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -8,6 +8,7 @@ import JournalNUXScreen from './JournalNUXScreen';
 
 import {JournalEntry} from '../types';
 import JournalRecordOptionsBar from '../components/JournalRecordOptionsBar';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const closeIcon =
   'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
@@ -160,13 +161,13 @@ export default function JournalScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {showJournalListView()}
       {showJournalRecord &&
         currentJournalRecord &&
         showCurrentRecordScreen(currentJournalRecord)}
       {showJournalRecord && currentJournalRecord && showOptionsIconBar()}
-    </View>
+    </SafeAreaView>
   );
 }
 

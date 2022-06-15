@@ -77,6 +77,7 @@ export default function JournalRecordScreen(props: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#121212',
+    height: '100%',
   },
   timestampText: {
     color: 'white',

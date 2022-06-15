@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Image, TouchableOpacity, View, StyleSheet, Text} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import CloseButton from './CloseButton';
 
 //const closeIcon = require('../assets/images/close-icon.png');
@@ -28,7 +29,7 @@ export default function LessonOptionsBar({
   onQuestionMark,
 }: Props) {
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView>
       <View style={styles.optionsBar}>
         <View style={styles.closeIcon}>
           <CloseButton onClick={onClose} />
@@ -46,7 +47,7 @@ export default function LessonOptionsBar({
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   optionsBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
+    marginTop: 10,
   },
   closeIcon: {
     marginLeft: 24,
