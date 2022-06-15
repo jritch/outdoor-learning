@@ -55,6 +55,8 @@ function RootNavigator() {
         headerTintColor: '#fff',
         headerTitleAlign: 'center',
         title: appName,
+        headerBackButtonMenuEnabled: false,
+        headerBackTitleVisible: false,
       }}
     >
       {__DEV__ && (
