@@ -50,10 +50,17 @@ export default function QuizAnswerBubble(props: Props) {
           paddingTop: 11,
           paddingBottom: 9,
           borderWidth: 1,
-          borderColor: 'rgba(70, 140, 247, 1)',
+          borderColor: disabled ? '#555' : 'rgba(70, 140, 247, 1)',
         }}
       >
-        <Text style={styles.bubbleText}>{textToBeRendered}</Text>
+        <Text
+          style={[
+            styles.bubbleText,
+            disabled && !isSelected ? styles.disabledText : null,
+          ]}
+        >
+          {textToBeRendered}
+        </Text>
       </View>
     </Pressable>
   );
@@ -71,6 +78,16 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
     borderWidth: 1,
     borderColor: 'rgba(70, 140, 247, 1)',
+  },
+  bubbleEnabled: {
+    borderColor: 'rgba(70, 140, 247, 1)',
+  },
+  bubbleDisabled: {
+    borderColor: 'rgba(38, 38, 39, 1)',
+    color: '#ddd',
+  },
+  disabledText: {
+    color: '#aaa',
   },
   bubbleText: {
     color: '#ffffff',
