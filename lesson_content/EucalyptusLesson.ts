@@ -184,7 +184,7 @@ export const EucalyptusLesson: Lesson = {
       ],
       imageSources: [
         {
-          uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/eucalyptus-litter.png',
+          uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/eucalyptus-litter.jpg',
         },
       ],
     },
