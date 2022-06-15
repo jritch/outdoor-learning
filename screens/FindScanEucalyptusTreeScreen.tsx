@@ -20,7 +20,7 @@ export default function FindScanEucalyptusTreeScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'FindScanEucalyptusTreeScreen'>) {
   const findTreeText =
-    'Go find and scan a eucalyptus tree to start the lesson.';
+    'Go find and scan a eucalyptus tree to start the lesson.\n\nEucalyptus leaves are long and thin, with a slight bulge in the middle.';
   const viewTreeText = 'View eucalyptus tree photos';
   const incorrectTreeText =
     'This doesn’t seem like a eucalyptus tree. Take a closer look at the reference photos.';
@@ -81,29 +81,37 @@ export default function FindScanEucalyptusTreeScreen({
         <Text style={styles.linkText}>{viewTreeText}</Text>
       </TouchableOpacity>,
     );
+
+    messageElements.push(
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('LessonContentScreen');
+        }}
+      >
+        <Text style={styles.linkText}>{'Skip to the lesson'}</Text>
+      </TouchableOpacity>,
+    );
   }
 
   if (imageClass && imageClass.indexOf('eucalyptus') === 0) {
     messageElements.push(
       <Text style={styles.messageText}>{correctTreeText}</Text>,
     );
-  }
 
-  if (imageClass && imageClass.indexOf('eucalyptus') === 0) {
     messageElements.push(
       <Text style={styles.messageText}>{wouldYouLikeToLearnText}</Text>,
     );
-  }
 
-  messageElements.push(
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('LessonContentScreen');
-      }}
-    >
-      <Text style={styles.linkText}>{'Skip to the lesson'}</Text>
-    </TouchableOpacity>,
-  );
+    messageElements.push(
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('LessonContentScreen');
+        }}
+      >
+        <Text style={styles.linkText}>{'Go to the lesson'}</Text>
+      </TouchableOpacity>,
+    );
+  }
 
   return (
     <View style={styles.mainContainer}>
