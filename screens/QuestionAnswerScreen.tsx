@@ -118,7 +118,7 @@ export default function QuestionAnswerScreen({
       <View style={styles.optionsBarArea}>
         <LessonOptionsBar
           displayQuestionAnswerScreen={true}
-          onClose={() => navigation.navigate('LessonTabNavigator')}
+          onClose={() => navigation.goBack()}
           onQuestionMark={() => navigation.goBack()}
         />
       </View>
