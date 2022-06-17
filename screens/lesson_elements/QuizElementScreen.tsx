@@ -36,7 +36,7 @@ export default function QuizElementScreen({
   const [chatViewPrompts, setChatViewPrompts] = useState(
     getChatViewPrompts(messages, possibleAnswers, correctAnswerIndex),
   );
-  const [disableSelection, setDisableSelection] = useState<boolean>(false);
+  const [userDidAnswer, setUserDidAnswer] = useState<boolean>(false);
 
   const imageSource = imageSources?.[0] ?? null;
 
@@ -81,6 +81,7 @@ export default function QuizElementScreen({
       totalElements={totalElements}
       topElement={<FeaturedCoverImage imageSource={imageSource} />}
       navigation={navigation}
+      showNavigation={userDidAnswer}
       route={route}
     >
       <ChatScrollViewContainer
@@ -103,9 +104,9 @@ export default function QuizElementScreen({
                   text={entry.text}
                   onSelect={() => {
                     answerSelectedCallback(entry.response);
-                    setDisableSelection(true);
+                    setUserDidAnswer(true);
                   }}
-                  disabled={disableSelection}
+                  disabled={userDidAnswer}
                 />
               </View>
             );
