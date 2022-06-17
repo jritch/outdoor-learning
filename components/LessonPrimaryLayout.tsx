@@ -123,7 +123,10 @@ const styles = StyleSheet.create({
   navigationSection: {
     flexGrow: 0,
     flexShrink: 0,
-    marginBottom: 90,
+    // The bottom of the arrows should be 90px above the bottom of the screen.
+    // Because we have 25px of padding on the top and bottom of the buttons so that
+    // there are good tap targets, subtract that padding here.
+    marginBottom: 90 - 25,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
