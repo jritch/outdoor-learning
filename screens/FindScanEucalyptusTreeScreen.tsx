@@ -120,6 +120,7 @@ export default function FindScanEucalyptusTreeScreen({
           style={[StyleSheet.absoluteFill, {bottom: insets.bottom}]}
           onCapture={handleImage}
           key={cameraKey}
+          hideFlipButton={true}
         />
         {imageClass && (
           <View style={styles.bubbleContainer}>
