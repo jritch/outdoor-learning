@@ -1,14 +1,5 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import * as React from 'react';
-import {useState} from 'react';
-import {
-  Image,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
+import {Image, TouchableOpacity, StyleSheet} from 'react-native';
 
 type Props = {
   onClick: () => void;

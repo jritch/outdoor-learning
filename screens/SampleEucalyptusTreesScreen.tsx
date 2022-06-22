@@ -1,26 +1,18 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import * as React from 'react';
-import {useState} from 'react';
-import {
-  Image,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
+import {ImageBackground, Text, View, StyleSheet} from 'react-native';
 import CloseButton from '../components/CloseButton';
 import {RootStackParamList} from '../types';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-const closeIcon =
-  'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/close.png';
+import globalStyles from '../constants/globalStyles';
 
 export default function SampleEucalyptusTreesScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'SampleEucalyptusTreesScreen'>) {
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView
+      style={[styles.wrapper, globalStyles.androidExtraSafeAreaPadding]}
+    >
       <View style={styles.closeIconContainer}>
         <CloseButton onClick={() => navigation.goBack()} />
       </View>

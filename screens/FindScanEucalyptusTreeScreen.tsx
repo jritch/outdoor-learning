@@ -9,6 +9,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import globalStyles from '../constants/globalStyles';
 
 export default function FindScanEucalyptusTreeScreen({
   navigation,
@@ -108,7 +109,10 @@ export default function FindScanEucalyptusTreeScreen({
   return (
     <SafeAreaView
       edges={['top', 'left', 'right']}
-      style={[StyleSheet.absoluteFill]}
+      style={[
+        StyleSheet.absoluteFill,
+        globalStyles.androidExtraSafeAreaPadding,
+      ]}
     >
       <Camera
         style={[StyleSheet.absoluteFill]}
