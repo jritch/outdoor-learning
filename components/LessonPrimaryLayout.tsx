@@ -1,16 +1,9 @@
 import * as React from 'react';
-import {
-  ImageBackground,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {Text, View, StyleSheet, Dimensions} from 'react-native';
 import type {RootStackParamList} from '../types';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import LessonOptionsBar from './LessonOptionsBar';
+import NavigationButton from './NavigationButton';
 
 const leftArrow = require('assets/images/left-arrow-3x.png');
 const rightArrow = require('assets/images/right-arrow-3x.png');
@@ -34,6 +27,10 @@ export default function LessonPrimaryLayout({
   showNavigation = true,
 }: NativeStackScreenProps<RootStackParamList, 'LessonContentScreen'> & Props) {
   const windowWidth = Dimensions.get('window').width;
+
+  const showForwardArrow = elementId + 1 < totalElements;
+  const showBackwardArrow = elementId > 0;
+
   return (
     <View style={styles.mainContainer}>
       <View style={(styles.topSection, {height: windowWidth})}>
@@ -42,20 +39,16 @@ export default function LessonPrimaryLayout({
       <View style={styles.body}>{children}</View>
       {showNavigation && (
         <View style={styles.navigationSection}>
-          <View style={styles.arrowContainer}>
-            {elementId > 0 && (
-              <TouchableOpacity
-                style={styles.arrowButton}
-                onPress={() =>
-                  navigation.navigate('LessonContentScreen', {
-                    elementId: elementId - 1,
-                  })
-                }
-              >
-                <Image source={leftArrow} style={styles.arrow} />
-              </TouchableOpacity>
-            )}
-          </View>
+          <NavigationButton
+            source={leftArrow}
+            hide={!showBackwardArrow}
+            onPress={() =>
+              navigation.navigate('LessonContentScreen', {
+                elementId: elementId - 1,
+              })
+            }
+          />
+
           <View style={styles.bottomCenterContainer}>
             {bottomElement != null ? (
               bottomElement
@@ -65,20 +58,16 @@ export default function LessonPrimaryLayout({
               }/${totalElements}`}</Text>
             )}
           </View>
-          <View style={styles.arrowContainer}>
-            {elementId + 1 < totalElements && (
-              <TouchableOpacity
-                style={styles.arrowButton}
-                onPress={() =>
-                  navigation.navigate('LessonContentScreen', {
-                    elementId: elementId + 1,
-                  })
-                }
-              >
-                <Image source={rightArrow} style={styles.arrow} />
-              </TouchableOpacity>
-            )}
-          </View>
+
+          <NavigationButton
+            hide={!showForwardArrow}
+            onPress={() =>
+              navigation.navigate('LessonContentScreen', {
+                elementId: elementId + 1,
+              })
+            }
+            source={rightArrow}
+          />
         </View>
       )}
       <View style={styles.optionBarWrapper}>
@@ -92,7 +81,6 @@ export default function LessonPrimaryLayout({
   );
 }
 
-// TODO: Use colors from the theme instead of hardcoding
 const styles = StyleSheet.create({
   mainContainer: {
     display: 'flex',
@@ -107,15 +95,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   body: {
-    // display: 'flex',
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 'auto',
     height: '100%',
   },
   topSection: {
-    // display: 'flex',
-    // flexBasis: 'auto',
     flexGrow: 0,
     flexShrink: 0,
     position: 'relative',
@@ -124,29 +109,12 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     flexShrink: 0,
     // The bottom of the arrows should be 90px above the bottom of the screen.
-    // Because we have 25px of padding on the top and bottom of the buttons so that
+    // Because we have 24px of padding on the top and bottom of the buttons so that
     // there are good tap targets, subtract that padding here.
-    marginBottom: 90 - 25,
+    marginBottom: 90 - 24,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  arrowContainer: {
-    // flexGrow: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 10 + 50,
-    height: 22 + 50,
-  },
-  arrowButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 10 + 50,
-    height: 22 + 50,
-  },
-  arrow: {
-    width: 10,
-    height: 22,
   },
   lessonNumber: {
     fontSize: 11,
