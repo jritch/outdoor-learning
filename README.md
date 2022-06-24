@@ -1,19 +1,13 @@
 # Flora
 
-# Contributing
+# Getting started
 
-First clone the repository and then install the dependencies:
+1. Clone this repo to your machine
+2. Run `npm install` in the root directory
+3. Run `npm run android:device` or `npm run ios:device` to compile the app and load it onto your test device/simulator
 
-```
-git clone <url for this repo>
-cd outdoor-learning
-npm install
-```
+If you haven't made any changes to the project's native dependencies since your last build then you can skip the build step and simply do these steps:
 
-Even if you are not going to build/run the app it's important to run `npm install` so that the relevant typescript types are installed, code formatting by prettier is enabled, and the commit hooks are installed that check for type errors on commit.
-
-## Adding assets to the project
-
-To add new image assets to the project first upload them as part of this github repos ["Pre Release" release](https://github.com/jritch/outdoor-learning/releases/tag/v0.0.1-alpha) by clicking the 'pencil' edit icon and adding the new jpg/png/etc file at the bottom.
-
-Then copy the url to the file you just uploaded (right click > Copy Link Address) into the relevant field in this project's typescript code.
+1. Run `npm run start` to start the expo metro dev server
+2. Press `a` once the expo dev server has started to reopen the hackathon app that was built in the previous steps.
+3. If pressing `a` doesn't work, open the hackathon app yourself on your device. It will show the expo dev client landing screen. Select "Enter URL manually" and enter the url and port shown by the metro server, usually something like `http://192.168.1.120:8081`. Press "Connect".

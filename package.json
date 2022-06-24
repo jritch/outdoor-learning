@@ -9,7 +9,9 @@
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
+    "android:device": "expo run:android --device",
     "ios": "expo run:ios",
+    "ios:device": "expo run:ios --device",
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
