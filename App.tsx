@@ -30,10 +30,7 @@ checkForPytorchCoreLib();
 export default function App() {
   // Cache all models required by the app
   useEffect(() => {
-    ModelCache.clearModelCache().then(() => {
-      console.log('Model Cache cleared!');
-      ModelCache.downloadAllModels().catch(console.error);
-    });
+    ModelCache.downloadAllModels().catch(console.error);
   }, []);
 
   const isLoadingComplete = useCachedResources();
