@@ -1,5 +1,6 @@
 import {MobileModel} from 'react-native-pytorch-core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
 
 const MODEL_URLS: {[key: string]: string} = {
   eucalyptusClassifier:
@@ -20,21 +21,33 @@ class ModelCache {
   }
 
   static async downloadAllModels(): Promise<void> {
-    for (const [key, _] of Object.entries(MODEL_URLS)) {
-      console.log('Caching model ' + key);
-      await ModelCache.getModelPath(key);
-    }
+    await Promise.all(
+      Object.keys(MODEL_URLS).map(async key => {
+        console.log('Fetching model ' + key);
+        await ModelCache.getModelPath(key);
+      }),
+    );
   }
 
   static async getModelPath(modelKey: string): Promise<string> {
     const modelPathKey = ModelCache.constructModelPathCacheKey(modelKey);
     const cachedModelPath = await AsyncStorage.getItem(modelPathKey);
-    if (cachedModelPath) {
-      console.log('from cache');
-      return cachedModelPath;
+    if (cachedModelPath != null) {
+      const modelPathInfo = await FileSystem.getInfoAsync(cachedModelPath);
+      if (modelPathInfo.exists === true) {
+        console.log(`Getting ${modelKey} from cache`);
+        return cachedModelPath;
+      }
+      console.warn(
+        'Model path found in async storage but no model at that path',
+        {modelKey, modelPathKey, cachedModelPath, modelPathInfo},
+      );
     }
+    console.log(`Downloading ${modelKey} and adding to cache...`);
     const modelPath = await ModelCache.downloadModelFromURL(modelKey);
-    console.log('loaded into cache with path: ' + modelPath);
+    console.log(
+      `Model with key ${modelKey} loaded into cache with path: ${modelPath}`,
+    );
     await AsyncStorage.setItem(modelPathKey, modelPath);
     return modelPath;
   }
@@ -44,7 +57,7 @@ class ModelCache {
     for (const [key, _] of Object.entries(MODEL_URLS)) {
       const modelKey = ModelCache.constructModelPathCacheKey(key);
       await AsyncStorage.removeItem(modelKey);
-      console.log('Removed model ' + key + ' from cache.');
+      console.log('Removed model path for ' + key + ' from cache.');
     }
   }
 
