@@ -1,11 +1,18 @@
 import * as React from 'react';
-import {useState, useCallback} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useState, useCallback, useEffect} from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Camera, Image} from 'react-native-pytorch-core';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import classifyImage from '../components/ImageClassifier';
 import Bubble from '../components/Bubble';
 import {useFocusEffect} from '@react-navigation/native';
+import {Camera as ExpoCamera} from 'expo-camera';
 
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -27,12 +34,24 @@ export default function FindScanEucalyptusTreeScreen({
   const [imageClass, setImageClass] = useState<string | null>(null);
   const [cameraKey, setCameraKey] = useState<number>(0);
 
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+
   // The PTL camera has a bug where it shows a black screen when focus is returned after navigating away.
   // This is a hack to force the camera to unmount and remount when the screen is refocused.
   const bumpCameraKey = useCallback(() => {
     setCameraKey(key => key + 1);
   }, []);
   useFocusEffect(bumpCameraKey);
+
+  useEffect(() => {
+    if (hasPermission === null) {
+      (async () => {
+        const {status} = await ExpoCamera.requestCameraPermissionsAsync();
+        setHasPermission(status === 'granted');
+        bumpCameraKey();
+      })();
+    }
+  }, [bumpCameraKey, hasPermission]);
 
   // Function to handle images whenever the user presses the capture button
   async function handleImage(image: Image) {
@@ -114,33 +133,50 @@ export default function FindScanEucalyptusTreeScreen({
         globalStyles.androidExtraSafeAreaPadding,
       ]}
     >
-      <Camera
-        style={[StyleSheet.absoluteFill]}
-        onCapture={handleImage}
-        key={cameraKey}
-        hideFlipButton={true}
-      />
-      <View style={styles.mainContainer} pointerEvents="box-none">
-        {imageClass && (
-          <View style={styles.bubbleContainer}>
-            <Bubble text={imageClass} />
-          </View>
-        )}
-        <View style={styles.messageHolder}>
-          {messageElements.map((element, index) => (
-            <View
-              key={index}
-              style={
-                index !== messageElements.length - 1
-                  ? styles.messageParagraphBottomSpacing
-                  : null
-              }
-            >
-              {element}
-            </View>
-          ))}
+      {hasPermission !== true && (
+        <View style={styles.spinnerContainer}>
+          {hasPermission === null && (
+            <ActivityIndicator color="#FFF" size="large" />
+          )}
+          {hasPermission === false && (
+            <Text style={styles.noCameraAccessText}>
+              Enable camera to proceed
+            </Text>
+          )}
         </View>
-      </View>
+      )}
+
+      {hasPermission === true && (
+        <>
+          <Camera
+            style={[StyleSheet.absoluteFill]}
+            onCapture={handleImage}
+            key={cameraKey}
+            hideFlipButton={true}
+          />
+          <View style={styles.mainContainer} pointerEvents="box-none">
+            {imageClass && (
+              <View style={styles.bubbleContainer}>
+                <Bubble text={imageClass} />
+              </View>
+            )}
+            <View style={styles.messageHolder}>
+              {messageElements.map((element, index) => (
+                <View
+                  key={index}
+                  style={
+                    index !== messageElements.length - 1
+                      ? styles.messageParagraphBottomSpacing
+                      : null
+                  }
+                >
+                  {element}
+                </View>
+              ))}
+            </View>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 }
@@ -151,7 +187,17 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: '100%',
   },
-
+  noCameraAccessText: {
+    textAlign: 'center',
+    fontSize: 24,
+    color: 'white',
+    padding: 20,
+  },
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
   bubbleContainer: {
     marginTop: 10,
     alignItems: 'center',
