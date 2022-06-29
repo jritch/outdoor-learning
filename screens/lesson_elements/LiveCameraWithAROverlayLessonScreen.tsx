@@ -59,11 +59,12 @@ export default function LiveCameraWithAROverlayLessonScreen({
         console.log('Image classification result:', result);
 
         setImageClass(result);
-        image.release();
       } catch (error) {
         console.error(error);
       } finally {
-        image.release();
+        if (image != null) {
+          image.release();
+        }
       }
     };
 
