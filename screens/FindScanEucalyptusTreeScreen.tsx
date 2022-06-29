@@ -17,7 +17,7 @@ import {Camera as ExpoCamera} from 'expo-camera';
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import globalStyles from '../constants/globalStyles';
-import {getModelStatus} from 'components/ModelCache';
+import {getModelStatus} from '../components/ModelCache';
 import ModelURLs from '../constants/ModelURLs';
 
 const findTreeText =
