@@ -1,7 +1,6 @@
 import {MobileModel} from 'react-native-pytorch-core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
-import {Platform} from 'react-native';
 
 const MODEL_URLS: {[key: string]: string} = {
   eucalyptusClassifier:
@@ -41,7 +40,12 @@ export async function downloadAllModels(): Promise<void> {
   );
 }
 
-export async function getModelPath(modelKey: string): Promise<string> {
+/**
+ *
+ * @param modelKey
+ * @returns the path, or null if the model is not cached
+ */
+async function getCachedModelPath(modelKey: string): Promise<string | null> {
   const modelPathKey = constructModelPathCacheKey(modelKey);
   const cachedModelPath = await AsyncStorage.getItem(modelPathKey);
   if (cachedModelPath != null) {
@@ -57,6 +61,20 @@ export async function getModelPath(modelKey: string): Promise<string> {
       {modelKey, modelPathKey, cachedModelPath, modelPathInfo},
     );
   }
+  return null;
+}
+
+export async function getIsModelReady(modelKey: string): Promise<boolean> {
+  const cachedModelPath = await getCachedModelPath(modelKey);
+  return cachedModelPath != null;
+}
+
+export async function getModelPath(modelKey: string): Promise<string> {
+  const cachedModelPath = await getCachedModelPath(modelKey);
+  if (cachedModelPath != null) {
+    return cachedModelPath;
+  }
+
   console.log(`Downloading ${modelKey} and adding to cache...`);
   const startTime = performance.now();
   const modelPath = await downloadModelFromURL(modelKey);
@@ -69,6 +87,7 @@ export async function getModelPath(modelKey: string): Promise<string> {
     getPathWithScheme(modelPath),
   );
   console.log('Donwloaded model info:', modelPathInfo);
+  const modelPathKey = constructModelPathCacheKey(modelKey);
   await AsyncStorage.setItem(modelPathKey, modelPath);
   console.log(
     `Model with key ${modelKey} loaded into cache with path: ${modelPath}`,
