@@ -7,8 +7,12 @@ import {
   Tensor,
 } from 'react-native-pytorch-core';
 
+import {Asset} from 'expo-asset';
+import * as FileSystem from 'expo-file-system';
+
 import * as ModelCache from './ModelCache';
 import ModelURLs from '../constants/ModelURLs';
+import nullthrows from 'nullthrows';
 
 // Alias for torchvision transforms
 const T = torchvision.transforms;
@@ -61,8 +65,21 @@ export default async function classifyImage(image: Image) {
   // 5. If the model has not been loaded already, it will be downloaded from
   // the URL and then loaded into memory.
   if (model == null) {
-    const filePath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
-    model = await torch.jit._loadForMobile(filePath);
+    // const filePath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
+    const modelFile = require('../assets/models/classifier.ptl');
+    console.log('Model file:', modelFile);
+    const asset = await Asset.fromModule(modelFile).downloadAsync();
+    console.log('Asset:', asset);
+    const modelPathInfo = await FileSystem.getInfoAsync(
+      nullthrows(asset.localUri),
+    );
+    console.log(modelPathInfo);
+    const pathWithoutSchema = nullthrows(asset.localUri).replace(
+      'file:///',
+      '/',
+    );
+    console.log('pathWithoutSchema', pathWithoutSchema);
+    model = await torch.jit._loadForMobile(pathWithoutSchema);
   }
 
   // 6. Run the ML inference with the pre-processed image tensor
