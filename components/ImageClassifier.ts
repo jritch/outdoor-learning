@@ -8,6 +8,7 @@ import {
 } from 'react-native-pytorch-core';
 
 import * as ModelCache from './ModelCache';
+import ModelURLs from '../constants/ModelURLs';
 
 // Alias for torchvision transforms
 const T = torchvision.transforms;
@@ -60,7 +61,7 @@ export default async function classifyImage(image: Image) {
   // 5. If the model has not been loaded already, it will be downloaded from
   // the URL and then loaded into memory.
   if (model == null) {
-    const filePath = await ModelCache.getModelPath(MODEL_KEY);
+    const filePath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
     model = await torch.jit._loadForMobile(filePath);
   }
 

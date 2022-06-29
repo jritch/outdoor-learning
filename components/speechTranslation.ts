@@ -1,10 +1,11 @@
 import {Audio, media, Tensor, torch} from 'react-native-pytorch-core';
 import * as ModelCache from './ModelCache';
+import ModelURLs from '../constants/ModelURLs';
 
 export default async function translate(audio: Audio) {
   const MODEL_KEY = 'wav2vec';
   if (audio != null) {
-    const modelPath = await ModelCache.getModelPath(MODEL_KEY);
+    const modelPath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
 
     // Convert the audio data to a blob
     const blob = media.toBlob(audio);

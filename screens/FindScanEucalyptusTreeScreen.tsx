@@ -17,7 +17,8 @@ import {Camera as ExpoCamera} from 'expo-camera';
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import globalStyles from '../constants/globalStyles';
-import {getIsModelReady} from 'components/ModelCache';
+import {getModelStatus} from 'components/ModelCache';
+import ModelURLs from '../constants/ModelURLs';
 
 const findTreeText =
   'Go find and scan a eucalyptus tree to start the lesson.\n\nEucalyptus leaves are long and thin, with a slight bulge in the middle.';
@@ -26,7 +27,7 @@ const incorrectTreeText =
   'This doesn’t seem like a eucalyptus tree. Take a closer look at the reference photos.';
 const correctTreeText = 'Great job! You have found a eucalyptus tree.';
 const wouldYouLikeToLearnText = 'Would you like to learn more about the tree?';
-const awaitingModelText = 'Model is downloading...';
+const awaitingModelText = 'Model is downloading. Please wait...';
 
 export default function FindScanEucalyptusTreeScreen({
   navigation,
@@ -60,7 +61,8 @@ export default function FindScanEucalyptusTreeScreen({
     setScanningStarted(true);
     setImageClass(null);
     try {
-      const isModelReady = await getIsModelReady('eucalyptusClassifier');
+      const isModelReady =
+        getModelStatus(ModelURLs.eucalyptusClassifier) === 'complete';
       if (!isModelReady) {
         setAwaitingModel(true);
       }

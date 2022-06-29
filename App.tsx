@@ -7,6 +7,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import React, {useEffect} from 'react';
 import * as ModelCache from './components/ModelCache';
+import ModelURLs from './constants/ModelURLs';
 
 function checkForPytorchCoreLib(): boolean {
   try {
@@ -30,11 +31,10 @@ checkForPytorchCoreLib();
 export default function App() {
   // Cache all models required by the app
   useEffect(() => {
-    async function preloadModels() {
-      // await ModelCache.clearModelCache();
-      await ModelCache.downloadAllModels().catch(console.error);
-    }
-    preloadModels();
+    console.log('Preloading all models...');
+    Promise.all(
+      Object.values(ModelURLs).map(async url => ModelCache.preloadModel(url)),
+    );
   }, []);
 
   const isLoadingComplete = useCachedResources();

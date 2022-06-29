@@ -1,5 +1,6 @@
 import {torch, text, Tensor} from 'react-native-pytorch-core';
 import * as ModelCache from './ModelCache';
+import ModelURLs from '../constants/ModelURLs';
 
 const spec = require('../assets/specs/bert_model_spec.json');
 
@@ -22,7 +23,7 @@ export default async function findAnswer(textString: string, question: string) {
   const inputText = `[CLS] ${question} [SEP] ${textString} [SEP]`;
   const arr = tokenizer.encode(inputText);
   const t = torch.tensor([arr], {dtype: torch.int});
-  const modelPath = await ModelCache.getModelPath(MODEL_KEY);
+  const modelPath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
   const nlpModel = await torch.jit._loadForMobile(modelPath);
   const output = await nlpModel.forward<Tensor, {[key: string]: Tensor}>(t);
   const startId = output.start_logits.argmax().item();
