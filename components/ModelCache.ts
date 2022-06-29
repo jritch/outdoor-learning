@@ -2,6 +2,7 @@ import {MobileModel} from 'react-native-pytorch-core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import nullthrows from 'nullthrows';
+import {Asset} from 'expo-asset';
 
 type DownloadStatus = 'in-progress' | 'complete' | 'error';
 
@@ -10,7 +11,7 @@ const ASYNC_STORAGE_MODEL_PATH_PREFIX = 'model_path_';
 // ios and android don't support the same file scheme prefixes: https://docs.expo.dev/versions/latest/sdk/filesystem/#supported-uri-schemes-1
 // const FILE_SCHEME = Platform.OS === 'android' ? 'file:///' : 'file://';
 // TODO: Figure out why 'file:///' is the required prefix on both ios and android when the docs above say otherwise
-const FILE_SCHEME = 'file:///';
+const FILE_SCHEMA = 'file:///';
 
 const modelDownloadInfo: {
   [url: string]: {
@@ -19,11 +20,15 @@ const modelDownloadInfo: {
   };
 } = {};
 
-function getPathWithScheme(path: string): string {
+function getPathWithSchema(path: string): string {
   if (path[0] === '/') {
-    return FILE_SCHEME + path.slice(1);
+    return FILE_SCHEMA + path.slice(1);
   }
-  return FILE_SCHEME + path;
+  return FILE_SCHEMA + path;
+}
+
+function getPathWithoutSchema(path: string): string {
+  return path.startsWith(FILE_SCHEMA) ? path.replace(FILE_SCHEMA, '/') : path;
 }
 
 export async function downloadModelFromURL(url: string): Promise<string> {
@@ -41,6 +46,26 @@ export async function downloadModelFromURL(url: string): Promise<string> {
   }
 }
 
+export async function getExpoAssetPathWithoutSchema(
+  assetResource: number,
+  name?: string,
+): Promise<string> {
+  console.log('Loading expo asset:', name, assetResource);
+  const asset = await Asset.fromModule(assetResource).downloadAsync();
+  console.log('Expo asset loaded:', name, asset);
+
+  // Check to make sure it's present locally:
+  // const modelPathInfo = await FileSystem.getInfoAsync(
+  //   nullthrows(asset.localUri),
+  // );
+  // console.log(modelPathInfo);
+
+  const pathWithoutSchema = getPathWithoutSchema(nullthrows(asset.localUri));
+  console.log('pathWithoutSchema', name, pathWithoutSchema);
+  console.log('\n');
+  return pathWithoutSchema;
+}
+
 /**
  *
  * @param url
@@ -55,7 +80,7 @@ async function getCachedModelPath(url: string): Promise<string | null> {
   }
 
   const modelPathInfo = await FileSystem.getInfoAsync(
-    getPathWithScheme(cachedModelPath),
+    getPathWithSchema(cachedModelPath),
   );
   if (modelPathInfo.exists === true) {
     // TODO: Consider having a TTL for cached models (7 days? 180 days?) after which we invalidate the cache and re-download
@@ -87,7 +112,7 @@ export async function clearModelCache(): Promise<void> {
         if (cachedModelPath != null) {
           try {
             console.log(`Deleting cached file ${cachedModelPath}...`);
-            await FileSystem.deleteAsync(getPathWithScheme(cachedModelPath));
+            await FileSystem.deleteAsync(getPathWithSchema(cachedModelPath));
           } catch (e) {
             console.log(`Unable to delete file ${cachedModelPath}:`, e);
           }
@@ -142,7 +167,7 @@ export async function getModelPath(url: string): Promise<string> {
 
   // Double check that the file is actually there.
   const modelPathInfo = await FileSystem.getInfoAsync(
-    getPathWithScheme(modelPath),
+    getPathWithSchema(modelPath),
   );
   console.log('Downloaded model info:', modelPathInfo);
 

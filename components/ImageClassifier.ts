@@ -65,20 +65,11 @@ export default async function classifyImage(image: Image) {
   // 5. If the model has not been loaded already, it will be downloaded from
   // the URL and then loaded into memory.
   if (model == null) {
-    // const filePath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
-    const modelFile = require('../assets/models/classifier.ptl');
-    console.log('Model file:', modelFile);
-    const asset = await Asset.fromModule(modelFile).downloadAsync();
-    console.log('Asset:', asset);
-    const modelPathInfo = await FileSystem.getInfoAsync(
-      nullthrows(asset.localUri),
+    console.log('Loading image classifier...');
+    const pathWithoutSchema = await ModelCache.getExpoAssetPathWithoutSchema(
+      require('../assets/models/classifier.ptl'),
     );
-    console.log(modelPathInfo);
-    const pathWithoutSchema = nullthrows(asset.localUri).replace(
-      'file:///',
-      '/',
-    );
-    console.log('pathWithoutSchema', pathWithoutSchema);
+    console.log('Image classifier loaded', pathWithoutSchema);
     model = await torch.jit._loadForMobile(pathWithoutSchema);
   }
 
