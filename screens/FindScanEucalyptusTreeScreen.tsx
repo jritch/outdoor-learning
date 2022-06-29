@@ -160,20 +160,22 @@ export default function FindScanEucalyptusTreeScreen({
                 <Bubble text={imageClass} />
               </View>
             )}
-            <View style={styles.messageHolder}>
-              {messageElements.map((element, index) => (
-                <View
-                  key={index}
-                  style={
-                    index !== messageElements.length - 1
-                      ? styles.messageParagraphBottomSpacing
-                      : null
-                  }
-                >
-                  {element}
-                </View>
-              ))}
-            </View>
+            {messageElements.length > 0 && (
+              <View style={styles.messageHolder}>
+                {messageElements.map((element, index) => (
+                  <View
+                    key={index}
+                    style={
+                      index !== messageElements.length - 1
+                        ? styles.messageParagraphBottomSpacing
+                        : null
+                    }
+                  >
+                    {element}
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         </>
       )}

@@ -31,7 +31,7 @@ export default function App() {
   // Cache all models required by the app
   useEffect(() => {
     async function preloadModels() {
-      await ModelCache.clearModelCache();
+      // await ModelCache.clearModelCache();
       await ModelCache.downloadAllModels().catch(console.error);
     }
     preloadModels();
