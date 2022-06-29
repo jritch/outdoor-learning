@@ -17,22 +17,25 @@ import {Camera as ExpoCamera} from 'expo-camera';
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import globalStyles from '../constants/globalStyles';
+import {getModelStatus} from 'components/ModelCache';
+import ModelURLs from '../constants/ModelURLs';
+
+const findTreeText =
+  'Go find and scan a eucalyptus tree to start the lesson.\n\nEucalyptus leaves are long and thin, with a slight bulge in the middle.';
+const viewTreeText = 'View eucalyptus tree photos';
+const incorrectTreeText =
+  'This doesn’t seem like a eucalyptus tree. Take a closer look at the reference photos.';
+const correctTreeText = 'Great job! You have found a eucalyptus tree.';
+const wouldYouLikeToLearnText = 'Would you like to learn more about the tree?';
+const awaitingModelText = 'Model is downloading. Please wait...';
 
 export default function FindScanEucalyptusTreeScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'FindScanEucalyptusTreeScreen'>) {
-  const findTreeText =
-    'Go find and scan a eucalyptus tree to start the lesson.\n\nEucalyptus leaves are long and thin, with a slight bulge in the middle.';
-  const viewTreeText = 'View eucalyptus tree photos';
-  const incorrectTreeText =
-    'This doesn’t seem like a eucalyptus tree. Take a closer look at the reference photos.';
-  const correctTreeText = 'Great job! You have found a eucalyptus tree.';
-  const wouldYouLikeToLearnText =
-    'Would you like to learn more about the tree?';
-
   const [scanningStarted, setScanningStarted] = useState(false);
   const [imageClass, setImageClass] = useState<string | null>(null);
   const [cameraKey, setCameraKey] = useState<number>(0);
+  const [awaitingModel, setAwaitingModel] = useState<boolean>(false);
 
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
@@ -58,7 +61,13 @@ export default function FindScanEucalyptusTreeScreen({
     setScanningStarted(true);
     setImageClass(null);
     try {
+      const isModelReady =
+        getModelStatus(ModelURLs.eucalyptusClassifier) === 'complete';
+      if (!isModelReady) {
+        setAwaitingModel(true);
+      }
       const result = await classifyImage(image);
+      setAwaitingModel(false);
       console.log('Image classification result:', result);
       setImageClass(result);
       image.release();
@@ -76,6 +85,19 @@ export default function FindScanEucalyptusTreeScreen({
         onPress={() => navigation.navigate('SampleEucalyptusTreesScreen')}
       >
         <Text style={styles.linkText}>{viewTreeText}</Text>
+      </TouchableOpacity>,
+    );
+  }
+
+  if (awaitingModel) {
+    messageElements.push(
+      <Text style={styles.messageText}>{awaitingModelText}</Text>,
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('LessonContentScreen');
+        }}
+      >
+        <Text style={styles.linkText}>{'Skip to the lesson'}</Text>
       </TouchableOpacity>,
     );
   }
@@ -160,20 +182,22 @@ export default function FindScanEucalyptusTreeScreen({
                 <Bubble text={imageClass} />
               </View>
             )}
-            <View style={styles.messageHolder}>
-              {messageElements.map((element, index) => (
-                <View
-                  key={index}
-                  style={
-                    index !== messageElements.length - 1
-                      ? styles.messageParagraphBottomSpacing
-                      : null
-                  }
-                >
-                  {element}
-                </View>
-              ))}
-            </View>
+            {messageElements.length > 0 && (
+              <View style={styles.messageHolder}>
+                {messageElements.map((element, index) => (
+                  <View
+                    key={index}
+                    style={
+                      index !== messageElements.length - 1
+                        ? styles.messageParagraphBottomSpacing
+                        : null
+                    }
+                  >
+                    {element}
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         </>
       )}
