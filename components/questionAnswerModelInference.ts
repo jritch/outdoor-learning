@@ -1,5 +1,5 @@
 import {torch, text, Tensor} from 'react-native-pytorch-core';
-import ModelCache from './ModelCache';
+import * as ModelCache from './ModelCache';
 
 const spec = require('../assets/specs/bert_model_spec.json');
 

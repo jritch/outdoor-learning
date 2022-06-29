@@ -1,5 +1,5 @@
 import {Audio, media, Tensor, torch} from 'react-native-pytorch-core';
-import ModelCache from './ModelCache';
+import * as ModelCache from './ModelCache';
 
 export default async function translate(audio: Audio) {
   const MODEL_KEY = 'wav2vec';

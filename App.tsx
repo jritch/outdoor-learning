@@ -6,7 +6,7 @@ import 'expo-dev-client';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import React, {useEffect} from 'react';
-import ModelCache from './components/ModelCache';
+import * as ModelCache from './components/ModelCache';
 
 function checkForPytorchCoreLib(): boolean {
   try {
