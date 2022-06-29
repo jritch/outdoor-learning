@@ -73,7 +73,7 @@ async function getCachedModelPath(url: string): Promise<string | null> {
 }
 
 export function getModelStatus(url: string): DownloadStatus | null {
-  return modelDownloadInfo[url].status;
+  return modelDownloadInfo[url]?.status ?? null;
 }
 
 // Probably not needed for the app, only for dev purposes.
