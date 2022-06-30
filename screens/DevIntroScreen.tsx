@@ -10,7 +10,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import type {RootStackParamList} from '../types';
 import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
-import {clearModelCache} from 'components/ModelCache';
+import {clearModelCache} from '../components/ModelCache';
 
 const ROUTES_TO_IGNORE = ['DevIntroScreen'];
 
