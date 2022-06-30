@@ -28,6 +28,7 @@ type Props = {
   onSave?: Function; // Callback when save function completes
   isSaveEnabled: boolean; // To display a 'Save' button to save notes to the File system
   targetImage: string | null; // The image for which notes are taken
+  clearInputOnSubmit?: boolean;
 };
 
 /**
@@ -40,7 +41,11 @@ type Props = {
    </KeyboardAvoidingView>
  */
 
-export default function TextVoiceInput({targetImage, ...props}: Props) {
+export default function TextVoiceInput({
+  targetImage,
+  clearInputOnSubmit,
+  ...props
+}: Props) {
   // Props
   const onSubmitCallback = props.onSubmit;
   const isSaveEnabled = props.isSaveEnabled;
@@ -170,6 +175,9 @@ export default function TextVoiceInput({targetImage, ...props}: Props) {
     }
     if (isSaveEnabled) {
       setShowSaveNotesView(true);
+    }
+    if (clearInputOnSubmit === true) {
+      setTextInputValue('');
     }
   }
 

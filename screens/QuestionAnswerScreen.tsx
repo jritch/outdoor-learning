@@ -113,6 +113,7 @@ export default function QuestionAnswerScreen({
           onSubmit={(text: string) => submitQuestion(text)}
           isSaveEnabled={false}
           targetImage={null}
+          clearInputOnSubmit={true}
         />
       </View>
       <View style={styles.optionsBarArea}>
