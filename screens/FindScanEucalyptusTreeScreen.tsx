@@ -29,6 +29,13 @@ const correctTreeText = 'Great job! You have found a eucalyptus tree.';
 const wouldYouLikeToLearnText = 'Would you like to learn more about the tree?';
 const awaitingModelText = 'Model is downloading. Please wait...';
 
+function getImageClassForDisplay(imageClass: string): string {
+  if (imageClass.toLowerCase().trim() === 'background') {
+    return 'No Tree Detected';
+  }
+  return imageClass;
+}
+
 export default function FindScanEucalyptusTreeScreen({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'FindScanEucalyptusTreeScreen'>) {
@@ -63,6 +70,10 @@ export default function FindScanEucalyptusTreeScreen({
     try {
       const isModelReady =
         getModelStatus(ModelURLs.eucalyptusClassifier) === 'complete';
+      console.log(
+        'Model status:',
+        getModelStatus(ModelURLs.eucalyptusClassifier),
+      );
       if (!isModelReady) {
         setAwaitingModel(true);
       }
@@ -179,7 +190,7 @@ export default function FindScanEucalyptusTreeScreen({
           <View style={styles.mainContainer} pointerEvents="box-none">
             {imageClass && (
               <View style={styles.bubbleContainer}>
-                <Bubble text={imageClass} />
+                <Bubble text={getImageClassForDisplay(imageClass)} />
               </View>
             )}
             {messageElements.length > 0 && (

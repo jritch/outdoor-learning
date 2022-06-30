@@ -15,7 +15,7 @@ const FILE_SCHEME = 'file:///';
 const modelDownloadInfo: {
   [url: string]: {
     status: DownloadStatus;
-    downloadPromise: Promise<string>;
+    downloadPromise?: Promise<string>;
   };
 } = {};
 
@@ -114,6 +114,7 @@ export async function getModelPath(url: string): Promise<string> {
   const cachedModelPath = await getCachedModelPath(url);
   // TODO: Do a md5 hash check on the model to ensure its the one that's intended. would require passing the hash of the intended model
   if (cachedModelPath != null) {
+    modelDownloadInfo[url] = {status: 'complete'};
     return cachedModelPath;
   }
 
@@ -125,7 +126,7 @@ export async function getModelPath(url: string): Promise<string> {
     console.log(
       `Download of ${url} is already in progress. Awaiting its completion...`,
     );
-    modelPath = await modelDownloadInfo[url].downloadPromise;
+    modelPath = await nullthrows(modelDownloadInfo[url].downloadPromise);
   } else {
     console.log(`Downloading ${url} and adding to cache...`);
 
