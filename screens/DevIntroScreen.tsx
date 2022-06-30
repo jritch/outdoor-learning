@@ -10,6 +10,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import type {RootStackParamList} from '../types';
 import {EucalyptusLesson} from '../lesson_content/EucalyptusLesson';
+import {clearModelCache} from 'components/ModelCache';
 
 const ROUTES_TO_IGNORE = ['DevIntroScreen'];
 
@@ -34,7 +35,7 @@ export default function DevIntroScreen({
               onPress={() => navigation.navigate('LessonIntroScreen')}
               style={styles.button}
             >
-              <Text style={styles.startButtonText}>{'Start App'}</Text>
+              <Text style={styles.buttonText}>{'Start App'}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.screensHeaderContainer}>
@@ -52,7 +53,7 @@ export default function DevIntroScreen({
                   style={styles.button}
                 >
                   <Text
-                    style={styles.startButtonText}
+                    style={styles.buttonText}
                   >{`Lesson ID: ${index} ${element.__type}`}</Text>
                 </TouchableOpacity>
               </View>
@@ -65,11 +66,19 @@ export default function DevIntroScreen({
                   onPress={() => navigation.navigate(routeName)}
                   style={styles.button}
                 >
-                  <Text style={styles.startButtonText}>{routeName}</Text>
+                  <Text style={styles.buttonText}>{routeName}</Text>
                 </TouchableOpacity>
               </View>
             );
           })}
+          <View style={[styles.buttonWrapper, styles.extraButtonSpacing]}>
+            <TouchableOpacity
+              onPress={() => clearModelCache()}
+              style={[styles.button, styles.orangeButton]}
+            >
+              <Text style={styles.buttonText}>Clear Model Cache</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
-  startButtonText: {
+  buttonText: {
     color: '#000000',
     fontSize: 14,
     fontWeight: 'bold',
@@ -125,5 +134,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 256,
     backgroundColor: '#ffffff',
+  },
+  orangeButton: {
+    backgroundColor: '#ff6f00',
+  },
+  extraButtonSpacing: {
+    marginTop: 24,
   },
 });
