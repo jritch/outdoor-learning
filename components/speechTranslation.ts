@@ -5,7 +5,9 @@ import ModelURLs from '../constants/ModelURLs';
 export default async function translate(audio: Audio) {
   const MODEL_KEY = 'wav2vec';
   if (audio != null) {
-    const modelPath = await ModelCache.getModelPath(ModelURLs[MODEL_KEY]);
+    const modelPath = await ModelCache.getExpoAssetPathWithoutSchema(
+      require('../assets/models/wav2vec2.ptl'),
+    );
 
     // Convert the audio data to a blob
     const blob = media.toBlob(audio);

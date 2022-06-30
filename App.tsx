@@ -29,29 +29,9 @@ function checkForPytorchCoreLib(): boolean {
 checkForPytorchCoreLib();
 
 export default function App() {
-  const [isModelPreloadingComplete, setIsModelPreloadingComplete] =
-    useState<boolean>(false);
   const [appError, setAppError] = useState<Error | unknown | null>(null);
 
-  // Cache all models required by the app
-  useEffect(() => {
-    console.log('Preloading all models...');
-    async function preloadModels() {
-      await Promise.all(
-        Object.values(ModelURLs).map(async url => ModelCache.preloadModel(url)),
-      );
-      setIsModelPreloadingComplete(true);
-    }
-
-    try {
-      preloadModels();
-    } catch (e) {
-      console.error('Error when preloading models:', e);
-      setAppError(e);
-    }
-  }, []);
-
-  const isLoadingComplete = useCachedResources();
+  const isLoadingComplete = useCachedResources(setAppError);
   // NOTE: We're hardcoding the dark theme here but in the future
   // we could support a light mode
   // const colorScheme = useColorScheme();
@@ -67,7 +47,7 @@ export default function App() {
     );
   }
 
-  if (!isLoadingComplete || !isModelPreloadingComplete) {
+  if (!isLoadingComplete) {
     return (
       <SafeAreaView style={styles.messageContainer}>
         <View style={styles.spinner}>
