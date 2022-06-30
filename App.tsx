@@ -35,20 +35,22 @@ export default function App() {
 
   // Cache all models required by the app
   useEffect(() => {
-    console.log('Preloading all models...');
     async function preloadModels() {
-      await Promise.all(
-        Object.values(ModelURLs).map(async url => ModelCache.preloadModel(url)),
-      );
-      setIsModelPreloadingComplete(true);
+      console.log('Preloading all models...');
+      try {
+        await Promise.all(
+          Object.values(ModelURLs).map(async url =>
+            ModelCache.preloadModel(url),
+          ),
+        );
+        setIsModelPreloadingComplete(true);
+      } catch (e) {
+        console.error('Error when preloading models:', e);
+        setAppError(e);
+      }
     }
 
-    try {
-      preloadModels();
-    } catch (e) {
-      console.error('Error when preloading models:', e);
-      setAppError(e);
-    }
+    preloadModels();
   }, []);
 
   const isLoadingComplete = useCachedResources();
