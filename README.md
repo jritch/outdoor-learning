@@ -1,6 +1,6 @@
 # Flora
 
-# Contributing: Getting Started
+## Contributing: Getting Started
 
 1. Clone this repo to your machine
 2. Run `npm install` in the root directory
@@ -13,9 +13,9 @@ If you haven't made any changes to the project's native dependencies since your 
 2. Press `a` to open on android or `i` to open on iOS once the expo dev server has started. This will reopen the app that was built in the initial steps above.
 3. If pressing `a` or `i` doesn't work, open the app yourself on your device. It will show the expo dev client landing screen. Select "Enter URL manually" and enter the url and port shown by the metro server running on your computer, usually something like `http://192.168.1.120:8081`. Press "Connect".
 
-# Creating builds for distribution
+## Creating builds for distribution
 
-## Using Expo EAS
+### Using Expo EAS
 
 The easiest way to build the app for distribution is to use Expo's EAS service.
 
@@ -35,11 +35,11 @@ _Specific notes for iOS:_
 1. In order to distribute the app on iOS you'll need to have an Apple developer account with an active subscription. Android does not have a similar limitation.
 2. In order to install the app on a _new_ iOS device you'll have to generate a provisioning profile and have the user install it on their device (which registers their device UDID with expo), and then build a new version of the app. See [the docs](https://docs.expo.dev/build/internal-distribution/#2-configure-app-signing) for more info.
 
-## Building locally
+### Building locally
 
 See the [expo development build](https://docs.expo.dev/development/build/#locally-with-xcode-and-android-studio) docs for instructions.
 
-# Sharing the app as an Expo Snack
+## Sharing the app as an Expo Snack
 
 _Note: this requires the PyTorch Live app, which is slated to launch in July 2022_
 
