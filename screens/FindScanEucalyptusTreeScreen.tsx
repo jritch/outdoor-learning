@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Camera, Image} from 'react-native-pytorch-core';
+import {Camera, Image, ImageUtil} from 'react-native-pytorch-core';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import classifyImage from '../components/ImageClassifier';
 import Bubble from '../components/Bubble';
 import {useFocusEffect} from '@react-navigation/native';
 import {Camera as ExpoCamera} from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
 
 import {RootStackParamList} from '../types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -45,6 +46,8 @@ export default function FindScanEucalyptusTreeScreen({
   const [awaitingModel, setAwaitingModel] = useState<boolean>(false);
 
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [albumPermission, _requestAlbumPermission] =
+    MediaLibrary.usePermissions();
 
   // The PTL camera has a bug where it shows a black screen when focus is returned after navigating away.
   // This is a hack to force the camera to unmount and remount when the screen is refocused.
@@ -62,6 +65,15 @@ export default function FindScanEucalyptusTreeScreen({
       })();
     }
   }, [bumpCameraKey, hasPermission]);
+
+  useEffect(() => {
+    if (albumPermission?.granted === false) {
+      MediaLibrary.requestPermissionsAsync(true /* write-only */);
+      // (async () => {
+      //   MediaLibrary.requestPermissionsAsync(true /* write-only */);
+      // })();
+    }
+  }, [albumPermission]);
 
   // Function to handle images whenever the user presses the capture button
   async function handleImage(image: Image) {
@@ -81,6 +93,11 @@ export default function FindScanEucalyptusTreeScreen({
       setAwaitingModel(false);
       console.log('Image classification result:', result);
       setImageClass(result);
+
+      ImageUtil.toFile(image).then(str => {
+        MediaLibrary.saveToLibraryAsync(`file://${str}`);
+      });
+
       image.release();
     } catch (error) {
       console.log(error);
