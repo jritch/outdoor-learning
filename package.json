@@ -20,7 +20,8 @@
     "prettier-check": "prettier --check .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "npm run lint -- --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "export": "./scripts/create_snack_branch.sh"
   },
   "jest": {
     "preset": "jest-expo"
