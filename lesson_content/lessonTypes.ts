@@ -26,7 +26,7 @@ export type Messages = Array<string>;
  * or as a ImageSource URI object. Example:
  *
  *    imageSources: [
-        require('assets/images/GettyImages-480806545.jpeg'),
+        require('../assets/images/GettyImages-480806545.jpeg'),
         {
           uri: 'https://github.com/jritch/outdoor-learning/releases/download/v0.0.1-alpha/microphone_active.png',
         },

@@ -5,8 +5,8 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import LessonOptionsBar from './LessonOptionsBar';
 import NavigationButton from './NavigationButton';
 
-const leftArrow = require('assets/images/left-arrow-3x.png');
-const rightArrow = require('assets/images/right-arrow-3x.png');
+const leftArrow = require('../assets/images/left-arrow-3x.png');
+const rightArrow = require('../assets/images/right-arrow-3x.png');
 
 type Props = {
   elementId: number;

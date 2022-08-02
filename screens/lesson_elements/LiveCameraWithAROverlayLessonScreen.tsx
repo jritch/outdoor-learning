@@ -12,7 +12,7 @@ import classifyImage from '../../components/ImageClassifier';
 import throttle from 'lodash.throttle';
 import useTextToSpeech from '../../hooks/useTextToSpeech';
 
-const flameGif = require('assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif');
+const flameGif = require('../../assets/images/fire-gif-2-GettyImages-906030022-cropped-compressed.gif');
 
 type Props = {
   elementProps: LiveCameraWithAROverlayElement;

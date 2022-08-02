@@ -11,14 +11,14 @@ export const EucalyptusLesson: Lesson = {
       messages: [
         'Great! you will learn about eucalyptus trees and their connection to the Bay Area. Ask any questions during the lesson by tapping the question button on the top right.',
       ],
-      imageSources: [require('assets/images/GettyImages-480806545.jpeg')],
+      imageSources: [require('../assets/images/GettyImages-480806545.jpeg')],
     },
     {
       __type: 'InformationalElement',
       messages: [
         'Eucalyptus trees are native to Australia and the islands surrounding it. Famously, these trees are home to koalas in Australia. Their diet consists almost solely of eucalyptus leaves!',
       ],
-      imageSources: [require('assets/images/GettyImages-153500925.jpeg')],
+      imageSources: [require('../assets/images/GettyImages-153500925.jpeg')],
     },
     {
       __type: 'InformationalElement',
