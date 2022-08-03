@@ -127,7 +127,7 @@ export default function ImageCaptureLessonComponent({
               disabled={!cameraReady}
             >
               <Image
-                source={require('assets/TakePhoto3x.png')}
+                source={require('../../assets/TakePhoto3x.png')}
                 style={styles.captureButtonImage}
               />
             </TouchableOpacity>
